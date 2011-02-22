@@ -14,8 +14,8 @@ Quick install instructions:
 2. Install bzr, get a branch of the OpenAS project, and cd to that directory.
    Become root ("$ sudo su <RETURN>"):
     # aptitude update && aptitude install bzr
-    # bzr branch <...>
-    # cd open-as-cgw.bzr
+    # bzr branch lp:open-as-cgw
+    # cd open-as-cgw
 
 3. Start build-, packaging- and installation-process:
     # make

@@ -283,7 +283,7 @@ dashboard_dashboard_notifications_update_running => 'The appliance is currently 
 dashboard_dashboard_notifications_default_text_heading => 'Everything\'s fine',
 dashboard_dashboard_notifications_default_text => 'Your appliance is correctly up and running.',
 
-dashboard_dashboard_support_text => 'If you have any questions or need help with something, don\'t hesitate to visit the project web-page. If you purchased a commercial license, you\'re welcome <a href="http://www.underground8.com/en/support/support.html">contact our support team!</a>',
+dashboard_dashboard_support_text => 'If you have any questions or need help with something, don\'t hesitate to visit the project web-page. If you purchased a commercial license or you intend to do it, you\'re welcome <a href="http://www.underground8.com/en/support/support.html">contact the underground_8 support team!</a>',
 
 
 ### SYSTEM :: GENERAL SETTINGS

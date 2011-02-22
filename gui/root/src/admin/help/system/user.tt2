@@ -1,0 +1,7 @@
+<div id="help_appliance_user">
+	<h3>[% Catalyst.localize('system_user_pw_gui_heading') %]</h3>
+	<p>[% Catalyst.localize('help_system_user_pw_gui') %]</p>
+
+	<h3>[% Catalyst.localize('system_user_pw_emergency_heading') %]</h3>
+	<p>[% Catalyst.localize('help_system_user_pw_emergency') %]</p>
+</div>

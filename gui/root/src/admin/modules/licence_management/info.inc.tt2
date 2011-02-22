@@ -1,0 +1,34 @@
+[% PROCESS 'site/box_init'; -%]
+[% INCLUDE 'site/box_open'; %]
+[% IF license_info.sign_date == '1970-01-01 00:00:00'  %]
+<p class="info"><strong>Note:</strong> [% Catalyst.localize(box_path _ '_neverupdated') %]</p>
+[% ELSE %]
+<p class="info"><strong>Note:</strong>[% Catalyst.localize(box_path _ '_lastupdated') %]<em>[% license_info.sign_date %]</em></p>
+[% END %]
+
+<ul class="text_list">
+	[% FOREACH service IN services %]
+		[%	mailto_request_lic = 'mailto:licence@underground8.com?subject=Request%20' _ Catalyst.localize(service) _ '%20Licence&body=DEAR%20UNDERGROUND_8%20TEAM%0D%0A%0D%0A%09Service-Modul:%20' _ Catalyst.localize(service) _ '%0D%0A%09Appliance%20Serial%20Number:%20' _ sn _ '%0D%0A%09Comment:';
+			mailto_renew_lic  = 'mailto:licence@underground8.com?subject=Renew%20' _ Catalyst.localize(service) _ '%20Licence&body=DEAR%20UNDERGROUND_8%20TEAM%0D%0A%0D%0A%09Service-Modul:%20' _ Catalyst.localize(service) _ '%0D%0A%09Appliance%20Serial%20Number:%20' _ sn _ '%0D%0A%09Comment:';
+			service_link = 'http://www.underground8.com/de/products/modules.html#' _ service; %]
+		<li><a href="[% service_link %]" title="[% Catalyst.localize(box_path _ '_lic_get_info') %]"><strong>[% Catalyst.localize(service) %]</strong></a>
+		[% IF license_info.$service.valid_until == '1970-01-01' %]
+			[% Catalyst.localize(box_path _ '_lic_not_activated') %] (<a title="[% Catalyst.localize(box_path _ '_lic_request') %]" href="[% mailto_request_lic %]">[% Catalyst.localize(box_path _ '_lic_request') %]</a>)
+		[% ELSE %]
+			[% IF license_info.$service.valid_for_days > 8 %]
+				[% Catalyst.localize(box_path _ '_lic_valid_until') %] [% license_info.$service.valid_until %] ([% license_info.$service.valid_for_days %] [% Catalyst.localize('more') %] [% Catalyst.localize('days') %])
+			[% ELSIF license_info.$service.valid_for_days <= 7 && license_info.$service.valid_for_days != 0 %]
+				[% Catalyst.localize(box_path _ '_lic_valid_until') %] [% Catalyst.localize('license_info.$service.valid_until') %] ([% license_info.$service.valid_for_days %] [% Catalyst.localize('more') %] [% Catalyst.localize('day') %] - <a title="[% Catalyst.localize(box_path _ '_lic_renew') %]: [% Catalyst.localize(service) %]" href="[% mailto_renew_lic %]">[% Catalyst.localize(box_path _ '_lic_renew') %]</a>)
+			[% ELSIF license_info.$service.valid_for_days == 0 %]
+				[% Catalyst.localize(box_path _ '_lic_expired_on') %] [% license_info.$service.valid_until %] (<a title="[% Catalyst.localize(box_path _ '_lic_renew') %]: [% Catalyst.localize(service) %]" href="[% mailto_renew_lic %]">[% Catalyst.localize(box_path _ '_lic_renew') %]</a>)
+			[% END %]
+		[% END %]
+		</li>
+	[% END %]
+</ul>
+[% INCLUDE 'site/elements/form' url = Catalyst.uri_for('/admin/modules/licence_management/get_license_file'), update = 'content',  -%]
+	<fieldset>
+	[% INCLUDE 'site/elements/input' type = 'button', value = Catalyst.localize(box_path _ '_updatelicence') %]
+	</fieldset>
+</form>
+[% INCLUDE 'site/box_close'; %]

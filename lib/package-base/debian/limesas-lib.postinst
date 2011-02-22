@@ -1,0 +1,681 @@
+#!/bin/bash
+# This file is part of the Open AS Communication Gateway.
+#
+# The Open AS Communication Gateway is free software: you can redistribute it
+# and/or modify it under theterms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
+#
+# The Open AS Communication Gateway is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License along
+# with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
+
+# postinst script for limesas-lib
+# see: dh_installdeb(1)
+
+set -e
+# summary of how this script can be called:
+#		* <postinst> `configure' <most-recently-configured-version>
+#		* <old-postinst> `abort-upgrade' <new version>
+#		* <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#		  <new-version>
+#		* <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#		  <failed-install-package> <version> `removing'
+#		  <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+prepare_lcd(){
+	# copy LCDd config
+	if [ -e /etc/limes/cfg-templates/lcdd/LCDd.conf ]; then
+		cp /etc/limes/cfg-templates/lcdd/LCDd.conf /etc/
+	fi
+
+	# hackhackhackhack
+	sed -i 's/set -e/# set -e/' /etc/init.d/LCDd
+
+	# restart LCDd
+	if [ -e /etc/init.d/LCDd ]; then
+		/etc/init.d/LCDd restart
+	fi
+
+	# restart lcd_menu daemon
+	if [ -e /etc/init.d/lcd_menu ]; then
+		/etc/init.d/lcd_menu restart
+	fi
+}
+
+prepare_system_accounts() {
+	echo "*** Preparing Systm User Accounts...";
+	# Create guipasswd if nonexistent
+	if [ ! -f "/etc/limes/guipasswd" ]; then
+		echo "admin:$apr1$RNL.....$A8LOW/HU1HrCT9vv6JkhN/" > /etc/limes/guipasswd
+		echo "wrote standard guipasswd file, this will soon be overwritten by catalyst"
+	fi
+
+	usermod -G amavis clamav
+	usermod -G limes www-data
+	usermod -G sasl postfix
+
+	echo "*** System user accounts created."
+}
+
+
+prepare_postfix(){
+	echo "*** Preparing Postfix Configuration..."
+
+	# Create empty defaults if nonexistent
+	CHECKED_FILES="main.cf usermaps local_rcpt_map mbox_transport header_checks"
+	for FILE in `echo $CHECKED_FILES`; do
+		if [ ! -f "/etc/postfix/$FILE" ]; then
+			touch /etc/postfix/$FILE
+			echo "Created empty file /etc/postfix/$FILE"
+		fi
+	done
+
+	# Set default mailname
+	if [ ! -f "/etc/mailname" ]; then
+		echo "ascgw.underground8.com" > /etc/mailname
+		echo "wrote standard /etc/mailname"
+	fi
+
+	# BATV Filter / Backscatter protection
+	if [ ! -f "/etc/postfix/batv.regexp" ]; then
+		cp -f /etc/limes/cfg-templates/postfix/batv.regexp /etc/postfix/batv.regexp
+	fi
+
+	# create postfix-regexp file to avoid greylisting of quarantine-responses
+	# the file exists in cfg-templates also but isnt used from there
+	if [ ! -f /etc/postfix/filter-quarantine.regexp ]; then
+		touch /etc/postfix/filter-quarantine.regexp
+		echo "/^quarantine\@/ OK" > /etc/postfix/filter-quarantine.regexp
+	fi
+   
+	# create filter bypassing file for postfix to send mails from 127.0.0.1 to amavis:10022 (NOCHECKS policy bank)
+	if [ ! -f /etc/postfix/amavis_bypass_filter_smtpcrypt ]; then
+		touch /etc/postfix/amavis_bypass_filter_smtpcrypt
+		echo "127.0.0.1 FILTER smtp-amavis:[127.0.0.1]:10022" > /etc/postfix/amavis_bypass_filter_smtpcrypt
+		postmap /etc/postfix/amavis_bypass_filter_smtpcrypt
+	fi
+	
+	# remove message_size_limit
+	postconf -e message_size_limit=0
+	
+	# update /etc/aliases file with new support user
+	if [ -e /etc/aliases ]; then
+		sed -i -e 's/root:\tgw/root:\tsupport/g' /etc/aliases
+		postalias /etc/aliases
+	fi
+
+    # REMOVED FOR LUCID
+	# echo "*** Hacking postfix-policyd ***"
+	# sed -i 's/policyd.conf/policyd2.conf/' /usr/sbin/postfix-policyd-cleanup
+}
+
+
+prepare_postfwd(){
+	echo "*** Preparing PostFWD Configuration..."
+	PFWD_DEF="/etc/default/postfwd"
+	PFWD_XML="/etc/limes/xml/postfwd.xml"
+	PFWD_CF="/etc/postfix/postfwd.cf"
+
+	# Ubuntu "Default" file
+	if [ ! -e $PFWD_DEF ]; then
+		cp /etc/limes/cfg-templates/postfwd/default_postfwd.tt2 $PFWD_DEF
+	fi
+	chown root:limes $PFWD_DEF
+	chmod g+w $PFWD_DEF
+
+	# Postfwd XML
+	if [ ! -f $PFWD_XML ]; then
+		touch $PFWD_XML
+		echo "<perldata>\n<hashref></hashref>\n</perldata>" > $PFWD_XML
+		chown root:limes $PFWD_XML
+		chmod g+w $PFWD_XML
+	fi
+
+	# Create PostFWD config
+	if [ ! -e $PFWD_CF ]; then
+		touch $PFWD_CF
+	fi
+	chown root:limes $PFWD_CF
+	chmod g+w $PFWD_CF
+
+	echo "*** PostFWD Config Done"
+}
+
+prepare_spamassassin(){
+	echo "*** Preparing Spamassassin Configuration..."
+	SA_DIR="/var/lib/spamassassin"
+
+	rm -f /etc/spamassassin/ctasd.pre
+	rm -f /etc/spamassassin/ctasd.cf
+
+	mkdir -p $SA_DIR
+	if [ ! -f "$SA_DIR/updates_spamassassin_org.cf" ]; then
+		echo "# UPDATE version 0" > $SA_DIR/updates_spamassassin_org.cf
+		echo "wrote standard sa-update compliant file"
+	fi
+	echo "spamassassin check done"
+
+	rm -rf $SA_DIR/3.001007
+	rm -rf $SA_DIR/3.002005
+	echo "removed spamassassin symlinks"
+
+	# fix ... i don't know why this is needs, but it is
+	mkdir -p $SA_DIR
+	ln -s $SA_DIR $SA_DIR/3.001007
+	ln -s $SA_DIR $SA_DIR/3.002005
+
+	# Enable SpamAssassin TextCat for language-filtering support
+	sed -i 's/#loadplugin Mail::SpamAssassin::Plugin::TextCat/loadplugin Mail::SpamAssassin::Plugin::TextCat/' /etc/spamassassin/v310.pre
+	echo "*** Spamassassin Config Done"
+}
+
+
+prepare_quarantine(){
+	echo "*** Preparing Quarantine..."
+	Q_XML="/etc/limes/xml/quarantine.xml"
+	Q_DIR="/var/quarantine"
+
+	# create empty quarantine.xml
+	if [ ! -f $Q_XML ]; then
+		touch $Q_XML
+		echo "<perldata>\n<hashref></hashref>\n</perldata>" > $Q_XML
+		echo "$Q_XML check done"
+	fi
+
+	# make the quarantine directory
+	if [ -d $Q_DIR ]; then
+		echo "Quarantine directory already exists!"
+	else
+		mkdir $Q_DIR $Q_DIR/spam $Q_DIR/banned $Q_DIR/virus
+		chown -R amavis:amavis $Q_DIR
+	fi
+
+	# create quarantine.lock file used by disk-space check
+	if [ ! -f $Q_DIR/quarantine.lock ]; then
+		touch $Q_DIR/quarantine.lock
+		echo -e "soft = 0\nhard = 0" > $Q_DIR/quarantine.lock
+	fi
+	
+	echo "*** Quarantine Config Done"
+}
+
+prepare_smtpcrypt(){
+	echo "*** Preparing SMTPCrypt Configuration..."
+	SC_DIR="/var/spool/smtpcrypt"
+	SC_XML="/etc/limes/xml/smtpcrypt.xml"
+
+	# Add user
+	if [ -z `cat /etc/passwd | grep -e '^smtpcrypt:.*'` ]; then
+		useradd -d $SC_DIR -s /bin/false smtpcrypt
+	fi
+	usermod -g limes smtpcrypt
+
+	if [ ! -s $SC_XML ]; then
+		touch $SC_XML
+		printf "<perldata>\n <hashref memory_address=\"0xab25574\">\n  <item key=\"domain_rcpt_autocrypt\">\n   <hashref memory_address=\"0xab2525c\">\n   </hashref>\n  </item>\n  <item key=\"domain_sender_autocrypt\">\n   <hashref memory_address=\"0xab256d0\">\n   </hashref>\n  </item>\n  <item key=\"global\">\n   <hashref memory_address=\"0xab25394\">\n	<item key=\"default_enc_type\">generate_pw</item>\n	<item key=\"default_pack_type\">pdf</item>\n	<item key=\"default_password\"></item>\n	<item key=\"default_tag\">CRYPT</item>\n	<item key=\"enabled\">0</item>\n   </hashref>\n  </item>\n  <item key=\"mailaddr_rcpt_autocrypt\">\n   <hashref memory_address=\"0xab24e54\">\n   </hashref>\n  </item>\n  <item key=\"mailaddr_sender_autocrypt\">\n   <hashref memory_address=\"0xab25514\">\n   </hashref>\n  </item>\n </hashref>\n</perldata>\n\n" > $SC_XML
+	fi
+
+	# Mkdir mail spool directory for to-be-encrypted mails
+	if [ ! -d $SC_DIR ]; then
+		mkdir -p $SC_DIR
+	fi
+	chown -R smtpcrypt:smtpcrypt $SC_DIR
+	chown smtpcrypt:limes $SC_XML
+
+	# this is so bad, don't even bother to ask for a reason!
+	echo "Installing Pisa-Egg"
+	easy_install /etc/limes/cfg-templates/pisa-egg/pisa-3.0.29-py2.5.egg > /dev/null
+
+	echo "*** SMTPCrypt Configuration Done"
+}
+
+prepare_cli(){
+	echo "*** Preparing CLI Configuration..."
+	CLI_LOG="/var/log/limes/cli.log"
+	CLI_ERR="/var/log/limes/cli-err.log"
+	CLI_VER="/etc/limes/conf/cliversion"
+
+	# Set up CLI logs
+	touch $CLI_LOG $CLI_ERR
+	chown admin:limes $CLI_LOG $CLI_ERR
+	chmod 660 $CLI_LOG $CLI_ERR
+
+	# Set up CLI version file
+	if [ ! -e $CLI_VER ]; then
+		touch $CLI_VER
+		echo "02-09-09 14:12" > $CLI_VER
+	fi
+
+	echo "*** CLI Configuration Done"
+}
+
+prepare_mysql(){
+	echo "*** Preparing MySQL Configuration..."
+	# the ping only works at new setupped appliances because
+	# root password is still not set
+	echo "starting mysql preparations"
+
+	## XXX lucid port
+	#/etc/init.d/mysql restart
+	service mysql stop
+	service mysql start
+
+	TESTMYSQL=$(mysqladmin ping 2>&1)
+	MYSQLSUCCESS=mysqld\ is\ alive
+
+	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
+		mysql < /etc/limes/db_struct/policyd.sql
+		echo "set /etc/limes/db_struct/policyd.sql"
+		mysql < /etc/limes/db_struct/rt_log.sql
+		echo "set /etc/limes/db_struct/rt_log.sql"
+		mysql < /etc/limes/db_struct/smtp_auth.sql
+		echo "set /etc/limes/db_struct/smtp_auth.sql"
+		mysql < /etc/limes/db_struct/mailq.sql
+		echo "set /etc/limes/db_struct/mailq.sql"
+		mysql < /etc/limes/db_struct/amavis.sql
+		echo "set /etc/limes/db_struct/amavis.sql"
+
+		mysqladmin -u root password loltruck2000
+		echo "created mysql root password"
+		echo "3" > /etc/limes/db_version
+		echo "wrote db_versions file"
+	else
+		echo "MySQL already set"
+	fi
+	echo "primary MySQL check done - now comparing versions"
+
+	DBVERSION=`cat /etc/limes/db_version`
+	if [ "${DBVERSION}" -lt "1" ]; then
+		echo "1" > /etc/limes/db_version
+		mysql -u root -ploltruck2000 < /etc/limes/db_struct/smtp_auth.sql
+	fi
+	echo "version 1 compared"
+
+	if [ "${DBVERSION}" -lt "2" ]; then
+		echo "2" > /etc/limes/db_version
+		mysql -u root -ploltruck2000 < /etc/limes/db_struct/mailq.sql
+	fi
+	echo "version 2 compared"
+
+	if [ "${DBVERSION}" -lt "3" ]; then
+		echo "3" > /etc/limes/db_version
+		mysql -u root -ploltruck2000 </etc/limes/db_struct/amavis.sql
+	fi
+	echo "version 3 compared"
+
+	chmod +x /etc/limes/db_struct/rtlog_checkdb.pl
+	/etc/limes/db_struct/rtlog_checkdb.pl
+	echo "*** MySQL Config Done"
+}
+
+prepare_ssh(){
+	echo "*** Preparing SSH Configuration..."
+
+	# overwrite freakin' sshd config
+	# may be in Service sometime
+	cp /etc/limes/cfg-templates/ssh/sshd_config.tt2 /etc/ssh/sshd_config
+
+	# all ssh keys before dateval are definitly broken which
+	# is a security leak
+	# 12:00, 14 May 2008 is the date
+	dateval=200805141200
+	restartssh=0
+	
+	# Obscurity?
+	/usr/local/bin/sshd_srvstr_scramble.sh /usr/sbin/sshd
+	SCRAMBLING_RC=$?
+	if [ $SCRAMBLING_RC -eq 0 ]; then
+		echo "SSHd service string scrambling done"
+		restartssh=1
+	else
+		echo "SSHd service string scrambling aborted (it may have already been scrambled)"
+	fi
+	# sshd init script checks version via `sshd -?', disable it immediately
+	sed -i -e "s/\(^[^#].*grep -q OpenSSH\)/#\1/" /etc/init.d/ssh
+
+	if [ `date +%Y%m%d%H%M -r /etc/ssh/ssh_host_rsa_key` -lt $dateval ]; then
+		rm /etc/ssh/ssh_host_rsa_key
+		rm /etc/ssh/ssh_host_rsa_key.pub
+		ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+		restartssh=1
+	fi
+
+	if [ `date +%Y%m%d%H%M -r /etc/ssh/ssh_host_dsa_key` -lt $dateval ]; then
+		rm /etc/ssh/ssh_host_dsa_key
+		rm /etc/ssh/ssh_host_dsa_key.pub
+		ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
+		restartssh=1
+	fi
+
+	if [ $restartssh -gt 0 ]; then
+		/etc/init.d/ssh restart
+	fi
+	echo "*** SSH Config Done"
+}
+
+prepare_crypto(){
+	echo "*** Preparing Crypto Configuration..."
+
+	# search for new ca-certs (inlcuding our own)
+	if [ -e /etc/ssl/certs/underground8-cacert_pem.pem ]; then
+		rm /etc/ssl/certs/underground8-cacert_pem.pem
+		ln -s /usr/share/ca-certificates/underground8-cacert_pem.crt /etc/ssl/certs/underground8-cacert_pem.pem
+	fi
+	
+	if [ -e /etc/ssl/certs/underground8-webserver-cacert_pem.pem ]; then
+		rm /etc/ssl/certs/underground8-webserver-cacert_pem.pem
+		ln -s /usr/share/ca-certificates/underground8-webserver-cacert_pem.crt /etc/ssl/certs/underground8-webserver-cacert_pem.pem
+	fi
+	/usr/sbin/update-ca-certificates
+
+	mkdir -p /etc/limes/cacert
+	mkdir -p /etc/limes/xml/cacert
+
+	echo "*** Crypto Config Done"
+}
+
+
+prepare_ldap(){
+	echo "*** Preparing LDAP Configuration..."
+	LDAP_DIR="/var/cache/ldap"
+
+	# create dir for ldap cache
+	if [ ! -d $LDAP_DIR ]; then
+		rm -rf $LDAP_DIR
+		mkdir -p $LDAP_DIR
+	fi
+
+	if [ ! -f $LDAP_DIR/ldap_maps.xml ]; then
+		touch $LDAP_DIR/ldap_maps.xml
+		echo "<perldata>\n<hashref></hashref>\n</perldata>" > $LDAP_DIR/ldap_maps.xml
+	fi
+
+	chmod 664 $LDAP_DIR/ldap_maps.xml
+	chown www-data:limes $LDAP_DIR/ldap_maps.xml
+
+	echo "*** LDAP Config Done"
+}
+
+prepare_cron(){
+	echo "*** Preparing CRON Configuration..."
+
+	if [ -f "/etc/cron.daily/logrotate" ]; then
+		mv /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
+		echo "Changed logrotate to be executed HOURLY instead of daily"
+	fi
+
+	# rotate the daily logs at midnight
+	sed -i -e 's/25\ 6/0\ \ 0/g' /etc/crontab
+
+	# disable cron emails sent to root@localhost
+	# those mails make double-bounce
+	crontab="/etc/crontab"
+	cronisnew=`cat $crontab | grep "MAILTO=" | wc -l`
+
+	if [ $cronisnew -eq 0 ]; then
+		tmpcron=`tempfile`
+		sed '/^PATH=/a \MAILTO=\"\"' $crontab > $tmpcron
+		mv $tmpcron $crontab
+
+		chmod 0644 $crontab
+		chown root:root $crontab
+
+		/etc/init.d/cron restart
+		echo "$crontab MAILTO statement updated"
+	fi
+
+	echo "*** CRON Config Done"
+}
+
+prepare_lighty(){
+	echo "*** Preparing Lighty Configuration..."
+
+	# overwrite current lighttpd config and create ssl certificate
+	cp -f /etc/limes/cfg-templates/lighttpd/ssleay.cnf /etc/lighttpd
+	cp -f /etc/limes/cfg-templates/lighttpd/lighttpd.conf /etc/lighttpd
+	cp -f /etc/limes/cfg-templates/lighttpd/lighttpd.init /etc/init.d/lighttpd
+	chmod +x /etc/init.d/lighttpd
+
+	# Make self-signed certificate
+	# there is a security-check for the date later in this file
+	if [ ! -f /etc/lighttpd/standard.pem ]; then
+		/usr/local/bin/lighttpd-ssl-certificate -batch
+	fi
+
+	# all certificates before dateval are definitly broken which
+	# is a security leak
+	# 12:00, 14 May 2008 is the date
+	dateval=200805141200
+
+	if [ `date +%Y%m%d%H%M -r /etc/lighttpd/standard.pem` -lt $dateval ]; then
+		/usr/local/bin/lighttpd-ssl-certificate --force -batch
+	fi
+
+	echo "*** Lighty Config Done"
+}
+
+prepare_system(){
+	echo "*** Preparing Base System Configuration..."
+	if [ -L "/etc/localtime" ]; then
+		rm /etc/localtime
+		touch /etc/localtime
+		echo "Recreated localtime"
+	fi
+
+	# hackhackhack
+	ln -sf /usr/local/bin/firewall /usr/local/bin/firewall.sh
+
+	# enable UTF-8
+	/usr/sbin/update-locale LANG=en_US.UTF-8
+	echo "Set locale to UTF8"
+
+	# Correctly place sudoers file 
+	cp /etc/limes/conf/sudoers /etc/sudoers
+	chmod 0440 /etc/sudoers
+	echo "Updated sudoers"
+
+	# Wipe motd, clean issue[.net]
+	echo "" > /etc/motd
+	echo "AS Communication Gateway" > /etc/issue
+	echo "AS Communication Gateway" > /etc/issue.net
+	echo "Updated MOTD"
+
+	chown limes:limes /usr/local/bin/mail_logacc.pl
+	chown limes:limes /usr/local/bin/logacc_rotate.pl
+	chown limes:limes /usr/local/bin/daily_spam_report.pl
+	chown limes:limes /usr/local/bin/firewall.sh
+	chmod 775 /usr/local/bin/firewall.sh
+
+	mkdir -p /var/limes/backup
+	mkdir -p /var/log/limes/upgrades
+	chown -R limes:limes /var/limes
+	chmod 775 /var/limes/backup
+	chmod 775 /var/limes
+
+	# /etc/environment + /etc/clamav/freshclam.conf have to be writable by limes group for proxy settings
+	touch /etc/environment
+	chown root.limes /etc/environment
+	chmod g+w /etc/environment
+	echo "Set up /etc/environment"
+
+	### write /etc/rc.local
+	echo "#!/bin/sh -e" > /etc/rc.local
+
+	# force dpkg/apt to act non-interactive
+	echo "export UCF_FORCE_CONFFNEW=yes" >> /etc/rc.local
+	echo "export DEBCONF_FRONTEND=noninteractive" >> /etc/rc.local
+	echo "export DEBIAN_FRONTEND=noninteractive" >> /etc/rc.local
+
+	# foo?
+	echo "stty onlcr </dev/console >/dev/console 2>&1" >> /etc/rc.local
+
+	# keep package list clean and sober
+	echo "/usr/bin/aptitude -f install >/dev/null 2>&1" >> /etc/rc.local
+
+	# on commercial virtual appliances, go to setup (obsolete for OSS version)
+	echo "/usr/local/bin/virtual_setup.sh >/dev/null 2>&1" >> /etc/rc.local
+
+	# on commercial virtual appliances, one may extend the pre-defined virtual HDD
+	echo "if grep -w -q hddextend /proc/cmdline 2>/dev/null; then" >> /etc/rc.local
+	echo " /usr/local/bin/virtual_hdd_extend.sh >/dev/null 2>&1" >> /etc/rc.local
+	echo "fi" >> /etc/rc.local
+
+	### not needed anymore
+	# echo "/usr/bin/nohup /usr/local/bin/launch.pl >/dev/null 2>&1" >> /etc/rc.local
+	echo "exit 0" >> /etc/rc.local
+	echo "Updated rc.local"
+
+
+	sed -i -e 's/defaults,errors=remount-ro/defaults,errors=remount-ro,noatime/g' /etc/fstab
+
+	# remove pre-used pipe from maillog-mangler
+	if [ -p "/etc/syslog-ng/mail.log" ]; then
+		rm /etc/syslog-ng/mail.log
+	fi
+
+	cp /etc/limes/conf/tty/tty* /etc/event.d/
+
+	if [ ! -e "/var/log/mail-simple.log" ]; then
+		/usr/bin/touch /var/log/mail-simple.log
+	fi
+	chgrp limes /var/log/mail-simple*
+	echo "Set up simple log"
+
+	if [ ! -f "/usr/local/bin/firewall.sh" ]; then
+		echo '#!/bin/bash' > /usr/local/bin/firewall.sh
+		echo 'exit 0' >> /usr/local/bin/firewall.sh
+		echo "wrote standard firewall.sh file, this will soon be overwritten by catalyst"
+	fi
+
+	if [ -f "/etc/snmp/snmpd.conf" ]; then
+		touch "/etc/snmp/snmpd.conf";
+	fi
+	chgrp limes /etc/snmp/snmpd.conf
+	chmod g+w /etc/snmp/snmpd.conf
+
+	if [ -f "/etc/default/snmpd" ]; then
+		touch "/etc/default/snmpd";
+	fi
+	chgrp limes /etc/default/snmpd
+	chmod g+w /etc/default/snmpd
+
+	# We need this for Amavis to correctly determine MIME-types
+	FILE_MIME="/usr/bin/file-mime"
+	if [ ! -e $FILE_MIME ]; then
+		echo '#!/bin/bash' > $FILE_MIME
+		echo '/usr/bin/file -i $*' >> $FILE_MIME
+		chmod +x $FILE_MIME
+	fi
+
+	# Use the new file-mime command
+	sed -i "s/'file'/'file-mime'/" /etc/amavis/conf.d/01-debian
+
+
+	echo "*** Base System Config Done"
+}
+
+
+prepare_limes(){
+	echo "*** Preparing Limes Configuration..."
+
+	# create empty usermaps
+	if [ ! -f /etc/limes/xml/usermaps.xml ]; then
+		touch /etc/limes/xml/usermaps.xml
+		echo "<perldata>\n<hashref></hashref>\n</perldata>" > /etc/limes/xml/usermaps.xml
+	fi
+
+	chown -R limes:limes /etc/limes
+	chown -R www-data:limes /etc/limes/xml
+
+	find /etc/limes -type d -exec chmod 774 {} \;
+	find /etc/limes -type f -exec chmod 664 {} \;
+	echo "Changed all /etc/limes permissions"
+
+#	Re-Read all backups to re-generate the backup.xml holding the IP information
+	if [ -f "/etc/limes/xml/backup.xml" ]; then
+		chown www-data:limes /etc/limes/xml/backup.xml
+	fi
+
+	# change the permissions in /etc/limes/xml to 664
+	chmod 664 /etc/limes/xml/*.xml
+
+	touch /etc/limes/avail_secversion
+	if [ ! -f /etc/limes/update_timestamp ]; then
+		touch /etc/limes/update_timestamp
+		echo "never" > /etc/limes/update_timestamp
+	fi
+
+	# fill avail versions with empty info so nothing is broken
+	if [ ! -f /etc/limes/avail_versions ]; then
+		touch /etc/limes/avail_versions
+		echo "<perldata><hashref></hashref></perldata>" > /etc/limes/avail_versions
+	fi
+
+	# and last - create empty /tmp/usus-running
+	if [ ! -f /tmp/usus-running ]; then
+		touch /tmp/usus-running
+	fi
+
+	# create homedir if needed - otherwise usus fails the first time it's started
+	gpg --homedir /root/.gnupg -k
+	echo "Usus file checking done"
+
+	if [ ! -p /var/limes/rt_log ]; then
+		mkfifo /var/limes/rt_log
+		echo "Recreated rtlog pipe"
+	fi
+	chown limes:limes /var/limes/rt_log
+
+	echo "*** Limes Config Done"
+}
+
+################# case
+
+case "$1" in
+	configure)
+	
+	prepare_crypto;
+	prepare_system;
+	prepare_ssh;
+	prepare_system_accounts;
+	prepare_limes;
+#	prepare_cli;
+	prepare_cron;
+	prepare_postfix;
+	prepare_postfwd;
+	prepare_spamassassin;
+	prepare_mysql;
+	prepare_lighty;
+	prepare_ldap;
+#	prepare_lcd;
+	prepare_quarantine;
+	prepare_smtpcrypt;
+
+	#sudo -u www-data /usr/local/bin/update_backup_conf.pl
+
+	# restart rtlogd
+	/etc/init.d/rtlogd restart
+
+	# restart lighthttpd
+	/etc/init.d/lighttpd restart	
+	;;
+
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
+esac
+
+
+exit 0
+

@@ -1,0 +1,116 @@
+#! /bin/bash
+# This file is part of the Open AS Communication Gateway.
+#
+# The Open AS Communication Gateway is free software: you can redistribute it
+# and/or modify it under theterms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
+#
+# The Open AS Communication Gateway is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License along
+# with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
+
+
+#
+# Init script for factory_defaults daemon
+
+# kernel module specific variables
+MODE=664
+MODULE="ppap3711_26"
+DEVICE="ppap3711"
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/factory_defaults.pl
+NAME=factory_defaults.pl
+SNAME=factory_defaults
+DESC="LimesAS Factory Default"
+PIDFILE="/var/run/$NAME.pid"
+XNAME=/usr/bin/perl
+
+
+test -f ${DAEMON} || exit 0
+
+export TMPDIR=/tmp
+
+START="--start --quiet --background --pidfile /var/run/${NAME}.pid --name ${DAEMONNAME} --exec /usr/bin/perl --startas ${DAEMON}"
+STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --exec /usr/bin/perl --name ${DAEMONNAME}"
+PARAMS=""
+
+case "$1" in
+  start)
+
+    # check for hardware requirements
+    HARDWAREMODEL=`/usr/local/bin/detect_limesas_hardware.pl`
+
+    if [ -z $HARDWAREMODEL ]; then
+        HARDWAREMODEL=""
+    fi
+
+    if [ "$HARDWAREMODEL" == "Portwell_NAR4040.1" -o \
+       "$HARDWAREMODEL" == "Portwell_NAR5060.1" -o \
+       "$HARDWAREMODEL" == "Portwell_NAR5060.2" ]
+    then
+        # check for kernel module
+        LSMODRESULT=`lsmod | awk "\\$1==\"$MODULE\" {print \\$1}"`
+        # kernel module does not exist, so do all necessary tasks to make it work
+        if [ "$LSMODRESULT" != "$MODULE" ]; then
+            # invoke insmod
+            # TODO set correct path name
+            KERNELREF=`uname -r`
+            /sbin/insmod /usr/local/lib/modules/$KERNELREF/$MODULE.ko
+
+            if [ $? -ne 0 ]; then
+                echo "Failed to load kernel module."
+                exit 2
+            fi
+
+            # get the major number of the device
+            MAJOR=`cat /proc/devices | grep ${DEVICE} | awk '{print $1}'`
+            # make the /bin/nnode for the device
+            if [ -e /dev/${DEVICE} ]
+            then
+                /bin/rm /dev/${DEVICE}
+            fi
+
+            /bin/mknod /dev/${DEVICE} c $MAJOR 0
+
+            if [ $? -ne 0 ]; then
+                echo "Failed to make device file for module."
+                exit 3
+            fi
+
+            # give appropriate group/permissions
+            chmod $MODE  /dev/${DEVICE}
+        fi
+
+        echo -n "Starting $DESC: "
+
+	start-stop-daemon --start --pidfile $PIDFILE --exec $XNAME \
+            --oknodo --startas $DAEMON -- $PARAMS
+
+    else
+        echo "Wrong hardware platform, unable to start up."
+        exit 0
+    fi
+    ;;
+    stop)
+	echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --pidfile $PIDFILE --exec $XNAME --oknodo
+        echo "$NAME."
+    ;;
+  restart|force-reload)
+    $0 stop
+    exec $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+

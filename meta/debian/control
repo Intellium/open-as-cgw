@@ -1,0 +1,46 @@
+Source: limesas
+Section: unknown
+Priority: optional
+Maintainer: Erik Sonnleitner <es@delta-xi.net>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: limesas
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    limesas-lib,
+    limesas-gui,
+Pre-Depends: clamav,
+	lighttpd,
+	libcairo2,
+	syslog-ng,
+	ntp,
+	sasl2-bin,
+	lzop,
+	pax,
+	p7zip,
+	unrar-free,
+	nomarch,
+	zoo,
+	cabextract,
+	amavisd-new,
+	spamassassin,
+	dnsmasq,
+	postfix,
+	postfix-policyd,
+	ca-certificates,
+	mysql-server,
+	apt-transport-https,
+	procmail,
+	clamav-daemon,
+	munin,
+	monit,
+	arj,
+	postfwd
+Conflicts: apache2,
+        exim4,
+        exim4-config,
+        exim4-base,
+        openntpd,
+	mutt,
+Description: limesas meta package (including versioning)

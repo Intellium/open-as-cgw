@@ -1,0 +1,83 @@
+#! /bin/bash
+# This file is part of the Open AS Communication Gateway.
+#
+# The Open AS Communication Gateway is free software: you can redistribute it
+# and/or modify it under theterms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
+#
+# The Open AS Communication Gateway is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License along
+# with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
+
+# Init script for lcd_menu daemon
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/lcd_menu.pl
+NAME=lcd_menu.pl
+SNAME=lcd_menu
+DESC="LimesAS LCD Menu"
+PIDFILE="/var/run/$NAME.pid"
+XNAME=/usr/bin/perl
+
+
+test -f ${DAEMON} || exit 0
+
+export TMPDIR=/tmp
+
+START="--start --quiet --background --pidfile /var/run/${NAME}.pid --name ${DAEMONNAME} --exec /usr/bin/perl --startas ${DAEMON}"
+STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --exec /usr/bin/perl --name ${DAEMONNAME}"
+PARAMS=""
+
+case "$1" in
+  start)
+    if [ -e "/etc/limes/conf/vconfig" ]; then
+		echo "This is a virtual appliance - not starting LCDd."
+		/etc/init.d/LCDd stop
+		exit 0
+	fi
+
+    # check for hardware requirements
+    HARDWAREMODEL=`/usr/local/bin/detect_limesas_hardware.pl`
+
+    if [ -z $HARDWAREMODEL ]; then
+        HARDWAREMODEL=""
+    fi
+
+    if [ "$HARDWAREMODEL" == "Portwell_NAD5612.1" -o \
+       "$HARDWAREMODEL" == "Portwell_NAD5612.2" -o \
+       "$HARDWAREMODEL" == "Portwell_NAD5612.3" -o \
+       "$HARDWAREMODEL" == "Portwell_NAR7080.1" -o \
+       "$HARDWAREMODEL" == "Portwell_NAR7080.2" ]
+
+    then
+        echo -n "Starting $DESC: "
+
+	    start-stop-daemon --start --pidfile $PIDFILE --exec $XNAME \
+            --oknodo --startas $DAEMON -- $PARAMS
+
+    else
+        echo "Wrong hardware platform, unable to start up."
+        exit 0
+    fi
+    ;;
+    stop)
+	echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --pidfile $PIDFILE --exec $XNAME --oknodo
+        echo "$NAME."
+    ;;
+  restart|force-reload)
+    $0 stop
+    exec $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+

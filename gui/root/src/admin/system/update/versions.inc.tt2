@@ -1,0 +1,43 @@
+[% PROCESS 'site/box_init' %]
+[% INCLUDE 'site/box_open' %]
+	[% ### Periodically poll for running updates ### %]
+	<script type="text/javascript">
+		new Ajax.PeriodicalUpdater(
+			"system_update_versions",
+			"[% Catalyst.uri_for('/admin/system/update/usus/poll_update') %]",
+			{
+				method: "get",
+				frequency: 2,
+				decay: 2
+			}
+		);
+	</script>
+	[% ### Update-status, if any update is currently running ### %]
+	[% IF update.update_running  %]
+		<p class="updating">Fetching newest update, please stand by.</p>
+		<ul class="text_list">
+		[%- USE lines = datafile(update.update_file) -%] 
+		[% FOREACH line IN lines %]
+			[% SWITCH line.success %]
+			[%   CASE "OK";     result_class = "success" %]
+			[%   CASE "FAILED"; result_class = "error"   %]
+			[%   CASE "INFO";   result_class = "warning" %]
+			[% END %]
+			<li><strong>[%- line.message -%]</strong><span class="[% result_class %]"></span></li>
+		[% END %]
+		</ul>
+
+	[% ### Version Information ### %]
+	[% ELSE %]
+		<ul class="text_list">
+			<li><strong>[% Catalyst.localize('current_system_version') %]  </strong>[%- versions.version_system -%]</li>
+			<li><strong>[% Catalyst.localize('latest_security_version') %] </strong>[%- versions.version_system_available -%]</li>
+			<li><strong>[% Catalyst.localize('last_version_information_update') %] </strong>[%- versions.last_update.set_locale("de") && versions.last_update.strftime("%c") -%] </li>
+		</ul>
+	    [% INCLUDE 'site/elements/form' url=Catalyst.uri_for('/admin/system/update/usus/update') %]
+		<fieldset>
+			[% INCLUDE 'site/elements/input' type = 'button', value = Catalyst.localize('system_update_versions_checkforupdates'), -%]
+		</fieldset>
+	    </form>
+	[% END %]
+[% INCLUDE 'site/box_close' %]

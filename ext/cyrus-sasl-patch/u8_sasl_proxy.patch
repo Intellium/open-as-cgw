@@ -1,0 +1,127 @@
+Index: cyrus-sasl/saslauthd/Makefile.am
+===================================================================
+--- cyrus-sasl.orig/saslauthd/Makefile.am	2010-06-10 08:03:38.675668603 +0200
++++ cyrus-sasl/saslauthd/Makefile.am	2010-06-10 08:05:09.618187069 +0200
+@@ -11,7 +11,7 @@
+ 		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
+ 		    krbtf.c krbtf.h utils.c utils.h \
+                     ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
+-		    md5.c saslauthd_md5.h md5global.h 
++		    md5.c saslauthd_md5.h md5global.h u8_sasl_auth_proxy.h u8_sasl_auth_proxy.c
+ EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
+ saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
+ saslauthd_LDADD	= @SASL_KRB_LIB@ \
+Index: cyrus-sasl/saslauthd/Makefile.in
+===================================================================
+--- cyrus-sasl.orig/saslauthd/Makefile.in	2010-06-10 08:04:03.605669630 +0200
++++ cyrus-sasl/saslauthd/Makefile.in	2010-06-10 08:05:09.618187069 +0200
+@@ -145,7 +145,7 @@
+ 		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
+ 		    krbtf.c krbtf.h utils.c utils.h \
+                     ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
+-		    md5.c saslauthd_md5.h md5global.h 
++		    md5.c saslauthd_md5.h md5global.h u8_sasl_auth_proxy.c u8_sasl_auth_proxy.h
+ 
+ EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
+ saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
+@@ -179,7 +179,7 @@
+ 	lak.$(OBJEXT) auth_ldap.$(OBJEXT) cache.$(OBJEXT) \
+ 	cfile.$(OBJEXT) krbtf.$(OBJEXT) utils.$(OBJEXT) \
+ 	ipc_unix.$(OBJEXT) ipc_doors.$(OBJEXT) saslauthd-main.$(OBJEXT) \
+-	md5.$(OBJEXT)
++	md5.$(OBJEXT) u8_sasl_auth_proxy.$(OBJEXT)
+ saslauthd_OBJECTS = $(am_saslauthd_OBJECTS)
+ saslauthd_LDFLAGS =
+ am_saslcache_OBJECTS = saslcache.$(OBJEXT)
+Index: cyrus-sasl/saslauthd/mechanisms.c
+===================================================================
+--- cyrus-sasl.orig/saslauthd/mechanisms.c	2010-06-10 08:03:38.645669978 +0200
++++ cyrus-sasl/saslauthd/mechanisms.c	2010-06-10 08:05:09.618187069 +0200
+@@ -37,6 +37,9 @@
+ /* PUBLIC DEPENDENCIES */
+ #include "mechanisms.h"
+ 
++#ifdef AUTH_PROXY
++# include "u8_sasl_auth_proxy.h"
++#endif /* AUTH_PROXY */
+ #ifdef AUTH_DCE
+ # include "auth_dce.h"
+ #endif /* AUTH_DCE */
+@@ -64,6 +67,9 @@
+ 
+ authmech_t mechanisms[] =
+ {
++#ifdef AUTH_PROXY
++	{	"proxy", 0, auth_proxy },
++#endif /* AUTH_PROXY */
+ #ifdef AUTH_SASLDB
+     {	"sasldb",	0,			auth_sasldb },
+ #endif /* AUTH_SASLDB */
+Index: cyrus-sasl/saslauthd/u8_sasl_auth_proxy.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ cyrus-sasl/saslauthd/u8_sasl_auth_proxy.c	2010-06-10 08:05:09.618187069 +0200
+@@ -0,0 +1,25 @@
++#include "mechanisms.h"
++#include "u8_sasl_auth_proxy.h"
++#include <stdio.h>
++#include <stdlib.h>
++#define RETURN(x) return strdup(x)
++
++
++char *auth_proxy(const char *login, const char *password, const char *service, const char *realm)
++{
++	if((strlen(login) <= 100) && (strlen(password) <= 500)) {
++		if(setenv("SASL_U", login, 1))
++			RETURN("NO enough memory");
++
++		if(setenv("SASL_P", password, 1))
++			RETURN("NO enough memory");
++
++		int rc = system( EXTERNAL_SASL_AUTH_SCRIPT );
++		if( rc != 0 )
++			 RETURN( "OK" );
++		else
++			 RETURN( "NO" );
++	} else
++			RETURN( "NO Login or Password too long" );
++}
++
+Index: cyrus-sasl/saslauthd/u8_sasl_auth_proxy.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ cyrus-sasl/saslauthd/u8_sasl_auth_proxy.h	2010-06-10 08:05:09.618187069 +0200
+@@ -0,0 +1,8 @@
++#ifndef __U8_SASL_AUTH_PROXY_H
++#define __U8_SASL_AUTH_PROXY_H
++
++#define EXTERNAL_SASL_AUTH_SCRIPT "/usr/local/bin/sasl_auth.pl"
++
++char *auth_proxy(const char *, const char *, const char *, const char *);
++
++#endif
+Index: cyrus-sasl/AUTHORS
+===================================================================
+--- cyrus-sasl.orig/AUTHORS	2010-06-10 08:03:38.695668755 +0200
++++ cyrus-sasl/AUTHORS	2010-06-10 08:05:09.618187069 +0200
+@@ -44,4 +44,8 @@
+ which is based on the IPv6 code written by KIKUCHI Takahiro
+ <kick@kyoto.wide.ad.jp>
+ 
++Erik Sonnleitner <es@underground8.com> added support for auth_proxy,
++which delegates the final authentication decision to an external
++program.
++
+ $Id: AUTHORS,v 1.17 2004/01/08 15:30:25 ken3 Exp $
+Index: cyrus-sasl/saslauthd/mechanisms.h
+===================================================================
+--- cyrus-sasl.orig/saslauthd/mechanisms.h	2010-06-10 08:03:38.685669869 +0200
++++ cyrus-sasl/saslauthd/mechanisms.h	2010-06-10 08:05:09.618187069 +0200
+@@ -99,4 +99,7 @@
+ # endif
+ #endif
+ 
++//U8 sasl authentication proxy
++#define AUTH_PROXY
++
+ #endif  /* _MECHANISMS_H */

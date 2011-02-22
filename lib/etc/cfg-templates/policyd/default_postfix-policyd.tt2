@@ -1,0 +1,2 @@
+DAEMON_CONFIG="/etc/postfix-policyd.conf"
+DAEMON_CONFIG2="/etc/postfix-policyd2.conf"

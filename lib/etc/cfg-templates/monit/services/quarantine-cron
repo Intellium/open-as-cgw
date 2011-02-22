@@ -1,0 +1,5 @@
+ check process quarantine-cron with pidfile /var/run/quarantine-cron.pl.pid
+   group mail
+#   start program = "/etc/init.d/quarantine-cron start"
+#   stop  program = "/etc/init.d/quarantine-cron stop"
+#   if 2 restarts within 9 cycles then timeout

@@ -1,0 +1,37 @@
+Installing the Open AS Communication Gateway in 5 easy Steps
+============================================================
+
+Since the Open AS Communication Gateway is an entire Operating System, you will
+need to set up a dedicated server for it. 
+
+
+Quick install instructions:
+
+1. Set up a new Ubuntu Server Lucid 10.04[.1] (VM recommended) with SSH
+   Note: You may choose any username you like, except "limes" for it is
+         reserved.
+
+2. Install bzr, get a branch of the OpenAS project, and cd to that directory.
+   Become root ("$ sudo su <RETURN>"):
+    # aptitude update && aptitude install bzr
+    # bzr branch <...>
+    # cd open-as-cgw.bzr
+
+3. Start build-, packaging- and installation-process:
+    # make
+
+   Note: This process may take some time, depending on your machine and network
+         connectivity (on a Core2Duo VM with 8Mbit Download, about 13 minutes).
+
+(4. Network settings, optional)
+  Edit /etc/limes/xml/system.xml, and adjust XML nodes <_net_interface> and
+  <_net_dns>. These settings will be automatically set upon rebooting (next
+  step). Normally, these settings are set solely via the WebGUI.
+
+5. Reboot your machine
+
+
+Viola, your brand-new Open AS Communication Gateway is ready. Open your
+favourite browser, and log in to https://<ip>:980, username "admin", password
+"password".
+Note: By default, SSH only listens on port 2200/tcp.

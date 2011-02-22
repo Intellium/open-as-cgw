@@ -1,0 +1,18 @@
+[% PROCESS 'site/box_init' %]
+[% INCLUDE 'site/box_open' %]
+	[% ### Install security update incl. upgrade-button ###%]   
+	[% IF (new_sec_version && !update_settings_params.upgrade) %]
+		<p class="info"><strong>[% Catalyst.localize(box_path _ '_latest_security_update') %]:</strong> [% Catalyst.localize(box_path _ '_latest_security_update_info') %]</p>
+		[% INCLUDE 'site/elements/form' url=Catalyst.uri_for('/admin/system/update/usus/upgrade') %]
+			<fieldset>
+				[% INCLUDE 'site/elements/input' type = 'button', value = Catalyst.localize(box_path _ '_button_upgrade'), -%]
+			</fieldset>
+		</form>
+	[% ELSIF (update_settings_params.upgrade && !update_settings_params.auto_newest) %]
+		<p class="info"><strong>[% Catalyst.localize(box_path _ '_updates_automated') %]:</strong> [% Catalyst.localize(box_path _ '_updates_automated_text') %]</p>
+	[% ELSIF (update_settings_params.auto_newest) %]
+		<p class="info"><strong>[% Catalyst.localize(box_path _ '_system_updates_automated') %]:</strong> [% Catalyst.localize(box_path _ '_system_updates_automated_text') %]</p>
+	[% ELSE %]
+		<p><span class="success">[% Catalyst.localize(box_path _ '_up_to_date') %]</span></p>
+	[% END %]
+[% INCLUDE 'site/box_close' %]

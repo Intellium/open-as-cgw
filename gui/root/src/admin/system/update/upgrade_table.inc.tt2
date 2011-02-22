@@ -1,0 +1,46 @@
+[% PROCESS 'site/box_init' %]
+[% INCLUDE 'site/box_open' %]
+	[% ### Version upgrade table ### %]
+	[% IF !up2date_license %]
+		<p><span class="error">[% Catalyst.localize('heading_get_up2date_license') %]</span></p>
+	[% END %]
+	[% IF new_main_version;
+		table_headers = [];
+		table_headers.push(Catalyst.localize('system_version'));
+		table_headers.push(Catalyst.localize('info'));
+		table_headers.push(Catalyst.localize('action'));
+
+		table_th_classes = [];
+		table_th_classes.push('left', '', '');
+		table_td_classes = [];
+		table_td_classes.push('left', '', 'action');
+
+		table_values = [];
+		FOREACH main_ver IN versions.version_system_all.keys.sort.reverse;
+			main_ver_url = main_ver | replace('\.', '_');
+			desc_link_url = "http://www.underground8.com/de/support/as_systemupdate_" _ main_ver_url  _ ".html";
+			desc_link = '<a href="' _ desc_link_url _  '" title="' _ Catalyst.localize('update_info_underground_website') _ '">' _ Catalyst.localize('description')  _ '</a>';
+
+			IF up2date_license ;
+				action = BLOCK; 
+					INCLUDE 'site/elements/link'
+					url = Catalyst.uri_for("/admin/system/update/usus/install_new/$main_ver"),
+					label = 'Install';
+				END;
+				action = '<span>' _ action _ '</span>';
+			ELSE;
+				action = Catalyst.localize('disabled_no_license_up2date');
+			END;
+			table_values.push([ main_ver, desc_link, action ]);
+		END;
+	
+		INCLUDE 'site/elements/table'
+			headers = table_headers,
+			td_classes = table_td_classes,
+			th_classes = table_th_classes,
+			td_values = table_values;
+		%]
+	[% ELSE %]
+		<p class="info"><strong>[% Catalyst.localize('newest_feature_version_installed') %]</strong></p>
+	[% END %]
+[% INCLUDE 'site/box_close' %]

@@ -1,0 +1,77 @@
+#! /bin/sh
+#
+# Init script for quarantine-ng
+# as@underground8.com
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/quarantine-ng.pl
+NAME=quarantine-ng.pl
+DAEMONNAME=quarantine-ng.pl
+DESC=quarantine-ng.pl
+
+test -f ${DAEMON} || exit 0
+
+set -e
+
+START="--start --quiet --pidfile /var/run/${NAME}.pid --name ${DAEMONNAME} --startas ${DAEMON}"
+STOP="--stop --quiet --pidfile /var/run/${NAME}.pid" #--name ${DAEMONNAME}"
+PARAMS=
+
+case "$1" in
+  start)
+        echo -n "Starting $DESC: "
+        if start-stop-daemon ${START} -- ${PARAMS} start >/dev/null ; then
+                echo "${DAEMONNAME}."
+        else
+                if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+                        echo "(failed)."
+                        exit 1
+                else
+                        echo "(already running)."
+                        exit 0
+                fi
+        fi
+        ;;
+  stop)
+  		# HACK HACK HACK
+  		exit 0;
+        echo -n "Stopping $DESC: "
+        if start-stop-daemon ${STOP} --retry 10 >/dev/null ; then
+                echo "${DAEMONNAME}."
+        else
+                if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+			PID_PIDFILE=`cat /var/run/${NAME}.pid`
+			PID_PSAUX=`ps aux | grep ${DAEMONNAME} | grep -v grep | awk '{print $2}'`
+
+			if [ $PID_PIDFILE -ne $PID_PSAUX ]; then
+				echo "(process PID and pidfile PID are inconsistent)";
+				rm /var/run/${NAME}.pid
+				killall ${NAME}
+			fi		
+	
+                        echo "(not running)."
+                        exit 0
+                else
+                        echo "(failed)."
+                        exit 1
+                fi
+        fi
+        ;;
+  reload)
+        echo -n "Reloading $DESC: "
+        kill -s HUP `cat $PIDFILE`
+        echo "$NAME."
+        ;;
+  restart|force-reload)
+        $0 stop
+        exec $0 start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+

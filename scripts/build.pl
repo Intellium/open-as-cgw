@@ -263,19 +263,19 @@ sub create_debs ($$$) {
 
 	print "  Building meta package ... ";
 	chdir("${BASE}/${BUILD_ENV_VIRDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";
 
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";
 
 	print "  Building gui package ... ";
 	chdir("${BASE}/${BUILD_ENV_GUIDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-gui") if $? != 0;
 	print "OK\n";
 
@@ -314,15 +314,15 @@ sub write_debian_changelog {
 	tie my @changelog, "Tie::File", "${BUILD_ENV_LIBDIR}/debian/changelog";
 	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
-	unshift @changelog, "limesas-lib ($package_version) unstable; urgency=low\n\n";
+	unshift @changelog, "limesas-lib ($package_version) lucid; urgency=low\n\n";
 
 	tie @changelog, "Tie::File", "${BUILD_ENV_GUIDIR}/debian/changelog";
 	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
-	unshift @changelog, "limesas-gui ($package_version) unstable; urgency=low\n\n";
+	unshift @changelog, "limesas-gui ($package_version) lucid; urgency=low\n\n";
 
 	tie @changelog, "Tie::File", "${BUILD_ENV_VIRDIR}/debian/changelog";
 	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
-	unshift @changelog, "limesas ($package_version) unstable; urgency=low\n\n";
+	unshift @changelog, "limesas ($package_version) lucid; urgency=low\n\n";
 }

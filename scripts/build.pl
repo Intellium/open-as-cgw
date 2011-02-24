@@ -38,6 +38,7 @@ my $BUILD_ENV_GUIDIR = $BUILD_ENV . "/" . "limesas-gui";
 my $BUILD_ENV_VIRDIR = $BUILD_ENV . "/" . "limesas";
 my $SRC_DIR = "src";
 my $NOCLEANUP = 0;
+my $SIGN_FILES = 0;
 my $rev = 0;
 
 
@@ -50,13 +51,15 @@ GetOptions (
 	'suffix=s'		=> \$SUFFIX,
 	'distribution=s' => \$DISTRIBUTION,
 	'nocleanup!'	=> \$NOCLEANUP,
+	'signfiles!'	=> \$SIGN_FILES,
 		);
 
 
 print "Going to build with the following parameters:\n";
 print "  LIBDIR = $LIBDIR, GUIDIR = $GUIDIR, VIRDIR = $VIRDIR\n";
 print "  Installing final packages to <$INSTALLDIR>\n";
-print "  Packaging with suffix <-$SUFFIX>, distribution <$DISTRIBUTION>\n\n";
+print "  Packaging with suffix <-$SUFFIX>, distribution <$DISTRIBUTION>\n";
+print "  Signing packages: $SIGN_FILES\n\n"
 
 
 print "Preparing code-base for package construction in <${BUILD_ENV}>\n";
@@ -263,19 +266,27 @@ sub create_debs ($$$) {
 
 	print "  Building meta package ... ";
 	chdir("${BASE}/${BUILD_ENV_VIRDIR}");
-	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+
+	($SIGN_FILES == 0)
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";
 
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
-	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+	($SIGN_FILES == 0)
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";
 
 	print "  Building gui package ... ";
 	chdir("${BASE}/${BUILD_ENV_GUIDIR}");
-	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+
+	($SIGN_FILES == 0)
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-gui") if $? != 0;
 	print "OK\n";
 

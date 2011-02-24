@@ -1,5 +1,5 @@
 Source: limesas-gui
-Section: unknown
+Section: admin
 Priority: optional
 Maintainer: Erik Sonnleitner <es@delta-xi.net>
 Build-Depends: debhelper (>= 5)

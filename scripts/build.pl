@@ -263,19 +263,19 @@ sub create_debs ($$$) {
 
 	print "  Building meta package ... ";
 	chdir("${BASE}/${BUILD_ENV_VIRDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";
 
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";
 
 	print "  Building gui package ... ";
 	chdir("${BASE}/${BUILD_ENV_GUIDIR}");
-	system("dpkg-buildpackage -rfakeroot -d -k22E1D6FD > /dev/null 2>&1");
+	system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-gui") if $? != 0;
 	print "OK\n";
 

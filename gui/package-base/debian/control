@@ -8,8 +8,7 @@ Standards-Version: 3.7.2
 Package: limesas-gui
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
-        libfcgi0ldbl,
-        libfcgi-perl,
-#        cpan-libfcgi-procmanager-perl,
-        libgd-gd2-perl
+	libfcgi0ldbl,
+	libfcgi-perl,
+	libgd-gd2-perl
 Description: this are all the files you need for the limesas-gui

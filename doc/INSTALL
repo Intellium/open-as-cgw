@@ -7,7 +7,10 @@ need to set up a dedicated server for it.
 
 Quick install instructions:
 
-1. Set up a new Ubuntu Server Lucid 10.04[.1] (VM recommended) with SSH
+1. Set up a new Ubuntu Server Lucid 10.04[.1] (VM recommended) with SSH.
+   For productive use, the System will need at least 1 GiB of RAM. You may
+   assign as many virtual cores/CPUs as you like, the system will use them
+   all.
    Note: You may choose any username you like, except "limes" for it is
          reserved.
 

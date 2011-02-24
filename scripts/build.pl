@@ -312,17 +312,17 @@ sub write_debian_changelog {
 
 
 	tie my @changelog, "Tie::File", "${BUILD_ENV_LIBDIR}/debian/changelog";
-	unshift @changelog, " -- AutoScript <limesas\@underground8.com>  $wday,  $day $month $year $hms +0100\n\n";
+	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
 	unshift @changelog, "limesas-lib ($package_version) unstable; urgency=low\n\n";
 
 	tie @changelog, "Tie::File", "${BUILD_ENV_GUIDIR}/debian/changelog";
-	unshift @changelog, " -- AutoScript <limesas\@underground8.com>  $wday,  $day $month $year $hms +0100\n\n";
+	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
 	unshift @changelog, "limesas-gui ($package_version) unstable; urgency=low\n\n";
 
 	tie @changelog, "Tie::File", "${BUILD_ENV_VIRDIR}/debian/changelog";
-	unshift @changelog, " -- AutoScript <limesas\@underground8.com>  $wday,  $day $month $year $hms +0100\n\n";
+	unshift @changelog, " -- Erik Sonnleitner <es\@delta-xi.net>  $wday,  $day $month $year $hms +0100\n\n";
 	unshift @changelog, "  * Automatically created entry.\n\n";
 	unshift @changelog, "limesas ($package_version) unstable; urgency=low\n\n";
 }

@@ -59,7 +59,7 @@ print "Going to build with the following parameters:\n";
 print "  LIBDIR = $LIBDIR, GUIDIR = $GUIDIR, VIRDIR = $VIRDIR\n";
 print "  Installing final packages to <$INSTALLDIR>\n";
 print "  Packaging with suffix <-$SUFFIX>, distribution <$DISTRIBUTION>\n";
-print "  Signing packages: $SIGN_FILES\n\n"
+print "  Signing packages: $SIGN_FILES\n\n";
 
 
 print "Preparing code-base for package construction in <${BUILD_ENV}>\n";

@@ -48,7 +48,7 @@ sub write_config {
 sub service_restart ($) {
     my $self = instance(shift);
     my $output = safe_system($g->{'cmd_avira_server_restart'});
-    my $output = safe_system($g->{'cmd_sambucus_server_restart'});
+    $output = safe_system($g->{'cmd_sambucus_server_restart'});
 }
  
 

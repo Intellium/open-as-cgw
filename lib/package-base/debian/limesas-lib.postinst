@@ -640,7 +640,7 @@ prepare_networking(){
 	echo "*** Preparing network/interfaces..."
 	IFACES="/etc/network/interfaces"
 
-	# TODO: this should not be static
+	# TODO: this should not be statically bound
 	DEFAULT_IFACE="eth0"
 
 	echo "auto lo" > $IFACES
@@ -654,6 +654,10 @@ prepare_networking(){
 	echo -e "\tgateway 192.168.1.254" >> $IFACES
 	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
 	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
+
+	# be sure we don't fetch a dhcp lease
+	killall dhclient3
+	killall dhclient
 }
 
 

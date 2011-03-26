@@ -636,6 +636,27 @@ prepare_limes(){
 	echo "*** Limes Config Done"
 }
 
+prepare_networking(){
+	echo "*** Preparing network/interfaces..."
+	IFACES="/etc/network/interfaces"
+
+	# TODO: this should not be static
+	DEFAULT_IFACE="eth0"
+
+	echo "auto lo" > $IFACES
+	echo -e "iface lo inet loopback\n" >> $IFACES
+	echo "# MARKER: DO NOT DELETE THE LINE BELOW" >> $IFACES
+	echo "#--start:${DEFAULT_IFACE}--" >> $IFACES
+	echo "auto ${DEFAULT_IFACE}" >> $IFACES
+	echo "iface ${DEFAULT_IFACE} inet static" >> $IFACES
+	echo -e "\taddress 192.168.1.1" >> $IFACES
+	echo -e "\tnetmask 255.255.255.0" >> $IFACES
+	echo -e "\tgateway 192.168.1.254" >> $IFACES
+	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
+	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
+}
+
+
 ################# case
 
 case "$1" in
@@ -657,6 +678,7 @@ case "$1" in
 #	prepare_lcd;
 	prepare_quarantine;
 	prepare_smtpcrypt;
+	prepare_networking;
 
 	#sudo -u www-data /usr/local/bin/update_backup_conf.pl
 

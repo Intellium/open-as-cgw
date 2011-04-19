@@ -658,6 +658,7 @@ prepare_networking(){
 	# be sure we don't fetch a dhcp lease
 	killall dhclient3
 	killall dhclient
+	return 0
 }
 
 

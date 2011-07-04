@@ -656,9 +656,10 @@ prepare_networking(){
 	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
 
 	# be sure we don't fetch a dhcp lease
-	killall dhclient3
-	killall dhclient
-	return 0
+	pidof dhclient3 &>/dev/null && killall dhclient3
+	pidof dhclient &>/dev/null && killall dhclient
+
+	echo "*** Preparing network/interfaces done"
 }
 
 

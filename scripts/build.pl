@@ -80,6 +80,8 @@ mkpath("${BUILD_ENV_GUIDIR}/$_") foreach(@dirs_needed_gui);
 print "  Retrieving revision ... ";
 # my $REVISION = `git log --date=raw HEAD^..HEAD | egrep "^Date:" | awk '{ print \$2 }'`;	 # legacy for GIT repo
 my $REVISION = `bzr log -r-1 | grep "revno" | awk '{ print \$2 }'`;
+# REMOVE THIS --- only for testing ... revision needs to be read from some sort of versioning system
+$REVISION = "1234";
 chomp($REVISION);
 print "is $REVISION\n";
 
@@ -268,7 +270,7 @@ sub create_debs ($$$) {
 	chdir("${BASE}/${BUILD_ENV_VIRDIR}");
 
 	($SIGN_FILES == 0)
-		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
 		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";

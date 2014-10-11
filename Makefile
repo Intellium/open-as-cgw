@@ -4,16 +4,16 @@
 # vim: ts=4:sw=4
 
 
-all: clean prepare build-cyrus-sasl build-limesas install
+all: clean prepare build-cyrus-sasl build-limesas finalize
 
 clean:
 	rm -rf devel
 
 prepare:
 	aptitude update
-	./scripts/install-package-list.sh scripts/packagelist-build-deps-lucid
+	./scripts/install-package-list.sh scripts/packagelist-build-deps-trusty
 	debconf-set-selections scripts/selections-postfix-policyd
-	./scripts/install-package-list.sh scripts/packagelist-runtime-deps-lucid
+	./scripts/install-package-list.sh scripts/packagelist-runtime-deps-trusty
 	./scripts/install-cpan-modules.sh
 
 build-cyrus-sasl:
@@ -22,9 +22,10 @@ build-cyrus-sasl:
 build-limesas:
 	./scripts/build.pl
 
+	mv ext/cyrus-sasl-patch/*.deb devel/
+	
 install:
-	dpkg -i ext/cyrus-sasl-patch/*.deb
-	dpkg -i devel/limesas-gui_*.deb
-	dpkg -i devel/limesas-lib_*.deb
-	dpkg -i devel/limesas_*.deb
-
+	dpkg -i release/cyrus-sasl-patch/*.deb
+	dpkg -i release/limesas-gui_*.deb
+	dpkg -i release/limesas-lib_*.deb
+	dpkg -i release/limesas_*.deb

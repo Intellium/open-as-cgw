@@ -1,38 +1,32 @@
 #!/bin/bash
 
-VERSION="2.1.23"
-SRC="ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-$VERSION.tar.gz"
+# settings
+VERSION="2.1.25"
+SRC="ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-$VERSION.tar.gz"
 PATCH="u8_sasl_proxy.patch"
-DEBIAN_DIR="debian-dir.tar.bz2"
+DEBSRC="debian.tar.gz"
 
+# cleanup from previous builds
 rm -rf cyrus*
+
+# get cyrus src and extract
 wget $SRC
 tar xfvz `basename $SRC`
 
-cp $PATCH "cyrus-sasl-$VERSION"
-cp $DEBIAN_DIR "cyrus-sasl-$VERSION"
+# get debian sources and unpack
+#apt-get source cyrus-sasl2
+tar xfvz $DEBSRC
 
+# copy patches and package dependencies
+cp $PATCH "cyrus-sasl-$VERSION"
+mv debian "cyrus-sasl-$VERSION"
+
+# switch to cyrus-sasl dir
 cd "cyrus-sasl-$VERSION"
-# patch -p1 < $PATCH
+
+# apply patch
 quilt import $PATCH
 quilt push
 
-#./configure --with-saslauthd=/var/spool/postfix/var/run/saslauthd --with-des=no
-#if [ $? eq 0 ]; then
-#	echo "Aborted."
-#	exit 1
-#fi
-
-#cd saslauthd
-#./configure --with-saslauthd=/var/spool/postfix/var/run/saslauthd --with-des=no
-#if [ $? eq 0 ]; then
-#	echo "Aborted."
-#	exit 1
-#fi
-
-#make
-
-tar xfj $DEBIAN_DIR
-dpkg-buildpackage
-
-
+# build deb package
+dpkg-buildpackage -b

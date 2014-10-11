@@ -15,7 +15,7 @@ Index: cyrus-sasl/saslauthd/Makefile.in
 ===================================================================
 --- cyrus-sasl.orig/saslauthd/Makefile.in	2010-06-10 08:04:03.605669630 +0200
 +++ cyrus-sasl/saslauthd/Makefile.in	2010-06-10 08:05:09.618187069 +0200
-@@ -145,7 +145,7 @@
+@@ -227,7 +227,7 @@
  		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
  		    krbtf.c krbtf.h utils.c utils.h \
                      ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
@@ -24,15 +24,15 @@ Index: cyrus-sasl/saslauthd/Makefile.in
  
  EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
  saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
-@@ -179,7 +179,7 @@
- 	lak.$(OBJEXT) auth_ldap.$(OBJEXT) cache.$(OBJEXT) \
- 	cfile.$(OBJEXT) krbtf.$(OBJEXT) utils.$(OBJEXT) \
- 	ipc_unix.$(OBJEXT) ipc_doors.$(OBJEXT) saslauthd-main.$(OBJEXT) \
--	md5.$(OBJEXT)
-+	md5.$(OBJEXT) u8_sasl_auth_proxy.$(OBJEXT)
+@@ -69,7 +69,7 @@
+	auth_sia.$(OBJEXT) auth_sasldb.$(OBJEXT) lak.$(OBJEXT) \
+	auth_ldap.$(OBJEXT) cache.$(OBJEXT) cfile.$(OBJEXT) \
+	krbtf.$(OBJEXT) utils.$(OBJEXT) ipc_unix.$(OBJEXT) \
+-	ipc_doors.$(OBJEXT) saslauthd-main.$(OBJEXT) md5.$(OBJEXT)
++	ipc_doors.$(OBJEXT) saslauthd-main.$(OBJEXT) md5.$(OBJEXT) u8_sasl_auth_proxy.$(OBJEXT)
  saslauthd_OBJECTS = $(am_saslauthd_OBJECTS)
- saslauthd_LDFLAGS =
  am_saslcache_OBJECTS = saslcache.$(OBJEXT)
+ saslcache_OBJECTS = $(am_saslcache_OBJECTS)
 Index: cyrus-sasl/saslauthd/mechanisms.c
 ===================================================================
 --- cyrus-sasl.orig/saslauthd/mechanisms.c	2010-06-10 08:03:38.645669978 +0200
@@ -100,19 +100,6 @@ Index: cyrus-sasl/saslauthd/u8_sasl_auth_proxy.h
 +char *auth_proxy(const char *, const char *, const char *, const char *);
 +
 +#endif
-Index: cyrus-sasl/AUTHORS
-===================================================================
---- cyrus-sasl.orig/AUTHORS	2010-06-10 08:03:38.695668755 +0200
-+++ cyrus-sasl/AUTHORS	2010-06-10 08:05:09.618187069 +0200
-@@ -44,4 +44,8 @@
- which is based on the IPv6 code written by KIKUCHI Takahiro
- <kick@kyoto.wide.ad.jp>
- 
-+Erik Sonnleitner <es@underground8.com> added support for auth_proxy,
-+which delegates the final authentication decision to an external
-+program.
-+
- $Id: AUTHORS,v 1.17 2004/01/08 15:30:25 ken3 Exp $
 Index: cyrus-sasl/saslauthd/mechanisms.h
 ===================================================================
 --- cyrus-sasl.orig/saslauthd/mechanisms.h	2010-06-10 08:03:38.685669869 +0200

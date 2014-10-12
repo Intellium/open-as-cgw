@@ -23,14 +23,14 @@ CREATE TABLE policy (
   _optin       tinyint(1) unsigned NOT NULL default '1',
   _priority    tinyint(1) unsigned NOT NULL default '0',
   UNIQUE KEY _rcpt (_rcpt,_optin) 
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE policy_training (
   _rcpt        char(60) NOT NULL default '',
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _rcpt (_rcpt),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE throttle (
   _from        char(60) NOT NULL default '',
@@ -51,7 +51,7 @@ CREATE TABLE throttle (
   _log_panic   int(10) unsigned NOT NULL default '0',
   _priority    tinyint(1) unsigned NOT NULL default '0',
   UNIQUE KEY _from (_from)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE throttle_from_instance (
   _instance    char(60) NOT NULL default '',
@@ -59,7 +59,7 @@ CREATE TABLE throttle_from_instance (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _instance (_instance),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE throttle_rcpt (
   _rcpt        char(60) NOT NULL default '',
@@ -73,7 +73,7 @@ CREATE TABLE throttle_rcpt (
   _log_warn    int(10) unsigned NOT NULL default '0',
   _log_panic   int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _rcpt (_rcpt)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE triplet (
   _from        char(60) NOT NULL default '',
@@ -85,7 +85,7 @@ CREATE TABLE triplet (
   UNIQUE KEY _host (_host,_from,_rcpt),
   KEY _datelast (_datelast),
   KEY _datenew (_datenew)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
   
 CREATE TABLE whitelist (
   _whitelist   char(15) NOT NULL default '',
@@ -93,7 +93,7 @@ CREATE TABLE whitelist (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _whitelist (_whitelist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE whitelist_sender (
   _whitelist   char(60) NOT NULL default '',
@@ -101,7 +101,7 @@ CREATE TABLE whitelist_sender (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _whitelist (_whitelist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE whitelist_dnsname (
   _whitelist   char(60) NOT NULL default '',
@@ -109,7 +109,7 @@ CREATE TABLE whitelist_dnsname (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _whitelist (_whitelist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE blacklist (
   _blacklist   char(15) NOT NULL default '',
@@ -117,12 +117,12 @@ CREATE TABLE blacklist (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _blacklist (_blacklist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE blacklist_helo (
   _helo        char(60) NOT NULL default '',
   UNIQUE KEY _helo (_helo)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE blacklist_sender (
   _blacklist   char(60) NOT NULL default '',
@@ -130,7 +130,7 @@ CREATE TABLE blacklist_sender (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _blacklist (_blacklist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE blacklist_dnsname (
   _blacklist   char(60) NOT NULL default '',
@@ -138,13 +138,13 @@ CREATE TABLE blacklist_dnsname (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _blacklist (_blacklist),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE spamtrap (
   _rcpt        char(60) NOT NULL default '',
   _active      tinyint(1) unsigned NOT NULL default '1',
   UNIQUE KEY _rcpt (_rcpt,_active)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE helo (
   _host        char(15) NOT NULL default '',
@@ -152,5 +152,5 @@ CREATE TABLE helo (
   _expire      int(10) unsigned NOT NULL default '0',
   UNIQUE KEY _host (_host,_helo),
   KEY _expire (_expire)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 

@@ -278,7 +278,8 @@ sub create_debs ($$$) {
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
 	($SIGN_FILES == 0)
-		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		#? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
 		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";

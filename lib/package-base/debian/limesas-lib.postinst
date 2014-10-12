@@ -670,7 +670,7 @@ case "$1" in
 	
 	prepare_crypto;
 	prepare_system;
-	prepare_ssh;
+	#prepare_ssh;
 	prepare_system_accounts;
 	prepare_limes;
 #	prepare_cli;

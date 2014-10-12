@@ -32,7 +32,7 @@ my $SUFFIX = "0";
 my $LIBDIR = "lib";
 my $GUIDIR = "gui";
 my $VIRDIR = "meta";
-my $BUILD_ENV = "devel";
+my $BUILD_ENV = "release";
 my $BUILD_ENV_LIBDIR = $BUILD_ENV . "/" . "limesas-lib";
 my $BUILD_ENV_GUIDIR = $BUILD_ENV . "/" . "limesas-gui";
 my $BUILD_ENV_VIRDIR = $BUILD_ENV . "/" . "limesas";
@@ -271,16 +271,15 @@ sub create_debs ($$$) {
 
 	($SIGN_FILES == 0)
 		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
-		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";
 
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
 	($SIGN_FILES == 0)
-		#? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
 		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
-		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";
 
@@ -288,8 +287,8 @@ sub create_debs ($$$) {
 	chdir("${BASE}/${BUILD_ENV_GUIDIR}");
 
 	($SIGN_FILES == 0)
-		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
-		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
 	fatal(1, "failed to build limesas-gui") if $? != 0;
 	print "OK\n";
 

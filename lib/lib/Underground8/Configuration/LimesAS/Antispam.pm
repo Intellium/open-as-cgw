@@ -941,12 +941,12 @@ sub create_blacklist_addr ($$$) {
 	my $address = shift;
 	my $description = shift;
 
-	if( defined $self->read_whitelist_addr->{$address} ) {
+	if( $self->read_whitelist_addr->{$address} ) {
 		throw Underground8::Exception::EntryExistsIn( 'nav_policy_emailaddresswhitelist', $address );
 	}
 
 	$address =~ /(\@.*)$/;
-	if( ($address !~ /^@/ ) && defined $self->read_whitelist_addr->{$1} ) {
+	if( ($address !~ /^@/ ) && $self->read_whitelist_addr->{$1} ) {
 		throw Underground8::Exception::EntryExistsIn( 'nav_policy_emailaddresswhitelist', $1 );
 	}
 	
@@ -996,7 +996,7 @@ sub create_whitelist_addr ($$$) {
 	my $address = shift;
 	my $description = shift;
 
-	if( defined $self->read_blacklist_addr->{$address} ) {
+	if( $self->read_blacklist_addr->{$address} ) {
 		throw Underground8::Exception::EntryExistsIn( 'nav_policy_emailaddressblacklist', $address );
 	}
 
@@ -1130,16 +1130,16 @@ sub load_config_xml_smart ($) {
 	my $policyd = $XML->{'policyd'}->tree_pointer_ok;
 	my @black_white_lists = qw(_addr_whitelist _addr_blacklist _ip_whitelist _ip_blacklist);
 	foreach my $list (@black_white_lists) {
-		if(	defined @{$XML->{'policyd'}->{$list}} && 
-			defined $XML->{'policyd'}->{$list}->{'address'} && 
+		if(	@{$XML->{'policyd'}->{$list}} && 
+			$XML->{'policyd'}->{$list}->{'address'} && 
 			$XML->{'policyd'}->{$list}->{'address'} ne '')
 		{
 				$policyd->{$list} = { };
 				foreach my $entry (@{$XML->{'policyd'}->{$list}}) {
 					$policyd->{$list}->{$entry->{'address'}} = sprintf('%s',$entry->{'description'});
 				}
-		} elsif(defined @{$XML->{'policyd'}->{$list}} && 
-				defined $XML->{'policyd'}->{$list}->{'start'} && 
+		} elsif(@{$XML->{'policyd'}->{$list}} && 
+				$XML->{'policyd'}->{$list}->{'start'} && 
 				$XML->{'policyd'}->{$list}->{'start'} ne '')
 		{
 			$policyd->{$list} = [ ];
@@ -1159,7 +1159,7 @@ sub load_config_xml_smart ($) {
 
 	my @string_to_int = qw(addr_blacklisting addr_whitelisting ip_blacklisting ip_whitelisting);
 	foreach my $entry (@string_to_int) {
-		if(defined $policyd->{'_config'}->{$entry}) {
+		if($policyd->{'_config'}->{$entry}) {
 			$policyd->{'_config'}->{$entry} = sprintf('%d',$policyd->{'_config'}->{$entry});
 		}
 	}
@@ -1260,7 +1260,7 @@ sub commit ($) {
 	
 	# we need this, so ldap.pl commit does not restart ALL antispam services!
 	# calling commit with a parameter activates override
-	if (! defined $ldap_override) {
+	if (! $ldap_override) {
 		$ldap_override = 0;
 	} else {
 		$ldap_override = 1;
@@ -1321,7 +1321,7 @@ sub set_policy_external {
 	my $setting = shift;
 	my $value = shift;
 
-	unless (defined $setting || defined $value) {
+	unless ($setting || $value) {
 		warn "Setting or Value not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1335,7 +1335,7 @@ sub policy_external {
 	my $self = shift;
 	my $setting = shift;
 
-	unless (defined $setting) {
+	unless ($setting) {
 		warn "Setting not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1351,7 +1351,7 @@ sub set_policy_whitelist {
 	my $setting = shift;
 	my $value = shift;
 
-	unless (defined $setting || defined $value) {
+	unless ($setting || $value) {
 		warn "Setting or Value not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1365,7 +1365,7 @@ sub policy_whitelist {
 	my $self = shift;
 	my $setting = shift;
 
-	unless (defined $setting) {
+	unless ($setting) {
 		warn "Setting not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1381,7 +1381,7 @@ sub set_policy_smtpauth {
 	my $setting = shift;
 	my $value = shift;
 
-	unless (defined $setting || defined $value) {
+	unless ($setting || $value) {
 		warn "Setting or Value not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1395,7 +1395,7 @@ sub policy_smtpauth {
 	my $self = shift;
 	my $setting = shift;
 
-	unless (defined $setting) {
+	unless ($setting) {
 		warn "Setting not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1411,7 +1411,7 @@ sub set_policy_internal {
 	my $setting = shift;
 	my $value = shift;
 
-	unless (defined $setting || defined $value) {
+	unless ($setting || $value) {
 		warn "Setting or Value not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1425,7 +1425,7 @@ sub policy_internal {
 	my $self = shift;
 	my $setting = shift;
 
-	unless (defined $setting) {
+	unless ($setting) {
 		warn "Setting not defined!";
 	} else {
 		unless ($setting =~ qr/bypass_spam|bypass_att|bypass_virus/) {
@@ -1472,11 +1472,11 @@ sub check_overlapping($$$) {
 
 	my ($start, $end);
 
-	if( defined $hash_ref->{'address'} ) {
+	if( $hash_ref->{'address'} ) {
 		# single IP
 		$start = $hash_ref->{'address'};
 		$end = $start;
-	} elsif( defined $hash_ref->{'start'} && defined $hash_ref->{'end'} ) {
+	} elsif( $hash_ref->{'start'} && $hash_ref->{'end'} ) {
 		# IP range
 		$start = $hash_ref->{'start'};
 		$end = $hash_ref->{'end'};
@@ -1495,12 +1495,12 @@ sub check_overlapping($$$) {
 		}
 	} elsif( ref( $arr_ref ) eq "ARRAY" ) {
 		for my $item ( @$arr_ref ) {
-			if( defined $item->{'address'} ) {
+			if( $item->{'address'} ) {
 				# single IP
 				if( $self->check_range_overlap( $item->{'address'}, $item->{'address'}, $start, $end ) ) {
 					return $item->{'address'};
 				}
-			} elsif( defined $item->{'start'} && defined $item->{'end'} ) {
+			} elsif( $item->{'start'} && $item->{'end'} ) {
 				# IP range
 				if( $self->check_range_overlap( $item->{'start'}, $item->{'end'}, $start, $end ) ) {
 					return $item->{'start'} . "-" . $item->{'end'};

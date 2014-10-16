@@ -123,7 +123,7 @@ sub create_md5_sums ($@)
 }
 
 
-sub compare_md5_hashes ($%%)
+sub compare_md5_hashes ($%)
 {
     my $self = instance(shift);
     my $first = shift;

@@ -271,15 +271,27 @@ sub create_debs ($$$) {
 
 	($SIGN_FILES == 0)
 		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
+<<<<<<< TREE
 		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
+=======
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+>>>>>>> MERGE-SOURCE
 	fatal(1, "failed to build limesas meta") if $? != 0;
 	print "OK\n";
 
 	print "  Building lib package ... ";
 	chdir("${BASE}/${BUILD_ENV_LIBDIR}");
 	($SIGN_FILES == 0)
+<<<<<<< TREE
+=======
+		#? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+>>>>>>> MERGE-SOURCE
 		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
+<<<<<<< TREE
 		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
+=======
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+>>>>>>> MERGE-SOURCE
 	fatal(1, "failed to build limesas-lib") if $? != 0;
 	print "OK\n";
 
@@ -287,8 +299,13 @@ sub create_debs ($$$) {
 	chdir("${BASE}/${BUILD_ENV_GUIDIR}");
 
 	($SIGN_FILES == 0)
+<<<<<<< TREE
 		? system("dpkg-buildpackage -rfakeroot -d -us -uc")
 		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD");
+=======
+		? system("dpkg-buildpackage -rfakeroot -d -us -uc > /dev/null 2>&1")
+		: system("dpkg-buildpackage -rfakeroot -S -d -k22E1D6FD > /dev/null 2>&1");
+>>>>>>> MERGE-SOURCE
 	fatal(1, "failed to build limesas-gui") if $? != 0;
 	print "OK\n";
 

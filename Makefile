@@ -21,10 +21,11 @@ build-cyrus-sasl:
 
 build-limesas:
 	./scripts/build.pl
-	mv ext/cyrus-sasl-patch/*.deb release/
+	mv ext/cyrus-sasl-patch/*.deb devel/
 	
 install:
 	dpkg -i release/cyrus*.deb
+	dpkg -i release/cyrus-sasl-patch/*.deb
 	dpkg -i release/limesas-gui_*.deb
 	dpkg -i release/limesas-lib_*.deb
 	dpkg -i release/limesas_*.deb

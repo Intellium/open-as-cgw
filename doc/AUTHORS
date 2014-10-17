@@ -7,7 +7,13 @@ on its way up to the version 2.0.2s, when the AS has finally gone Open Source.
 
 
 === Active developers =========================================================
-Sonnleitner Erik MSc., <es@delta-xi.net>
+Wehinger Stefan
+Core programming, build system, packaging
+
+Schallert Dominic
+Core programming
+
+Sonnleitner Erik, PhD <es@delta-xi.net>
 Core programming, OSS porting, maintainer
 
 
@@ -26,9 +32,6 @@ Quarantine-ng code
 
 Tangui Achraf
 Score-matrix code
-
-Wehinger Stefan
-Core programming, build system, packaging
 
 
 

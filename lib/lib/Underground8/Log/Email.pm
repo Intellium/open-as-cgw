@@ -33,7 +33,7 @@ sub new
         _to             => '',
         _subject        => '',
         _client_ip      => '',
-        _policyd_status => '',
+        _sqlgrey_status => '',
         _amavis_status  => '',
         _amavis_detail  => '',
         _amavis_hits    => undef,
@@ -49,7 +49,7 @@ sub new
 sub complete
 {
     my $self = shift;
-    return $self->msg_id && $self->queue_nr && $self->received && $self->received_log && $self->delay && $self->from && $self->to && $self->client_ip && $self->policyd_status && $self->amavis_status;
+    return $self->msg_id && $self->queue_nr && $self->received && $self->received_log && $self->delay && $self->from && $self->to && $self->client_ip && $self->sqlgrey_status && $self->amavis_status;
 }
 
 sub msg_id
@@ -108,11 +108,11 @@ sub subject
     return $self->{'_subject'};
 }
 
-sub policyd_status
+sub sqlgrey_status
 {
     my $self = shift;
-    $self->{'_policyd_status'} = shift if @_;
-    return $self->{'_policyd_status'};
+    $self->{'_sqlgrey_status'} = shift if @_;
+    return $self->{'_sqlgrey_status'};
 }
 
 sub client_ip
@@ -172,7 +172,7 @@ sub to_string
 {
     my $self = shift;
 
-    return sprintf("*MAIL* from: %s to: %s ip: %s policyd-status: %s",$self->from,$self->to,$self->client_ip,$self->policyd_status);
+    return sprintf("*MAIL* from: %s to: %s ip: %s sqlgrey-status: %s",$self->from,$self->to,$self->client_ip,$self->sqlgrey_status);
 }
 
 1;

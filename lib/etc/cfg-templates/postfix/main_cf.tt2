@@ -57,7 +57,7 @@ smtpd_sender_restrictions =
 
 127.0.0.1:10040_time_limit = 3600
 
-# pass internal whitelists, do optional checks, send to policyd
+# pass internal whitelists, do optional checks
 smtpd_recipient_restrictions = 
  check_client_access cidr:/etc/postfix/amavis_bypass_internal_accept,
  check_recipient_access regexp:/etc/postfix/filter-quarantine.regexp,
@@ -114,7 +114,7 @@ smtp_tls_security_level = may
 #selective greylisting
 [% IF config.selective_greylisting == 1 || config.greylisting == 1 -%]
 smtpd_restriction_classes = rc_greylisting
-rc_greylisting = reject_unauth_destination, check_policy_service inet:127.0.0.1:10032
+rc_greylisting = reject_unauth_destination, check_policy_service inet:127.0.0.1:2501
 [% END -%]
 
 # Note: This option is needed in order to make livelog/rtlogd correctly recognize all

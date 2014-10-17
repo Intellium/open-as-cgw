@@ -148,7 +148,7 @@ if ($pid == 0)
         syslog('info', '%s', 'LimesAS soft reset initiated');    
         purge_configuration();
         purge_livelog();
-        purge_policyd();
+        purge_sqlgrey();
         purge_smtpauth();
         purge_mailq();
 		reset_admin_password();
@@ -172,7 +172,7 @@ if ($pid == 0)
         syslog('info', '%s', 'LimesAS hard reset initiated');    
         purge_livelog();
         purge_amavis();
-        purge_policyd();
+        purge_sqlgrey();
         purge_smtpauth();
         purge_system_logfiles();
         purge_configuration();
@@ -265,10 +265,10 @@ sub purge_amavis
 
 }
 
-# purge policyd from mysql
-sub purge_policyd
+# purge sqlgrey from mysql
+sub purge_sqlgrey
 {
-    purge_database("Policyd", "policyd");
+    purge_database("sqlgrey", "sqlgrey");
 }
 
 

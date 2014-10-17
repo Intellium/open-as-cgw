@@ -13,12 +13,10 @@ The OpenAS is NOT a fully-fledged MTA-suite:
 
 External software-components used:
  * postfix as central MTA
- * postfix-policyd for greylisting; it used to be do much more work, but most
-   of these tasks are now done by postfwd (and hopefully, postfix-policyd is
-   soon replaced by postgrey)
+ * sqlgrey as greylisting policy server 
  * postfwd for black-/whitelistig and general postfix target demuxer; it sets
    postfix targets for sasl-authenticated mails, sending to-be-greylisted 
-   mails to postfix-policyd, does selective greylisting checks and performs
+   mails to sqlgrey, does selective greylisting checks and performs
    DNSBL lookups. Finally, it reaches a dummy-target, which is used to simply
    print a syslog-message for further parsing (see below)
  * amavisd-new as virus-scanning middleware

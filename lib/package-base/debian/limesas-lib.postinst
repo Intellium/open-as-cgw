@@ -110,10 +110,6 @@ prepare_postfix(){
 		sed -i -e 's/root:\tgw/root:\tsupport/g' /etc/aliases
 		postalias /etc/aliases
 	fi
-
-    # REMOVED FOR LUCID
-	# echo "*** Hacking postfix-policyd ***"
-	# sed -i 's/policyd.conf/policyd2.conf/' /usr/sbin/postfix-policyd-cleanup
 }
 
 
@@ -271,8 +267,8 @@ prepare_mysql(){
 	MYSQLSUCCESS=mysqld\ is\ alive
 
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
-		mysql < /etc/limes/db_struct/policyd.sql
-		echo "set /etc/limes/db_struct/policyd.sql"
+		mysql < /etc/limes/db_struct/sqlgrey.sql
+		echo "set /etc/limes/db_struct/sqlgrey.sql"
 		mysql < /etc/limes/db_struct/rt_log.sql
 		echo "set /etc/limes/db_struct/rt_log.sql"
 		mysql < /etc/limes/db_struct/smtp_auth.sql

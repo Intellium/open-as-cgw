@@ -35,7 +35,7 @@ Main features the AS include:
 Some aspects from the programmer's point of view:
  * The AS is basically a plain Ubuntu server with several open source
    software packages, which are managed by the AS core code (e.g.
-   postfix, postfix-policyd, postfwd, amavisd-new, spamassassin, clamav, etc.)
+   postfix, sqlgrey, postfwd, amavisd-new, spamassassin, clamav, etc.)
  * The AS core code is done mainly in OO Perl and aims to glue all operating
    system components and software packages together
 
@@ -105,18 +105,6 @@ II.1: Install build dependencies
  Note: This packages could be (manually) removed after the whole appliance
  set-up process is finished (read: after you successfully crawled through this
  file).
-
-
-II.2: Run debconf-set-selections for postfix-policyd
- Normally, Debian packages are supposed to look after certain environment
- variables and APT flags, to disable interactivity if required. Unfortunately,
- not all packages do this. One of them (and luckily the only one we're dealing
- with) is "postfix-policyd".
- In order to get rid of that, we define pre-selections so that the package
- doesn't need to interactively ask you what to do. The corresponding file which
- defines the debconf-selections is located at scripts/selections-postfix-policyd
- and has to be called as follows:
-  # debconf-set-selections scripts/selections-postfix-policyd
 
 II.3: Installing regular dependencies (from main Ubuntu repositories)
  The AS is mainly built upon numerous open-source software packages, already

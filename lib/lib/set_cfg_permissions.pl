@@ -46,10 +46,13 @@ my @files = qw(
 /etc/avira/mirror.conf
 /etc/sambucus/main.cfg
 /etc/sambucus/roles.cfg
-/etc/postfix-policyd.conf
-/etc/postfix-policyd2.conf
-/etc/default/postfix-policyd
-/etc/init.d/postfix-policyd
+/etc/sqlgrey/clients_fqdn_whitelist
+/etc/sqlgrey/clients_ip_whitelist
+/etc/sqlgrey/discrimination.regexp
+/etc/sqlgrey/dyn_fqdn.regexp
+/etc/sqlgrey/smtp_server.regexp
+/etc/sqlgrey/sqlgrey.conf
+/etc/init.d/sqlgrey
 /etc/postfix/main.cf
 /etc/postfix/filter-dynip.pcre
 /etc/postfix/amavis_bypass_filter

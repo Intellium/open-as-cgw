@@ -34,7 +34,6 @@ sub new {
 
 	my $self = {
 		_writer => new Underground8::Log::Writer::Email($mq_offset),
-		_listen_services => [	'postfix-policyd',
 								'postfix/smtpd',
 								'postfix/smtp',
 								'postfix/qmgr',
@@ -43,7 +42,8 @@ sub new {
 								'postfwd/master',		# legacy?
 								'postfwd/policy',		# legacy?
 								'postfwd',
-							],
+								'sqlgrey',	
+								],
 		_mails => {
 				msg_id		=> { },
 				queue_nr	=> { },
@@ -96,7 +96,7 @@ sub listen_services {
 }
 
 sub add_greylisted_mail {
-	my ($self, $date_log, $from, $to, $host, $policyd_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
+	my ($self, $date_log, $from, $to, $host, $sqlgrey_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
 
 	my $mail = new Underground8::Log::Email;
 	my $date = [ gettimeofday ];  #### veeRRRy dirty :(
@@ -105,7 +105,7 @@ sub add_greylisted_mail {
 	$mail->from($from);
 	$mail->to($to);
 	$mail->client_ip($host);
-	$mail->policyd_status($policyd_status);
+	$mail->sqlgrey_status($sqlgrey_status);
 	
 	$self->commit_greylisted($mail);
 	$count++;
@@ -113,7 +113,7 @@ sub add_greylisted_mail {
 } 
 
 sub add_blocked_mail {
-	my ($self, $date_log, $from, $to, $host, $policyd_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
+	my ($self, $date_log, $from, $to, $host, $sqlgrey_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
 
 	my $mail = new Underground8::Log::Email;
 	my $date = [ gettimeofday ];  #### veeRRRy dirty :(
@@ -123,7 +123,7 @@ sub add_blocked_mail {
 	$mail->from($from);
 	$mail->to($to);
 	$mail->client_ip($host);
-	$mail->policyd_status($policyd_status);
+	$mail->sqlgrey_status($sqlgrey_status);
 
 	$self->commit_blocked_blacklist($mail);
 	$count++;
@@ -138,7 +138,7 @@ sub add_outgoing_mail {
 
 	$mail->received($date);
 	$mail->received_log($date_log);
-	$mail->policyd_status("outgoing");
+	$mail->sqlgrey_status("outgoing");
 	$mail->client_ip($client_ip);
 
 	debug("Adding outgoing Mail queue_nr: $queue_nr, ip: $client_ip",3);
@@ -150,7 +150,7 @@ sub add_outgoing_mail {
 }
 
 sub add_accepted_mail {
-	my ($self, $date_log, $from, $to, $host, $policyd_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
+	my ($self, $date_log, $from, $to, $host, $sqlgrey_status) = (shift, shift, lc(shift), lc(shift), shift, shift);
 
 	my $mail = new Underground8::Log::Email;
 	my $date = [ gettimeofday ];
@@ -159,15 +159,15 @@ sub add_accepted_mail {
 	$mail->from($from);
 	$mail->to($to);
 	$mail->client_ip($host);
-	$mail->policyd_status($policyd_status);
+	$mail->sqlgrey_status($sqlgrey_status);
 	
 	debug("Adding accepted Mail from:$from, to:$to, ip:$host",3);
 
 	# there are cases when queue_nrs are already known for a new email
-	# (smtpd/cleanup message comes before policyd)
+	# (smtpd/cleanup message comes before sqlgrey)
 	# So, let's first have a look on the queue_nr mapping and see if there are
 	# any empty entries. If so, our new mail belongs to this queue_nr.
-	unless ($policyd_status =~ qr/new|abuse/) # performance
+	unless ($sqlgrey_status =~ qr/new|abuse/) # performance
 	{
 		foreach my $queue_nr (keys %{$self->mails->{'queue_nr'}})
 		{
@@ -635,18 +635,18 @@ sub process {
 	}
 
 	### POLICYD: Recognize newly arrived Greylisted mails, Greylisting-Updates and Greylisting-Abuse
-	elsif ($service =~ qr/postfix-policyd/) {
-		my ($policyd_msg, $type, $client_ip, $from, $to, $module);
+	elsif ($service =~ qr/sqlgrey/) {
+		my ($sqlgrey_msg, $type, $client_ip, $from, $to, $module);
 
 		# rcpt=13, greylist=update, host=10.2.200.10 (unknown), from=abc@orf.at, to=lol@domain.tld, size=0
 		if ($message =~ qr/rcpt=\d+,\s(.+)/) {
-			$policyd_msg = $1;
-			debug ("policyd msg: $policyd_msg",4);
+			$sqlgrey_msg = $1;
+			debug ("sqlgrey msg: $sqlgrey_msg",4);
 
 			# extract data from message
-			if ($policyd_msg =~ qr/(module|greylist|type)=(\w+)\,\shost=([\d\.]+)\s\(.+\)\,\sfrom=([\w\d\.\=\-\_\@\<\>]+)\,\sto=([\w\d\.\=\-\_\@]+)\,.+/) {
+			if ($sqlgrey_msg =~ qr/(module|greylist|type)=(\w+)\,\shost=([\d\.]+)\s\(.+\)\,\sfrom=([\w\d\.\=\-\_\@\<\>]+)\,\sto=([\w\d\.\=\-\_\@]+)\,.+/) {
 				($module, $type, $client_ip, $from, $to) = ($1, $2, $3, $4, $5);
-				debug ("policyd message arrived ($module=$type)",3);
+				debug ("sqlgrey message arrived ($module=$type)",3);
 
 				$type = 'update' if $type =~ qr/bypass|passthrough/;
 				$from = 'MAILER-DAEMON' if $from eq '<>';
@@ -661,7 +661,7 @@ sub process {
 					$self->add_greylisted_mail($date, $from, $to, $client_ip, $type);
 				}
 			} else {
-				debug ("Didn't match policyd regex",3);
+				debug ("Didn't match sqlgrey regex",3);
 			}
 		}
 	}

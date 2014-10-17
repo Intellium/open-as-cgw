@@ -14,7 +14,7 @@
 # with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
 
 
-package Underground8::Service::PostfixPolicyd::SLAVE;
+package Underground8::Service::SQLGrey::SLAVE;
 use base Underground8::Service::SLAVE;
 
 use strict;
@@ -31,7 +31,7 @@ sub new ($$)
 {
     my $class = shift;
     my $self = $class->SUPER::new();
-    $self->{'_system_username'} = 'policyd';
+    $self->{'_system_username'} = 'sqlgrey';
     $self->{'_mysql_username'} = '';
     $self->{'_mysql_password'} = '';
     $self->{'_mysql_database'} = '';
@@ -51,7 +51,7 @@ sub initialized
 sub service_restart ($)
 {
     my $self = instance(shift, __PACKAGE__);
-    my $output = safe_system($g->{'cmd_policyd_restart'});
+    my $output = safe_system($g->{'cmd_sqlgrey_restart'});
 }
     
 
@@ -260,7 +260,7 @@ sub write_config ($$$$$)
     my $mysql_password = shift;
     my $config = shift;
 
-    $self->write_policyd_config($mysql_hostname,
+    $self->write_sqlgrey_config($mysql_hostname,
                                 $mysql_database, 
                                 $mysql_username,
                                 $mysql_password, 
@@ -350,7 +350,7 @@ sub write_postfix_whitelist_ip
 }
 
 
-sub write_policyd_config ($$$$$)
+sub write_sqlgrey_config ($$$$$)
 {
     my $self = instance(shift, __PACKAGE__);                                                                                 
     my $mysql_host = shift;
@@ -384,7 +384,7 @@ sub write_policyd_config ($$$$$)
                     greylisting_triplettime => $config->{'greylisting_triplettime'},
                     greylisting_message => $config->{'greylisting_message'},
     };                                                                                                                       
-    ## up from now there are two policyd demons runing (a trick to implement selective greylisting) , one for greylisting and the other instance for White and Black-listing  
+    ## up from now there are two sqlgrey demons runing (a trick to implement selective greylisting) , one for greylisting and the other instance for White and Black-listing  
     #Thus we need to write two config files.
     #
     #We write also the init script and the default configuration            
@@ -394,32 +394,32 @@ sub write_policyd_config ($$$$$)
     my $config_content2;
     my $init_content;
     my $default_content;
-    $template->process($g->{'template_policyd_conf'},$options,\$config_content)                                     
+    $template->process($g->{'template_sqlgrey_conf'},$options,\$config_content)                                     
         or throw Underground8::Exception($template->error);                                                            
      
-    open (POLICYD_LIMES,'>',$g->{'file_policyd_conf'})
-        or throw Underground8::Exception::FileOpen($g->{'file_policyd_conf'});
+    open (POLICYD_LIMES,'>',$g->{'file_sqlgrey_conf'})
+        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_conf'});
     print POLICYD_LIMES $config_content;
 
-    $template->process($g->{'template_policyd2_conf'},$options,\$config_content2)                                     
+    $template->process($g->{'template_sqlgrey2_conf'},$options,\$config_content2)                                     
         or throw Underground8::Exception($template->error);                                                            
 
-    open (POLICYD2_LIMES,'>',$g->{'file_policyd2_conf'})
-        or throw Underground8::Exception::FileOpen($g->{'file_policyd2_conf'});                     
+    open (POLICYD2_LIMES,'>',$g->{'file_sqlgrey2_conf'})
+        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey2_conf'});                     
     print POLICYD2_LIMES $config_content2;
 
-    $template->process($g->{'template_policyd_init'},$options,\$init_content)                                     
+    $template->process($g->{'template_sqlgrey_init'},$options,\$init_content)                                     
         or throw Underground8::Exception($template->error);                                                            
 
-    open (INIT_POLICYD,'>',$g->{'file_policyd_init'})
-        or throw Underground8::Exception::FileOpen($g->{'file_policyd_init'});                     
+    open (INIT_POLICYD,'>',$g->{'file_sqlgrey_init'})
+        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_init'});                     
 
     print INIT_POLICYD $init_content;
 
-    $template->process($g->{'template_policyd_default'},$options,\$default_content)                                     
+    $template->process($g->{'template_sqlgrey_default'},$options,\$default_content)                                     
         or throw Underground8::Exception($template->error);                                                            
-    open (DEFAULT,'>',$g->{'file_policyd_default'})
-        or throw Underground8::Exception::FileOpen($g->{'file_policyd_default'});                     
+    open (DEFAULT,'>',$g->{'file_sqlgrey_default'})
+        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_default'});                     
     print DEFAULT $default_content;
 
     

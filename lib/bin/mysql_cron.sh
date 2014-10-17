@@ -22,7 +22,7 @@
 echo "====================================================="
 echo "Repairing started"
 /bin/date
-/usr/local/bin/mysql_tables.sh --repair policyd
+/usr/local/bin/mysql_tables.sh --repair sqlgrey
 /usr/local/bin/mysql_tables.sh --repair rt_log
 /usr/local/bin/mysql_tables.sh --repair mysql
 /usr/local/bin/mysql_tables.sh --repair smtp_auth
@@ -86,7 +86,7 @@ echo "===================================================="
 # optimizing the tables is important ;)
 echo "====================================================="
 echo "Optimizing started"
-/usr/local/bin/mysql_tables.sh --optimize policyd
+/usr/local/bin/mysql_tables.sh --optimize sqlgrey
 /usr/local/bin/mysql_tables.sh --optimize rt_log
 /usr/local/bin/mysql_tables.sh --optimize amavis
 
@@ -101,11 +101,11 @@ echo "Sleeping for 360 seconds..."
 /bin/sleep 360
 echo "Sleeping done"
 
-echo "Repairing policyd again ... don't know why we need that"
+echo "Repairing sqlgrey again ... don't know why we need that"
 echo "====================================================="
 echo "Repairing started"
 /bin/date
-/usr/local/bin/mysql_tables.sh --repair policyd
+/usr/local/bin/mysql_tables.sh --repair sqlgrey
 echo "Repairing done"
 echo "====================================================="
 /bin/date

@@ -35,8 +35,8 @@ $dbh->{'mysql_auto_reconnect'} = 1;
 die "Failed to Connect to Database!" if not $dbh;
  
 # select from mail livelog
-#my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
-my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
+#my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
 
 # get all mails
 my $mails = $dbh->selectall_hashref($livelog_stmt,'timestamp');
@@ -50,7 +50,7 @@ foreach my $timestamp (keys %$mails)
     my $mail = $mails->{$timestamp};
     my $rounded_timestamp = $timestamp + ($interval - ($timestamp % $interval));
     
-    my $policyd = $mail->{'policyd'};
+    my $sqlgrey = $mail->{'sqlgrey'};
     my $amavis = $mail->{'amavis'} || 0;
 
     unless ($stats->{$rounded_timestamp})
@@ -67,7 +67,7 @@ foreach my $timestamp (keys %$mails)
     }
 
     # accepted
-    if ($policyd < 20)
+    if ($sqlgrey < 20)
     {
         # passed
         if ($amavis <20)
@@ -107,12 +107,12 @@ foreach my $timestamp (keys %$mails)
     else
     {
         # greylisted
-        if ($policyd < 22)
+        if ($sqlgrey < 22)
         {
             $stats->{$rounded_timestamp}->{'blocked_greylisted'} ++;
         }
         # blacklisted
-        elsif ($policyd == 22 || $policyd == 23)
+        elsif ($sqlgrey == 22 || $sqlgrey == 23)
         {
             $stats->{$rounded_timestamp}->{'blocked_blacklisted'} ++;
         }

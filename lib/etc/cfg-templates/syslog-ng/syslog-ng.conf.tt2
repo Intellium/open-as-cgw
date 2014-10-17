@@ -394,10 +394,10 @@ filter f_amavis {
         (not match("^amavis"));
 };
 
-filter f_policyd {
+filter f_sqlgrey {
         match("greylist=")
         or 
-        (not match("^postfix-policyd"));
+        (not match("^sqlgrey"));
 };
 
 # filter greylist dummie entries from monit
@@ -423,7 +423,7 @@ log {
         source(s_all);
         filter(f_nummail);
         filter(f_postfix);
-        filter(f_policyd);
+        filter(f_sqlgrey);
         filter(f_amavis);
         filter(f_greydummies); 
 		filter(f_postfwd);
@@ -440,7 +440,7 @@ log {
         source(s_all);
         filter(f_nummail);
         filter(f_postfix);
-        filter(f_policyd);
+        filter(f_sqlgrey);
         filter(f_amavis);
         filter(f_greydummies); 
         destination(d_test);

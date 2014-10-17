@@ -49,7 +49,7 @@ include /etc/limes/cfg-templates/monit/services/lighttpd
 include /etc/limes/cfg-templates/monit/services/mysql
 include /etc/limes/cfg-templates/monit/services/ntp
 include /etc/limes/cfg-templates/monit/services/postfix
-include /etc/limes/cfg-templates/monit/services/postfix-policyd
+include /etc/limes/cfg-templates/monit/services/sqlgrey
 include /etc/limes/cfg-templates/monit/services/rtlogd
 include /etc/limes/cfg-templates/monit/services/postfwd
 #include /etc/limes/cfg-templates/monit/services/update

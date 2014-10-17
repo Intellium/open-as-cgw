@@ -63,7 +63,7 @@ unless ($row_ref)
 {
     # create index on table
     print "Creating table index (mail_livelog.status)...";
-    my $create_index = "ALTER TABLE `mail_livelog` ADD INDEX `status` ( `policyd` , `amavis` ) ;";
+    my $create_index = "ALTER TABLE `mail_livelog` ADD INDEX `status` ( `sqlgrey` , `amavis` ) ;";
     $dbh->do($create_index);        
     print "done!\n";
 }
@@ -100,7 +100,7 @@ unless ($row_ref)
 {
     # create index on table
     print "Creating table index (domain_livelog.status)...";
-    my $create_index = "ALTER TABLE `domain_livelog` ADD INDEX `status` ( `policyd` , `amavis` ) ;";
+    my $create_index = "ALTER TABLE `domain_livelog` ADD INDEX `status` ( `sqlgrey` , `amavis` ) ;";
     $dbh->do($create_index);        
     print "done!\n";
 }

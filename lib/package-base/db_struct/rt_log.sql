@@ -96,7 +96,7 @@ CREATE TABLE `domain_livelog` (
   `received_log` timestamp NOT NULL default '0000-00-00 00:00:00',
   `from_domain` varchar(255) collate utf8_unicode_ci NOT NULL,
   `to_domain` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `policyd` int(11) NOT NULL,
+  `sqlgrey` int(11) NOT NULL,
   `amavis` int(11) default NULL,
   `amavis_hits` float default NULL,
   PRIMARY KEY  (`received`,`received_us`)
@@ -196,7 +196,7 @@ CREATE TABLE `mail_livelog` (
   `client_ip` varchar(15) collate utf8_unicode_ci default NULL,
   `queue_nr` varchar(10) collate utf8_unicode_ci default NULL,
   `subject` varchar(255) collate utf8_unicode_ci default NULL,
-  `policyd` int(11) NOT NULL,
+  `sqlgrey` int(11) NOT NULL,
   `amavis` int(11) default NULL,
   `amavis_hits` float default NULL,
   `amavis_detail` varchar(50) collate utf8_unicode_ci default NULL,
@@ -207,17 +207,17 @@ CREATE TABLE `mail_livelog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `policyd_status`
+-- Table structure for table `sqlgrey_status`
 -- 
 
-CREATE TABLE `policyd_status` (
+CREATE TABLE `sqlgrey_status` (
   `id` int(11) NOT NULL,
   `description` varchar(18) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-INSERT INTO `policyd_status` (`id`, `description`) VALUES (10, 'update'),
+INSERT INTO `sqlgrey_status` (`id`, `description`) VALUES (10, 'update'),
 (11, 'whitelist'),
 (12, 'whitelist_sender'),
 (13, 'outgoing'),

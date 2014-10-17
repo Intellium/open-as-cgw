@@ -14,14 +14,14 @@
 # with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
 
 
-package Underground8::Service::PostfixPolicyd;
+package Underground8::Service::SQLGrey;
 use base Underground8::Service;
 
 use strict;
 use warnings;
 
 use Underground8::Utils;
-use Underground8::Service::PostfixPolicyd::SLAVE;
+use Underground8::Service::SQLGrey::SLAVE;
 use Underground8::Exception::EntryExists;
 use Underground8::Exception::EntryNotExists;
 
@@ -32,7 +32,7 @@ sub new ($$)
 {
     my $class = shift;
     my $self = $class->SUPER::new();
-    $self->{'_slave'} = new Underground8::Service::PostfixPolicyd::SLAVE();
+    $self->{'_slave'} = new Underground8::Service::SQLGrey::SLAVE();
     $self->{'_config'} = { greylisting => 1,
                            selective_greylisting => 0,
 							greylisting_authtime => 30,
@@ -48,8 +48,8 @@ sub new ($$)
     $self->{'_addr_blacklist_has_changes'} = 0;
     $self->{'_addr_whitelist_has_changes'} = 0;
     $self->{'_mysql_host'} = 'localhost';
-    $self->{'_mysql_database'} = 'policyd';
-    $self->{'_mysql_username'} = 'policyd-user';
+    $self->{'_mysql_database'} = 'sqlgrey';
+    $self->{'_mysql_username'} = 'sqlgrey-user';
     $self->{'_mysql_password'} = '';
     return $self;
 }

@@ -12,7 +12,6 @@ clean:
 prepare:
 	aptitude update
 	./scripts/install-package-list.sh scripts/packagelist-build-deps-trusty
-	debconf-set-selections scripts/selections-postfix-policyd
 	./scripts/install-package-list.sh scripts/packagelist-runtime-deps-trusty
 	./scripts/install-cpan-modules.sh
 

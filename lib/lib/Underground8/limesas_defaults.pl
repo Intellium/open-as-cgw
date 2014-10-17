@@ -37,7 +37,7 @@ print "#" x 80 . "\n\n";
 # prepare
 my $appliance = new Underground8::Appliance::LimesAS;
 
-$appliance->antispam->set_postfixpolicyd_mysql_password('loltruck2000');
+$appliance->antispam->set_sqlgrey_mysql_password('loltruck2000');
 
 ### APPLIANCE ###
 print "APPLIANCE SETTINGS\n";

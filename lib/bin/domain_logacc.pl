@@ -56,12 +56,12 @@ my $temp_to_top_stmt = $dbh->prepare($temp_to_top_stmt_text);
 
 ## DOMAIN ##
 # last hour statistics
-#my $domain_lasthour_stmt_text = "SELECT DISTINCT from_domain, to_domain, policyd, amavis, COUNT( * ) FROM domain_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY from_domain, policyd, amavis;";
-#my $domain_lasthour_stmt_text = "SELECT DISTINCT from_domain, to_domain, policyd, amavis, COUNT( * ) AS count FROM domain_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY from_domain, policyd, amavis ORDER BY count DESC LIMIT $top_count;";
+#my $domain_lasthour_stmt_text = "SELECT DISTINCT from_domain, to_domain, sqlgrey, amavis, COUNT( * ) FROM domain_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY from_domain, sqlgrey, amavis;";
+#my $domain_lasthour_stmt_text = "SELECT DISTINCT from_domain, to_domain, sqlgrey, amavis, COUNT( * ) AS count FROM domain_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY from_domain, sqlgrey, amavis ORDER BY count DESC LIMIT $top_count;";
 
-my $domain_from_lasthour_stmt_text = "SELECT DISTINCT dl.from_domain, dl.policyd, dl.amavis, COUNT(dl.from_domain) AS count FROM domain_livelog dl LEFT JOIN temp_from_top tmptd ON (dl.from_domain = tmptd.from_domain) WHERE dl.received_log >= ? AND dl.received_log <= ? GROUP BY tmptd.from_domain, dl.policyd, dl.amavis ORDER BY count;";
+my $domain_from_lasthour_stmt_text = "SELECT DISTINCT dl.from_domain, dl.sqlgrey, dl.amavis, COUNT(dl.from_domain) AS count FROM domain_livelog dl LEFT JOIN temp_from_top tmptd ON (dl.from_domain = tmptd.from_domain) WHERE dl.received_log >= ? AND dl.received_log <= ? GROUP BY tmptd.from_domain, dl.sqlgrey, dl.amavis ORDER BY count;";
 
-my $domain_to_lasthour_stmt_text = "SELECT DISTINCT dl.to_domain, dl.policyd, dl.amavis, COUNT(dl.to_domain) AS count FROM domain_livelog dl LEFT JOIN temp_to_top tmptd ON (dl.to_domain = tmptd.to_domain) WHERE dl.received_log >= ? AND dl.received_log <= ? GROUP BY tmptd.to_domain, dl.policyd, dl.amavis ORDER BY count;";
+my $domain_to_lasthour_stmt_text = "SELECT DISTINCT dl.to_domain, dl.sqlgrey, dl.amavis, COUNT(dl.to_domain) AS count FROM domain_livelog dl LEFT JOIN temp_to_top tmptd ON (dl.to_domain = tmptd.to_domain) WHERE dl.received_log >= ? AND dl.received_log <= ? GROUP BY tmptd.to_domain, dl.sqlgrey, dl.amavis ORDER BY count;";
 #my $domain_to_lasthour_stmt = $dbh->prepare($domain_to_lasthour_stmt_text);
 
 # insert last hour stats
@@ -243,10 +243,10 @@ sub get_last_24hour_domains
 
         if ($stmt->execute)
         {           
-            while (my ($domain_name, $policyd, $amavis, $count) = $stmt->fetchrow_array)
+            while (my ($domain_name, $sqlgrey, $amavis, $count) = $stmt->fetchrow_array)
             {
                 ## ## status codes ## ##
-                ## policyd ##
+                ## sqlgrey ##
                 # 10 update
                 # 11 whitelist
                 # 12 whitelist_sender
@@ -268,7 +268,7 @@ sub get_last_24hour_domains
                 $stats->{$domain_name}->{'sum'} += $count;
                 
                 # accepted
-                if ($policyd < 20)
+                if ($sqlgrey < 20)
                 {
                     # passed
                     if (defined $amavis && $amavis <20)
@@ -316,13 +316,13 @@ sub get_last_24hour_domains
                 else
                 {
                     # greylisted
-                    if ($policyd < 22)
+                    if ($sqlgrey < 22)
                     {
                         $stats->{$domain_name}->{'blocked_greylisted'} += $count;
                         $stats->{$domain_name}->{'hours'}->[$hour]->{'blocked_greylisted'} += $count;
                     }
                     # blacklisted
-                    elsif ($policyd == 22 || $policyd == 23)
+                    elsif ($sqlgrey == 22 || $sqlgrey == 23)
                     {
                         $stats->{$domain_name}->{'blocked_blacklisted'} += $count;
                         $stats->{$domain_name}->{'hours'}->[$hour]->{'blocked_blacklisted'} += $count;

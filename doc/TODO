@@ -47,8 +47,6 @@ General:
   * and much, MUCH, more ..
 
 Component update:
-  * Disroot postfix-policyd (used to do much more work, but in the meanwhile,
-    it only does greylisting) and replace with postgrey
   * Postfwd is fine but could be integrated much better - since its first
     integration in the AS, postfwd has dramatically enhanced its functionality.
     Moreover, parsing postfwd stats (as printed in syslog) would be cool

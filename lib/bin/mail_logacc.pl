@@ -43,7 +43,7 @@ die "Failed to Connect to Database!" if not $dbh;
 my $start_stmt_text = "SELECT DATE(DATE_SUB(NOW(), INTERVAL 1 HOUR)), HOUR(DATE_SUB(NOW(), INTERVAL 1 HOUR))";
 ## MAIL ##
 # last hour statistics
-my $mail_lasthour_stmt_text = "SELECT DISTINCT policyd, amavis, COUNT( * ) FROM mail_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY policyd, amavis;";
+my $mail_lasthour_stmt_text = "SELECT DISTINCT sqlgrey, amavis, COUNT( * ) FROM mail_livelog WHERE received_log >= ? AND received_log <= ? GROUP BY sqlgrey, amavis;";
 
 # insert last hour stats
 my $insert_hourly_stmt_text = "INSERT INTO mail_hourly (received_start, received_end, passed_clean, passed_spam, blocked_greylisted, blocked_blacklisted, blocked_virus, blocked_banned, blocked_spam) VALUES (?,?,?,?,?,?,?,?,?);";
@@ -95,10 +95,10 @@ sub get_last_hour_mail
     $mail_lasthour_stmt->bind_param(2,$enddatetime);
     if ($mail_lasthour_stmt->execute)
     {           
-        while (my ($policyd,$amavis,$count) = $mail_lasthour_stmt->fetchrow_array)
+        while (my ($sqlgrey,$amavis,$count) = $mail_lasthour_stmt->fetchrow_array)
         {
             ## ## status codes ## ##
-            ## policyd ##
+            ## sqlgrey ##
             # 10 update
             # 11 whitelist
             # 12 whitelist_sender
@@ -116,7 +116,7 @@ sub get_last_hour_mail
             ########################
             
             # accepted
-            if ($policyd < 20)
+            if ($sqlgrey < 20)
             {
                 # passed
                 if ($amavis <20)
@@ -156,12 +156,12 @@ sub get_last_hour_mail
             else
             {
                 # greylisted
-                if ($policyd < 22)
+                if ($sqlgrey < 22)
                 {
                     $blocked_greylisted += $count;
                 }
                 # blacklisted
-                elsif ($policyd == 22 || $policyd == 23)
+                elsif ($sqlgrey == 22 || $sqlgrey == 23)
                 {
                     $blocked_blacklisted += $count;
                 }

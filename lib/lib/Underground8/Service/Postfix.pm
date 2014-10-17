@@ -890,7 +890,7 @@ sub backscatter_key
 #    $self->change;
 #}
 #
-# Obsolete - but we'll still need this sub for converting old policyd-rbl to new postfwd-rbl
+# Obsolete - but we'll still need this sub for converting old sqlgrey-rbl to new postfwd-rbl
 sub rbl_checks($)
 {
     my $self = instance(shift);

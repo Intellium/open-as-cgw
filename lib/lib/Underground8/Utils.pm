@@ -157,13 +157,16 @@ our $g = {
     file_avira_updaterconf => '/etc/avira/update-vdf.conf',
     file_avira_mirrorconf => '/etc/avira/mirror.conf',
 
-    file_policyd_conf => '/etc/postfix-policyd.conf',
-    file_policyd2_conf => '/etc/postfix-policyd2.conf',
-    file_policyd_init => '/etc/init.d/postfix-policyd',
-    file_policyd_default => '/etc/default/postfix-policyd',
+    file_clients_fqdn_whitelist => '/etc/sqlgrey/clients_fqdn_whitelist',
+    file_clients_ip_whitelist => '/etc/sqlgrey/clients_ip_whitelist',
+    file_discrimination_regexp => '/etc/sqlgrey/discrimination.regexp',
+    file_dyn_fqdn_regexp => '/etc/sqlgrey/dyn_fqdn.regexp',
+    file_sqlgrey_smtp_server_regexp => '/etc/sqlgrey/smtp_server.regexp',
+    file_sqlgrey_conf => '/etc/sqlgrey/sqlgrey.conf',
+    file_sqlgrey_default => '/etc/default/sqlgrey',
 
-	file_postfwd_cf => '/etc/postfix/postfwd.cf',
-	file_postfwd_default => '/etc/default/postfwd',
+    file_postfwd_cf => '/etc/postfix/postfwd.cf',
+    file_postfwd_default => '/etc/default/postfwd',
     
     file_ntpd_conf => '/etc/ntp.conf',
 
@@ -224,13 +227,16 @@ our $g = {
     template_amavis_20_dd => 'amavis/20-debian_defaults.tt2',
     template_amavis_vs => 'amavis/15-av_scanners.tt2',
 
-    template_policyd_conf => 'policyd/postfix-policyd.tt2',
-    template_policyd2_conf => 'policyd/postfix-policyd2.tt2',
-    template_policyd_init => 'policyd/init.d_postfix-policyd.tt2',
-    template_policyd_default => 'policyd/default_postfix-policyd.tt2',
+    template_clients_fqdn_whitelist => 'sqlgrey/clients_fqdn_whitelist.tt2',
+    template_clients_ip_whitelist => 'sqlgrey/clients_ip_whitelist.tt2',
+    template_discrimination_regexp => 'sqlgrey/discrimination.regexp.tt2',
+    template_dyn_fqdn_regexp => 'sqlgrey/dyn_fqdn.regexp.tt2',
+    template_sqlgrey_smtp_server_regexp => 'sqlgrey/smtp_server.regexp.tt2',
+    template_sqlgrey_conf => 'sqlgrey/sqlgrey.conf.tt2',
+    template_sqlgrey_default => 'sqlgrey/default_sqlgrey.tt2',
 
-	template_postfwd_cf => 'postfwd/postfwd.cf.tt2',
-	template_postfwd_default => 'postfwd/default_postfwd.tt2',
+    template_postfwd_cf => 'postfwd/postfwd.cf.tt2',
+    template_postfwd_default => 'postfwd/default_postfwd.tt2',
     
     template_ntpd_conf => 'ntp-simple/ntp.tt2',
 
@@ -324,8 +330,10 @@ our $g = {
     cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/quarantine-cron restart',        
     cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/quarantine-ng restart',        
     
-
-    cmd_policyd_restart => '/usr/bin/sudo /etc/init.d/postfix-policyd restart',
+    cmd_sqlgrey_start => '/usr/bin/sudo /etc/init.d/sqlgrey start',
+    cmd_sqlgrey_stop => '/usr/bin/sudo /etc/init.d/sqlgrey stop',
+    cmd_sqlgrey_restart => '/usr/bin/sudo /etc/init.d/sqlgrey restart',
+    cmd_sqlgrey_reload => '/usr/biN/sudo /etc/init.d/sqlgrey reload',    
 
     cmd_postfwd_start => '/usr/bin/sudo /etc/init.d/postfwd start',
     cmd_postfwd_stop => '/usr/bin/sudo /etc/init.d/postfwd stop',
@@ -471,7 +479,7 @@ our $g = {
 	# substitution and delete masks for process list
 	process_substitutions => {
 		'master' => 'mail-daemon',
-		'postfix-policyd.*' => 'greylisting-daemon',
+		'sqlgrey.*' => 'greylisting-daemon',
 		'amavisd' => 'mail-processing-engine',
 		'limesgui.*' => 'AS interface-daemon',
 		'clamd.*' => 'antivirus-engine',

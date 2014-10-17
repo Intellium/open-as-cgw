@@ -93,14 +93,14 @@ sub new
 
     my $dbh = $self->dbh;
 
-    my $policyd_stmt_text = "SELECT id, description FROM policyd_status;";
-    my $policyd_stmt = $dbh->prepare($policyd_stmt_text);
+    my $sqlgrey_stmt_text = "SELECT id, description FROM sqlgrey_status;";
+    my $sqlgrey_stmt = $dbh->prepare($sqlgrey_stmt_text);
 
-    if ($policyd_stmt->execute)
+    if ($sqlgrey_stmt->execute)
     {
-        while (my ($id,$description) = $policyd_stmt->fetchrow_array)
+        while (my ($id,$description) = $sqlgrey_stmt->fetchrow_array)
         {
-            $self->{'_status'}->{'policyd'}->{$description} = $id;
+            $self->{'_status'}->{'sqlgrey'}->{$description} = $id;
         }
     }
 
@@ -128,13 +128,13 @@ sub run
     debug("Preparing Statements", 1);
 
     # prepare the statement
-    my $livelog_text = "INSERT INTO mail_livelog (received, received_us, received_log, msg_id, mail_from, rcpt_to, client_ip, queue_nr, subject, policyd, amavis, amavis_hits, amavis_detail, delay) VALUES (FROM_UNIXTIME(?),?,FROM_UNIXTIME(?),?,?,?,?,?,?,?,?,?,?,?);";
+    my $livelog_text = "INSERT INTO mail_livelog (received, received_us, received_log, msg_id, mail_from, rcpt_to, client_ip, queue_nr, subject, sqlgrey, amavis, amavis_hits, amavis_detail, delay) VALUES (FROM_UNIXTIME(?),?,FROM_UNIXTIME(?),?,?,?,?,?,?,?,?,?,?,?);";
     my $livelog = $dbh->prepare($livelog_text);
 
-    my $domain_livelog_text = "INSERT INTO domain_livelog (received,received_us,received_log,from_domain,to_domain,policyd,amavis,amavis_hits) VALUES (FROM_UNIXTIME(?),?,FROM_UNIXTIME(?),?,?,?,?,?);";
+    my $domain_livelog_text = "INSERT INTO domain_livelog (received,received_us,received_log,from_domain,to_domain,sqlgrey,amavis,amavis_hits) VALUES (FROM_UNIXTIME(?),?,FROM_UNIXTIME(?),?,?,?,?,?);";
     # my $domain_livelog = $dbh->prepare($domain_livelog_text);
 
-    my $greylist_lookup_text = "SELECT received, received_us FROM mail_livelog WHERE (policyd=20 OR policyd=21) AND mail_from=? AND rcpt_to=? AND client_ip=?;";
+    my $greylist_lookup_text = "SELECT received, received_us FROM mail_livelog WHERE (sqlgrey=20 OR sqlgrey=21) AND mail_from=? AND rcpt_to=? AND client_ip=?;";
     my $greylist_lookup = $dbh->prepare($greylist_lookup_text);
     
     my $greylist_delete_text = "DELETE FROM mail_livelog WHERE received=? AND received_us=?;";
@@ -190,7 +190,7 @@ sub run
             #    $domain_livelog->bind_param(3, $mail->received_log);
             #    $domain_livelog->bind_param(4, $from_domain);
             #    $domain_livelog->bind_param(5, $to_domain);
-            #    $domain_livelog->bind_param(6, $self->id_policyd_status($mail->policyd_status));
+            #    $domain_livelog->bind_param(6, $self->id_sqlgrey_status($mail->sqlgrey_status));
             #    $domain_livelog->bind_param(7, $self->id_amavis_status($mail->amavis_status));
             #    $domain_livelog->bind_param(8, $mail->amavis_hits);
             #    my $t0 = [ gettimeofday ];
@@ -205,7 +205,7 @@ sub run
                 $type == Underground8::Log::Writer::Email::BLOCKEDBF)
             {
                 # lookup if there is a greylisted mail
-                if ($mail->policyd_status =~ qr/update/)
+                if ($mail->sqlgrey_status =~ qr/update/)
                 {
                     my $t0 = [ gettimeofday ];
                     $greylist_lookup->bind_param(1, $mail->from);
@@ -242,7 +242,7 @@ sub run
                 $livelog->bind_param(7, $mail->client_ip);
                 $livelog->bind_param(8, $mail->queue_nr);
                 $livelog->bind_param(9, unmime($mail->subject));
-                $livelog->bind_param(10, $self->id_policyd_status($mail->policyd_status));
+                $livelog->bind_param(10, $self->id_sqlgrey_status($mail->sqlgrey_status));
                 $livelog->bind_param(11, $self->id_amavis_status($mail->amavis_status));
                 $livelog->bind_param(12, $mail->amavis_hits);
                 if ($mail->amavis_detail)
@@ -271,7 +271,7 @@ sub run
                 $livelog->bind_param(7, $mail->client_ip);
                 $livelog->bind_param(8, undef);
                 $livelog->bind_param(9, undef);
-                $livelog->bind_param(10, $self->id_policyd_status($mail->policyd_status));
+                $livelog->bind_param(10, $self->id_sqlgrey_status($mail->sqlgrey_status));
                 if ($mail->amavis_status)
                 {
                     $livelog->bind_param(11, $self->id_amavis_status($mail->amavis_status));
@@ -294,11 +294,11 @@ sub run
     }
 }
 
-sub id_policyd_status
+sub id_sqlgrey_status
 {
     my $self = shift;
     my $description = shift;
-    return $self->{'_status'}->{'policyd'}->{$description};
+    return $self->{'_status'}->{'sqlgrey'}->{$description};
 }
 
 sub id_amavis_status

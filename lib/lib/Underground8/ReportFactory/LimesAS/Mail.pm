@@ -150,12 +150,12 @@ sub mail_last24h
     my $dbh = $self->dbh;
      
     # select from mail livelog
-    my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+    my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
 
-    #my $livelog_stmt = "SELECT policyd, amavis AS timestamp, COUNT(*) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY policyd, amavis";
+    #my $livelog_stmt = "SELECT sqlgrey, amavis AS timestamp, COUNT(*) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY sqlgrey, amavis";
 
 
-    #my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
+    #my $livelog_stmt = "SELECT UNIX_TIMESTAMP(received_log) AS timestamp, sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
 
     # get all mails
     my $mails = $dbh->selectall_arrayref($livelog_stmt);
@@ -176,7 +176,7 @@ sub mail_last24h
 
     foreach my $row (@$mails)
     {
-        my ($timestamp,$policyd,$amavis) = @$row;
+        my ($timestamp,$sqlgrey,$amavis) = @$row;
         my $rounded_timestamp = $timestamp + ($interval - ($timestamp % $interval));
         
         unless ($stats->{$rounded_timestamp})
@@ -191,8 +191,8 @@ sub mail_last24h
                 blocked_spam => 0,
             };
         }
-        $stats->{$rounded_timestamp} = $self->find_mail_status($stats->{$rounded_timestamp},$policyd,$amavis);
-        $sum_stats = $self->find_mail_status($sum_stats,$policyd,$amavis);
+        $stats->{$rounded_timestamp} = $self->find_mail_status($stats->{$rounded_timestamp},$sqlgrey,$amavis);
+        $sum_stats = $self->find_mail_status($sum_stats,$sqlgrey,$amavis);
     }
     
     my $t2 = [ gettimeofday ];
@@ -223,7 +223,7 @@ sub from_domains_lastweek
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT from_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT from_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $hourlog_lastweek_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_from_hourly WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 WEEK) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($hourlog_lastweek_stmt,'name');
@@ -254,7 +254,7 @@ sub to_domains_lastweek
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT to_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT to_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $hourlog_lastweek_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_to_hourly WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 WEEK) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($hourlog_lastweek_stmt,'name');
@@ -285,7 +285,7 @@ sub from_domains_lastmonth
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT from_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT from_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $hourlog_lastmonth_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_from_hourly WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($hourlog_lastmonth_stmt,'name');
@@ -316,7 +316,7 @@ sub to_domains_lastmonth
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT to_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT to_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $hourlog_lastmonth_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_to_hourly WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($hourlog_lastmonth_stmt,'name');
@@ -347,7 +347,7 @@ sub from_domains_lastyear
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT from_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT from_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $daylog_lastyear_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_from_daily WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($daylog_lastyear_stmt,'name');
@@ -378,7 +378,7 @@ sub to_domains_lastyear
 
     my $dbh = $self->dbh;
 
-    my $livelog_today_stmt = "SELECT to_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(policyd), crc32(amavis) ORDER BY from_domain;";
+    my $livelog_today_stmt = "SELECT to_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND HOUR(received_log) < HOUR(NOW()) GROUP BY crc32(sqlgrey), crc32(amavis) ORDER BY from_domain;";
     my $daylog_lastyear_stmt = "SELECT domain AS name, SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam, SUM(passed_clean) + SUM(passed_spam) + SUM(blocked_greylisted) + SUM(blocked_blacklisted) + SUM(blocked_virus) + SUM(blocked_banned) + SUM(blocked_spam) AS sum FROM domain_to_daily WHERE DATE(received_end) > DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY crc32(domain) ORDER BY domain;";
     
     my $stats = $dbh->selectall_hashref($daylog_lastyear_stmt,'name');
@@ -407,7 +407,7 @@ sub from_domains_last24h
     my $self = shift;
     my $top_count = shift || 100;
 
-    my $livelog_stmt = "SELECT from_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(from_domain), policyd, amavis ORDER BY from_domain;";
+    my $livelog_stmt = "SELECT from_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(from_domain), sqlgrey, amavis ORDER BY from_domain;";
     my $stats = $self->db_stats_domains_livelog($livelog_stmt);
 
     my $other_domains = $stats->{'other'};
@@ -433,7 +433,7 @@ sub to_domains_last24h
     my $self = shift;
     my $top_count = shift || 100;
 
-    my $livelog_stmt = "SELECT to_domain, policyd, amavis, COUNT(*) AS count FROM domain_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(to_domain), policyd, amavis ORDER BY from_domain;";
+    my $livelog_stmt = "SELECT to_domain, sqlgrey, amavis, COUNT(*) AS count FROM domain_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(to_domain), sqlgrey, amavis ORDER BY from_domain;";
     my $stats = $self->db_stats_domains_livelog($livelog_stmt);
 
     my $other_domains = $stats->{'other'};
@@ -472,7 +472,7 @@ sub db_stats_domains_livelog
     foreach my $row (@$mails)
     {
         my $domain_name = $row->[0];
-        my $policyd = $row->[1];
+        my $sqlgrey = $row->[1];
         my $amavis = $row->[2];
         my $count = $row->[3];
 
@@ -490,7 +490,7 @@ sub db_stats_domains_livelog
                 sum => 0,
             };
         }
-        $stats->{$domain_name} = $self->find_mail_status($stats->{$domain_name},$policyd,$amavis,$count);
+        $stats->{$domain_name} = $self->find_mail_status($stats->{$domain_name},$sqlgrey,$amavis,$count);
     }
     return $stats;
 }
@@ -530,14 +530,14 @@ sub current_stats
     my $t0 = [ gettimeofday ]; # start
      
     # select from mail livelog
-    my $last24h_stmt = "SELECT policyd, amavis, COUNT(policyd) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(policyd), crc32(amavis)";
-    #my $last24h_stmt = "SELECT policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
-    my $today_stmt = "SELECT policyd, amavis, COUNT(policyd) AS count FROM mail_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY crc32(policyd), crc32(amavis)";
-    #my $today_stmt = "SELECT policyd, amavis FROM mail_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
-    my $lasthour_stmt = "SELECT policyd, amavis, COUNT(*) AS count  FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) GROUP BY crc32(policyd), amavis";
-    #my $lasthour_stmt = "SELECT policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR)";
-    my $to_lasthour_stmt = "SELECT policyd, amavis, COUNT(*) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) AND HOUR(received_log) > HOUR(DATE_SUB(NOW(), INTERVAL 1 HOUR)) GROUP BY crc32(policyd), crc32(amavis)";
-    #my $to_lasthour_stmt = "SELECT policyd, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) AND HOUR(received_log) > HOUR(DATE_SUB(NOW(), INTERVAL 1 HOUR))";
+    my $last24h_stmt = "SELECT sqlgrey, amavis, COUNT(sqlgrey) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY crc32(sqlgrey), crc32(amavis)";
+    #my $last24h_stmt = "SELECT sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+    my $today_stmt = "SELECT sqlgrey, amavis, COUNT(sqlgrey) AS count FROM mail_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY crc32(sqlgrey), crc32(amavis)";
+    #my $today_stmt = "SELECT sqlgrey, amavis FROM mail_livelog WHERE DATE(received_log) > DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
+    my $lasthour_stmt = "SELECT sqlgrey, amavis, COUNT(*) AS count  FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) GROUP BY crc32(sqlgrey), amavis";
+    #my $lasthour_stmt = "SELECT sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR)";
+    my $to_lasthour_stmt = "SELECT sqlgrey, amavis, COUNT(*) AS count FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) AND HOUR(received_log) > HOUR(DATE_SUB(NOW(), INTERVAL 1 HOUR)) GROUP BY crc32(sqlgrey), crc32(amavis)";
+    #my $to_lasthour_stmt = "SELECT sqlgrey, amavis FROM mail_livelog WHERE received_log >= DATE_SUB(NOW(), INTERVAL 1 HOUR) AND HOUR(received_log) > HOUR(DATE_SUB(NOW(), INTERVAL 1 HOUR))";
     my $forever_to_lasthour_stmt = "SELECT SUM(passed_clean) AS passed_clean, SUM(passed_spam) AS passed_spam, SUM(blocked_greylisted) AS blocked_greylisted, SUM(blocked_blacklisted) AS blocked_blacklisted, SUM(blocked_virus) AS blocked_virus, SUM(blocked_banned) AS blocked_banned, SUM(blocked_spam) AS blocked_spam FROM mail_daily WHERE DATE(received_start) <= DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
 
     # get all mails
@@ -573,8 +573,8 @@ sub current_stats
     };
     while (my $row = shift @{$mails_last24h})
     {
-        my ($policyd,$amavis,$count) = @$row;
-        $stats->{'last24h'} = $self->find_mail_status($stats->{'last24h'},$policyd,$amavis,$count);    
+        my ($sqlgrey,$amavis,$count) = @$row;
+        $stats->{'last24h'} = $self->find_mail_status($stats->{'last24h'},$sqlgrey,$amavis,$count);    
     }     
     my $t7 = [ gettimeofday ];
 
@@ -590,8 +590,8 @@ sub current_stats
     };
     while (my $row  = shift @{$mails_today})
     {
-        my ($policyd,$amavis,$count) = @$row;
-        $stats->{'today'} = $self->find_mail_status($stats->{'today'},$policyd,$amavis,$count);        
+        my ($sqlgrey,$amavis,$count) = @$row;
+        $stats->{'today'} = $self->find_mail_status($stats->{'today'},$sqlgrey,$amavis,$count);        
     }     
     my $t8 = [ gettimeofday ];
 
@@ -607,8 +607,8 @@ sub current_stats
     };
     while (my $row = shift @{$mails_lasthour})
     {
-        my ($policyd,$amavis,$count) = @$row;
-        $stats->{'lasthour'} = $self->find_mail_status($stats->{'lasthour'},$policyd,$amavis,$count); 
+        my ($sqlgrey,$amavis,$count) = @$row;
+        $stats->{'lasthour'} = $self->find_mail_status($stats->{'lasthour'},$sqlgrey,$amavis,$count); 
     }
     my $t9 = [ gettimeofday ];
 
@@ -707,12 +707,12 @@ sub find_mail_status
 {
     my $self = shift;
     my $stats = shift;
-    my $policyd = shift;
+    my $sqlgrey = shift;
     my $amavis = shift;
     my $count = shift || 1;
 
     # accepted
-    if ($policyd < 20)
+    if ($sqlgrey < 20)
     {
         if (defined $amavis)
         {
@@ -755,12 +755,12 @@ sub find_mail_status
     else
     {
         # greylisted
-        if ($policyd < 22)
+        if ($sqlgrey < 22)
         {
             $stats->{'blocked_greylisted'} += $count;
         }
         # blacklisted
-        elsif ($policyd == 22 || $policyd == 23)
+        elsif ($sqlgrey == 22 || $sqlgrey == 23)
         {
             $stats->{'blocked_blacklisted'} += $count;
         }
@@ -772,11 +772,11 @@ sub find_mail_status
 sub find_mail_status_string
 {
     my $self = shift;
-    my $policyd = shift;
+    my $sqlgrey = shift;
     my $amavis = shift;
 
     # accepted
-    if ($policyd < 20)
+    if ($sqlgrey < 20)
     {
         # passed
         if ($amavis <20)
@@ -816,12 +816,12 @@ sub find_mail_status_string
     else
     {
         # greylisted
-        if ($policyd < 22)
+        if ($sqlgrey < 22)
         {
             return 'blocked_greylisted';
         }
         # blacklisted
-        elsif ($policyd == 22 || $policyd == 23)
+        elsif ($sqlgrey == 22 || $sqlgrey == 23)
         {
             return 'blocked_blacklisted';
         }
@@ -883,14 +883,14 @@ sub livelog
     
     my $dbh = $self->dbh;
 
-    my $statement = "SELECT UNIX_TIMESTAMP(received_log) AS received_log, msg_id, mail_from, rcpt_to, client_ip, subject, policyd, amavis, amavis_hits, amavis_detail, delay FROM mail_livelog ORDER BY received_log DESC LIMIT $limit;";
+    my $statement = "SELECT UNIX_TIMESTAMP(received_log) AS received_log, msg_id, mail_from, rcpt_to, client_ip, subject, sqlgrey, amavis, amavis_hits, amavis_detail, delay FROM mail_livelog ORDER BY received_log DESC LIMIT $limit;";
 
     my $mail_arrayref = $dbh->selectall_arrayref($statement);
     my $mails;
 
     foreach my $row (@$mail_arrayref)
     {
-        my ($received_log,$msg_id,$mail_from,$rcpt_to,$client_ip,$subject,$policyd,$amavis,$amavis_hits,$amavis_detail,$delay) = @$row;
+        my ($received_log,$msg_id,$mail_from,$rcpt_to,$client_ip,$subject,$sqlgrey,$amavis,$amavis_hits,$amavis_detail,$delay) = @$row;
         my $mail = {
             received_log    => $received_log,
             msg_id          => $msg_id,
@@ -903,7 +903,7 @@ sub livelog
             delay           => $delay,
         };
 
-        my $status = $self->find_mail_status_string($policyd,$amavis);
+        my $status = $self->find_mail_status_string($sqlgrey,$amavis);
 
         $mail->{'status'} = $status;
 

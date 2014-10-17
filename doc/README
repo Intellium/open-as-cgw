@@ -212,13 +212,3 @@ II.4: Installing all required CPAN modules
       and look what lighty is complaining about. If there is nothing to see,
       try starting /var/www/LimesGUI/scripts/limesgui_fastcgi.pl and look for
       errors.
-
-
-=== COMMERCIAL SUPPORT ========================================================
-Underground_8 secure computing is offering commercial licenses for the Open AS
-Communication Gateway. Buying a license will give you:
-  * Support:    Full technical phone- and e-mail support
-  * Anti-Virus: An additional, commercial Virus-Scanning engine
-  * A goodie:   A useful transparent mail-encryption module
-
-

@@ -7,14 +7,5 @@
 			status = clamav_enabled ? 'enabled' : 'disabled',
 			url = Catalyst.uri_for("/admin/content_scanning/anti_virus/toggle_scanner/clamav"); %]
 	</li>
-	<li><strong>[% Catalyst.localize(box_path _ '_avira') %]</strong>
-		[% IF up2date %]
-			[% INCLUDE 'site/elements/enable'
-				status = avira_enabled ? 'enabled' : 'disabled',
-				url = Catalyst.uri_for("/admin/content_scanning/anti_virus/toggle_scanner/avira"); %]
-		[% ELSE %]
-			<span class="error">[% Catalyst.localize(box_path _ '_locked_noup2date') %]</span>
-		[% END %]
-	</li>
 </ul>
 [% INCLUDE 'site/box_close' %]

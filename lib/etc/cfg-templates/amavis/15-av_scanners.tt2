@@ -26,20 +26,6 @@ use strict;
     ],
     [% END %]
 
-
-	[% # Commercial Avira AV scanner - you will have to get a license in order to use this.
-       # Note: Sambucus is a kind of API-middleware, which manages communication between
-       #       Amavis and Avira; it will come with the commercial license, when you decide
-       #       to get one. %]
-    [% IF avira_enabled -%]
-    ['Sambucus',
-        \&ask_daemon, ["action: scan_file\ntarget: {}/*\nrole: amavis\n.\n", "/var/run/sambucus/sambucus.ctl"],
-        qr/^status: 201$/, 
-        qr/^status: 202$/,
-        qr/^virusname: (.+?)$/,
-    ],
-    [% END %]
-
 );
 
 1;  # insure a defined return

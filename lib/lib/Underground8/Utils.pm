@@ -153,10 +153,7 @@ our $g = {
  
     #file_kaspersky_kavserverconf => '/etc/kav/kav_server.conf',
     #file_kaspersky_kavupdaterconf => '/etc/kav/kav_updater.conf',
-    file_avira_serverconf => '/etc/avira/avira.conf',
-    file_avira_updaterconf => '/etc/avira/update-vdf.conf',
-    file_avira_mirrorconf => '/etc/avira/mirror.conf',
-
+    
     file_clients_fqdn_whitelist => '/etc/sqlgrey/clients_fqdn_whitelist',
     file_clients_ip_whitelist => '/etc/sqlgrey/clients_ip_whitelist',
     file_discrimination_regexp => '/etc/sqlgrey/discrimination.regexp',
@@ -257,9 +254,6 @@ our $g = {
 
     #template_kaspersky_kavserverconf => 'kaspersky/kav_server.conf.tt2',
     #template_kaspersky_kavupdaterconf => 'kaspersky/kav_updater.conf.tt2',
-    template_avira_serverconf => 'avira/avira_server.conf.tt2',
-    template_avira_updaterconf => 'avira/avira_update-vdf.conf.tt2',
-    template_avira_mirrorconf => 'avira/avira_mirror.conf.tt2',
 
     template_syslogng => 'syslog-ng/syslog-ng.conf.tt2',
     template_syslogng_logrotate => 'syslog-ng/syslog-ng.logrotate.tt2',
@@ -413,7 +407,6 @@ our $g = {
     cmd_clamav_freshclam_restart => '/usr/bin/sudo /etc/init.d/clamav-freshclam restart',
 
     #cmd_kaspersky_kavserver_restart => '/usr/bin/sudo /etc/init.d/kav-server restart',
-    cmd_avira_server_restart => '/usr/bin/sudo /etc/init.d/avira restart',
     cmd_sambucus_server_restart => '/usr/bin/sudo /etc/init.d/sambucus restart',
 
     file_spamassassin_version => '/var/lib/spamassassin/updates_spamassassin_org.cf',

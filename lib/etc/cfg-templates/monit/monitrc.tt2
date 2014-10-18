@@ -41,7 +41,6 @@ include /etc/limes/cfg-templates/monit/services/quarantine-ng
 #include /etc/limes/cfg-templates/monit/services/quarantine-cron
 include /etc/limes/cfg-templates/monit/services/clamav
 #include /etc/limes/cfg-templates/monit/services/kav-server
-include /etc/limes/cfg-templates/monit/services/avira
 include /etc/limes/cfg-templates/monit/services/sambucus
 include /etc/limes/cfg-templates/monit/services/lighttpd
 #include /etc/limes/cfg-templates/monit/services/localhost

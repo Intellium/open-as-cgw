@@ -441,18 +441,6 @@ sub meta_lic_use25
 #    return $return;
 #}
 
-sub meta_lic_useavira
-{
-    my $self = instance(shift);
-    my $return = 0;
-
-    my $serial_info = serial_info();
-    $return = 1 if ($self->service_status("up2date"));
-    $return = 1 if ($self->service_status("virtual_use"));
-
-    return $return;
-}
-
 sub meta_lic_secupdate
 {
     my $self = instance(shift);

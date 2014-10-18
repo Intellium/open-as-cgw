@@ -1,6 +1,0 @@
- check process kav with pidfile /var/run/avira/savapi_*.PID
-   group virus
-   start program = "/etc/init.d/avira restart"
-   stop  program = "/etc/init.d/avira stop"
-   if failed unixsocket /var/run/avira/avira.ctl within 2 cycles then start
-   if 99 restarts within 99 cycles then timeout

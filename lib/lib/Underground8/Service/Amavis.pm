@@ -55,7 +55,6 @@ sub new ($)
     };
 
     $self->{'_clamav_enabled'} = 1;
-    $self->{'_avira_enabled'} = 0;
     $self->{'_archive_maxfiles'} = 1000;
     $self->{'_archive_recursion'} = 12;
     $self->{'_unchecked_subject_tag'} = '** UNCHECKED **';
@@ -437,26 +436,6 @@ sub clamav_enabled
     return $self->{'_clamav_enabled'};
 }
 
-sub enable_avira() {
-    my $self = instance(shift);
- 
-    $self->{'_avira_enabled'} = 1;
-    $self->change;
-}
- 
-sub disable_avira() {
-    my $self = instance(shift);
- 
-    $self->{'_avira_enabled'} = 0;
-    $self->change;
-}
- 
-sub avira_enabled {
-    my $self = instance(shift);
-    return $self->{'_avira_enabled'};
-}
-
-
 sub archive_maxfiles
 {
     my $self = instance(shift);
@@ -562,7 +541,6 @@ sub commit ($)
 	    $self->score_map,
     	$self->policy,
         $self->clamav_enabled,
-        $self->avira_enabled,
         $self->archive_maxfiles,
         $self->archive_recursion,
         $self->unchecked_subject_tag,

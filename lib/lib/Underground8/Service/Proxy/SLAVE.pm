@@ -54,11 +54,9 @@ sub write_config ($$$$$$) {
 	if ($proxy_enabled == 1) {
 		$self->write_environment_config($proxy_server, $proxy_port, $proxy_username, $proxy_password);
 		$self->write_freshclam_config($proxy_server, $proxy_port, $proxy_username, $proxy_password);
-		$self->write_aviraupdater_config($use_proxy);
 	} else {
 		$self->write_environment_config("", "", "", "");
 		$self->write_freshclam_config("", "", "", "");
-		$self->write_aviraupdater_config("no");
 	}
 }
 
@@ -118,26 +116,6 @@ sub write_freshclam_config($$$$$) {
 	print FRESHCLAM $config_content;
 
 	close (FRESHCLAM);
-}
-
-sub write_aviraupdater_config($$) {
-	my $self = shift;
-	my $use_proxy = shift;
-
-	my $template = Template->new ({ INCLUDE_PATH => $g->{'cfg_template_dir'}, });
-
-	my $options = { use_proxy => $use_proxy, };
-
-	my $config_content;
-	$template->process($g->{'template_avira_updaterconf'},$options,\$config_content)
-		or throw Underground8::Exception($template->error);
-
-	open (KAVUPDATER,'>',$g->{'file_avira_updaterconf'})
-		or throw Underground8::Exception::FileOpen($g->{'file_avira_updaterconf'});
-
-	print KAVUPDATER $config_content;
-
-	close (KAVUPDATER);
 }
 
 1;

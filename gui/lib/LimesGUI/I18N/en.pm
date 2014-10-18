@@ -746,7 +746,6 @@ content_scanning_anti_virus_options_heading => 'Archive scanning options',
 content_scanning_anti_virus_scanners_text => 'All available anti-virus engines are listed below. You may separately en- or disable certain engines, according to your currently active licenses.',
 content_scanning_anti_virus_scanners_clamav => 'Clam Anti-Virus Engine',
 content_scanning_anti_virus_scanners_kav => 'Kaspersky Anti-Virus Engine',
-content_scanning_anti_virus_scanners_avira => 'Avira Anti-Virus Engine',
 content_scanning_anti_virus_scanners_success => 'Newly configured anti-virus engine settings have been successfully applied.',
 content_scanning_anti_virus_scanners_locked_noup2date => 'No license available in the open-source version',
 

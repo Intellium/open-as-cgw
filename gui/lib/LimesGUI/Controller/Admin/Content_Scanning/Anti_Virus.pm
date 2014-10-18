@@ -41,10 +41,8 @@ sub update_stash {
 
 	$c->stash->{'up2date'} = $appliance->report->license->meta_lic_featureupdate();
 	$c->stash->{'clamav'} = $appliance->antispam->clamav();
-	$c->stash->{'avira'} = $appliance->antispam->avira();
 
 	$c->stash->{'clamav_enabled'} = $appliance->antispam->clamav_enabled();
-	$c->stash->{'avira_enabled'} = $appliance->antispam->avira_enabled();
 
 	$c->stash->{'unchecked_tag'} = $appliance->antispam->unchecked_subject_tag;
 	$c->stash->{'recursion_level'} = $appliance->antispam->archive_recursion;
@@ -62,10 +60,6 @@ sub toggle_scanner : Local {
 			$appliance->antispam->clamav_enabled
 				? $appliance->antispam->disable_clamav()
 				: $appliance->antispam->enable_clamav();
-		} elsif ($av_engine eq "avira"){
-			$appliance->antispam->avira_enabled
-				? $appliance->antispam->disable_avira()
-				: $appliance->antispam->enable_avira();
 		}
 
 		$appliance->antispam->commit;

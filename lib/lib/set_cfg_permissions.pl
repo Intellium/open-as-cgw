@@ -41,9 +41,6 @@ my @files = qw(
 /etc/clamav/freshclam.conf
 /etc/kav/kav_server.conf
 /etc/kav/kav_updater.conf
-/etc/avira/avira.conf
-/etc/avira/update-vdf.conf
-/etc/avira/mirror.conf
 /etc/sambucus/main.cfg
 /etc/sambucus/roles.cfg
 /etc/sqlgrey/clients_fqdn_whitelist

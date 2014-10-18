@@ -31,7 +31,6 @@ use Underground8::Service::Postfwd;
 use Underground8::Service::Spamassassin;
 use Underground8::Service::ClamAV;
 # use Underground8::Service::KasperskyAV;
-use Underground8::Service::Avira;
 use Underground8::ReportFactory::LimesAS::LDAP;
 use Underground8::Log;
 use XML::Smart;
@@ -57,7 +56,6 @@ sub new ($$) {
 	$self->{'_spamassassin'} =  new Underground8::Service::Spamassassin();
 	$self->{'_clamav'} =		new Underground8::Service::ClamAV();
 	# $self->{'_kasperskyav'} =   new Underground8::Service::KasperskyAV();
-	$self->{'_avira'} =   new Underground8::Service::Avira();
 	$self->{'_ldap_report'} =   new Underground8::ReportFactory::LimesAS::LDAP();
 	$self->{'_has_changes'} = 0;
 	$self->{'_temp_dir'} = '';
@@ -96,11 +94,6 @@ sub clamav {
 #	my $self = instance(shift,__PACKAGE__);
 #	return $self->{'_kasperskyav'};
 #}
-
-sub avira {
-	my $self = instance(shift,__PACKAGE__);
-	return $self->{'_avira'};
-}
 
 sub postfwd {
 	my $self = instance(shift,__PACKAGE__);
@@ -1275,7 +1268,6 @@ sub commit ($) {
 			$self->create_ca_certificates();
 
 			$self->clamav->commit() if ($self->clamav->is_changed && !$ldap_override);
-			$self->avira->commit() if ($self->avira->is_changed && !$ldap_override);
 			# $self->kasperskyav->commit() if ($self->kasperskyav->is_changed && !$ldap_override);
 			$self->spamassassin->commit() if ($self->spamassassin->is_changed && !$ldap_override);
 			$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
@@ -1619,7 +1611,6 @@ sub set_archive_recursion {
 	if ($archive_recursion) {
 		$self->amavis->archive_recursion($archive_recursion);
 		$self->clamav->archive_recursion($archive_recursion);
-		$self->avira->archive_recursion($archive_recursion);
 		#$self->kasperskyav->archive_recursion($archive_recursion);
 	}
 }
@@ -1657,21 +1648,6 @@ sub disable_clamav() {
 sub clamav_enabled {
 	my $self = instance(shift);
 	return $self->amavis->clamav_enabled;
-}
-
-sub enable_avira() {
-	my $self = instance(shift);
-	return $self->amavis->enable_avira;
-}
- 
-sub disable_avira() {
-	my $self = instance(shift);
-	return $self->amavis->disable_avira;
-}
- 
-sub avira_enabled {
-	my $self = instance(shift);
-	return $self->amavis->avira_enabled;
 }
 
 ### Spamassassin

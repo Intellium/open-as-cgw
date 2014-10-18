@@ -51,12 +51,6 @@ sub write_config ($$)
     my $score_map = shift;
     my $policy = shift;
     my $clamav_enabled = shift;
-    my $avira_enabled = shift;
-
-
-    my $avira_license = $self->report->license->meta_lic_useavira();
-    if (!$avira_license) { $avira_enabled = 0;}
-
     my $archive_maxfiles = shift;
     my $archive_recursion = shift;
     my $unchecked_subject_tag = shift;
@@ -80,7 +74,7 @@ sub write_config ($$)
     $self->write_amavis_cfm(1);
     $self->write_amavis_dd($banned_attachments);
 
-    $self->write_amavis_vs($clamav_enabled, $avira_enabled);
+    $self->write_amavis_vs($clamav_enabled);
 }
 
 # write amavis 99-limes
@@ -241,7 +235,6 @@ sub write_amavis_vs($@)
 {
     my $self = instance(shift);
     my $clamav_enabled = shift;
-    my $avira_enabled = shift;
 
     my $template = Template->new ({
                            INCLUDE_PATH => $g->{'cfg_template_dir'},
@@ -249,7 +242,6 @@ sub write_amavis_vs($@)
 
     my $options = {
         clamav_enabled => $clamav_enabled,
-        avira_enabled => $avira_enabled,
     };
 
     my $config_content;

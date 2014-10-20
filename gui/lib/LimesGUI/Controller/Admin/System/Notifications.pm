@@ -21,7 +21,7 @@ use namespace::autoclean;
 BEGIN { extends 'LimesGUI::Controller'; };
 use strict;
 use warnings;
-use Error qw(:try);
+use TryCatch;
 use Data::FormValidator::Constraints qw(:closures :regexp_common);
 use Data::FormValidator::Constraints::Underground8;
 use Underground8::Log;
@@ -103,8 +103,8 @@ sub add_recipient : Local {
 			$appliance->notification->email_set_account($email, $name, $type, $smtpsrv, $login, $password, $usetls);
 			$appliance->notification->commit();
 			$c->stash->{'box_status'}->{'success'} = 'success';
-		} catch Underground8::Exception with {
-			my $E = shift;
+		} catch (Underground8::Exception $E) {
+			#my $E = shift;
 			aslog "warn", "Error adding new notifications recipient.";
 			$c->session->{'exception'} = $E; 
 			$c->stash->{'redirect_url'} = $c->uri_for('/error');

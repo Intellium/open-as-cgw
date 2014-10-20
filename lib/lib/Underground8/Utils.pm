@@ -316,7 +316,7 @@ our $g = {
     cmd_network_route => '/usr/bin/sudo /sbin/route',
     cmd_network_restart => "/usr/local/bin/restart_network.pl",
     
-    cmd_hostname_change => '/usr/bin/sudo /etc/init.d/hostname.sh', 
+    cmd_hostname_change => '/usr/bin/sudo service hostname restart', 
     cmd_dnsmasq_restart => '/usr/bin/sudo /etc/init.d/dnsmasq restart',
 
     cmd_amavis_restart => '/usr/bin/sudo /etc/init.d/amavis restart',        
@@ -376,7 +376,8 @@ our $g = {
     cmd_monit_stop => '/usr/bin/sudo /etc/init.d/monit stop',
     cmd_monit_start => '/usr/bin/sudo /etc/init.d/monit start',
     cmd_monit_restart => '/usr/bin/sudo /etc/init.d/monit restart',
-    cmd_monit_perm => '/usr/bin/sudo /bin/chmod g+rw /etc/monit/monitrc',
+    cmd_monit_perm_addgrp => '/usr/bin/sudo /bin/chmod g+rw /etc/monit/monitrc',
+    cmd_monit_perm_delgrp => '/usr/bin/sudo /bin/chmod g-rw /etc/monit/monitrc',
 
 
     cmd_syslogng_stop => '/usr/bin/sudo /etc/init.d/syslog-ng stop',

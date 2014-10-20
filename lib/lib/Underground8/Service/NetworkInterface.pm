@@ -41,6 +41,13 @@ sub new ($$)
     $self->{'_old_ip_address'} = '';
     $self->{'_old_subnet_mask'} = '';
     $self->{'_old_default_gateway'} = '';
+
+    # from DNS.pm - needs to be here for ubunt 14.04
+    $self->{'_primary_dns'} = undef;
+    $self->{'_secondary_dns'} = undef;
+    $self->{'_use_local_cache'} = 1;
+    $self->{'_domainname'} = undef;
+
     return $self;
 }
 #### Accessors ####
@@ -152,6 +159,54 @@ sub restart_webserver ($)
     $self->slave->restart_webserver();
 }
 
+sub primary_dns($@)
+{
+    my $self = instance(shift);
+    if (@_)
+    {
+        $self->{'_primary_dns'} = shift;
+        $self->change;
+    }
+    return $self->{'_primary_dns'};
+}
+
+sub secondary_dns($@)
+{
+    my $self = instance(shift);
+    if (@_)
+    {
+        $self->{'_secondary_dns'} = shift;
+        $self->change;
+    }
+    return $self->{'_secondary_dns'};
+}
+
+sub domainname($@)
+{
+    my $self = instance(shift);
+    if (@_)
+    {
+        $self->{'_domainname'} = shift;
+        $self->change;
+    }
+    return $self->{'_domainname'};
+}
+
+
+sub use_local_cache ($@)
+{
+    my $self = instance(shift);
+    if (@_)
+    {
+        $self->{'_use_local_cache'} = shift;
+        $self->change;
+    }
+    return $self->{'_use_local_cache'};
+}
+
+
+
+
 #### Misc methods ####
 sub commit ($)
 {
@@ -167,7 +222,11 @@ sub commit ($)
     $self->slave->write_config( $self->name,
                                 $self->ip_address,
                                 $self->subnet_mask,
-                                $self->default_gateway) unless ($self->user_change == 2);
+                                $self->default_gateway,
+                                $self->primary_dns,
+                                $self->secondary_dns,
+                                $self->use_local_cache,
+                                $self->domainname ) unless ($self->user_change == 2);
     # Only if user changes, create crontab
     if ($self->user_change == 1)
     { 

@@ -75,12 +75,10 @@ sub write_config($$)
 
     #
     # set group-write permissions before opening monitrc
-    # monit init script changes permissions every time,
-    # and it does not start with group-write-rights
-    # very nasty thing...
+    # monit does not start with group-write-rights, so we will need
+    # to remove this later!
     #
-    
-    safe_system($g->{'cmd_monit_perm'});
+    safe_system($g->{'cmd_monit_perm_addgrp'});
 
     my $config_content;
     $template->process($g->{'template_monit'},$options,\$config_content) 
@@ -104,6 +102,7 @@ sub write_config($$)
 
     close (MONITCONF);
 
+    safe_system($g->{'cmd_monit_perm_delgrp'});
 
 }
 

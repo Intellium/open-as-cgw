@@ -19,7 +19,7 @@ package LimesGUI::Controller::Admin::System::Remote_Assistance;
 use Moose;
 use namespace::autoclean;
 use Underground8::Log;
-use Error qw(:try);
+use TryCatch;
 use Data::FormValidator::Constraints qw(:closures :regexp_common);
 use Data::FormValidator::Constraints::Underground8;
 use Underground8::Exception;
@@ -90,8 +90,8 @@ sub configure_snmp : Local {
 			$appliance->system->iptables->commit( $appliance->system->net_name );
 			$appliance->system->commit;
 			$c->stash->{'box_status'}->{'success'} = 'success';
-		} catch Underground8::Exception with {
-			my $E = shift;
+		} catch (Underground8::Exception $E) {
+			#my $E = shift;
 			aslog "warn", "Error setting up snmp configuration, caught exception $E";
 			$c->session->{'exception'} = $E;
 			$c->stash->{'redirect_url'} = $c->uri_for('/error');

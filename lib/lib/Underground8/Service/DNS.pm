@@ -32,9 +32,9 @@ sub new ($)
     $self->{'_slave'} = new Underground8::Service::DNS::SLAVE();
     $self->{'_hostname'} = undef;
     $self->{'_domainname'} = undef;
-    $self->{'_primary_dns'} = undef;
-    $self->{'_secondary_dns'} = undef;
-    $self->{'_use_local_cache'} = 1;
+#    $self->{'_primary_dns'} = undef;
+#    $self->{'_secondary_dns'} = undef;
+#    $self->{'_use_local_cache'} = 1;
     return $self;
 }
 
@@ -62,47 +62,47 @@ sub domainname ($@)
     return $self->{'_domainname'};
 }
 
-sub use_local_cache ($@)
-{
-    my $self = instance(shift);
-    if (@_)
-    {
-        $self->{'_use_local_cache'} = shift;
-        $self->change;
-    }
-    return $self->{'_use_local_cache'};
-}
+#sub use_local_cache ($@)
+#{
+#    my $self = instance(shift);
+#    if (@_)
+#    {
+#        $self->{'_use_local_cache'} = shift;
+#        $self->change;
+#    }
+#    return $self->{'_use_local_cache'};
+#}
 
-sub primary_dns($@)
-{
-    my $self = instance(shift);
-    if (@_)
-    {
-        $self->{'_primary_dns'} = shift;
-        $self->change;
-    }
-    return $self->{'_primary_dns'};
-}
+#sub primary_dns($@)
+#{
+#    my $self = instance(shift);
+#    if (@_)
+#    {
+#        $self->{'_primary_dns'} = shift;
+#        $self->change;
+#    }
+#    return $self->{'_primary_dns'};
+#}
 
-sub secondary_dns($@)
-{
-    my $self = instance(shift);
-    if (@_)
-    {
-        $self->{'_secondary_dns'} = shift;
-        $self->change;
-    }
-    return $self->{'_secondary_dns'};
-}
+#sub secondary_dns($@)
+#{
+#    my $self = instance(shift);
+#    if (@_)
+#    {
+#        $self->{'_secondary_dns'} = shift;
+#        $self->change;
+#    }
+#    return $self->{'_secondary_dns'};
+#}
 
 #### Misc methods ####
 
 sub commit ($)
 {
     my $self = instance(shift);
-    $self->slave->write_config( $self->primary_dns,
-                                $self->secondary_dns,
-                                $self->use_local_cache,
+    $self->slave->write_config( #$self->primary_dns,
+                                #$self->secondary_dns,
+                                #$self->use_local_cache,
                                 $self->hostname,
                                 $self->domainname);
     $self->slave->service_restart();

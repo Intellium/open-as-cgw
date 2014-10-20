@@ -381,6 +381,7 @@ sub set_domainname ($$)
     my $domainname = shift;
     # TODO: check for valid domainname
     $self->net_dns->domainname($domainname);
+    $self->net_interface->domainname($domainname);
 
     my $fq_hostname = $self->hostname . "." . $domainname;
     $self->appliance->antispam->set_myhostname($fq_hostname);
@@ -397,7 +398,7 @@ sub set_domainname ($$)
 sub primary_dns ($)
 {
     my $self = instance(shift);
-    return $self->net_dns->primary_dns;
+    return $self->net_interface->primary_dns;
 }
 
 sub set_primary_dns ($$)
@@ -405,13 +406,13 @@ sub set_primary_dns ($$)
     my $self = instance(shift);
     my $new_server = shift;
     
-    $self->net_dns->primary_dns($new_server);
+    $self->net_interface->primary_dns($new_server);
 }
 
 sub secondary_dns ($)
 {
     my $self = instance(shift);
-    return $self->net_dns->secondary_dns;
+    return $self->net_interface->secondary_dns;
 }
 
 sub set_secondary_dns ($$)
@@ -419,7 +420,7 @@ sub set_secondary_dns ($$)
     my $self = instance(shift);
     my $new_server = shift;
     
-    $self->net_dns->secondary_dns($new_server);
+    $self->net_interface->secondary_dns($new_server);
 }
 
 sub delete_dns_server

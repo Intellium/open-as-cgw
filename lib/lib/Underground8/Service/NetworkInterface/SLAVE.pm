@@ -153,6 +153,10 @@ sub write_network_config($$$$$)
     my $if_ip_addr = shift;
     my $if_sn_mask = shift;
     my $if_def_gw = shift;
+    my $primary_dns = shift;
+    my $secondary_dns = shift;
+    my $use_local_cache = shift;
+    my $domainname = shift;
 
     my @interface_file;
     open (INTERFACES, '<', $g->{'file_networking_interfaces'})
@@ -174,6 +178,13 @@ sub write_network_config($$$$$)
             push (@interface_file,"    address $if_ip_addr\n");
             push (@interface_file,"    netmask $if_sn_mask\n");
             push (@interface_file,"    gateway $if_def_gw\n");
+            if ($use_local_cache) {
+                push (@interface_file,"    dns-nameservers 127.0.0.1 $primary_dns $secondary_dns\n");
+            } else {
+                push (@interface_file,"    dns-nameservers $primary_dns $secondary_dns\n");
+            }
+            push (@interface_file,"    dns-search $domainname\n");
+               
         }
         elsif($line =~ m/$end_marker/)
         {

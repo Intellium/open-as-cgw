@@ -20,7 +20,7 @@ use base Underground8::Service::SLAVE;
 use strict;
 use warnings;
 use Underground8::Utils;
-use Error;
+use TryCatch;
 use Underground8::Exception::FileOpen;
 use Underground8::Exception::Execution;
 
@@ -52,16 +52,16 @@ sub service_restart ($$)
 sub write_config ($$$$$)
 {
     my $self = instance(shift);
-    my $primary_dns = shift;
-    my $secondary_dns = shift;
-    my $use_local_cache = shift;
+#    my $primary_dns = shift;
+#    my $secondary_dns = shift;
+#    my $use_local_cache = shift;
     my $hostname = shift;
     my $domainname = shift;
 
-    $self->write_resolv_conf($primary_dns,
-                             $secondary_dns,
-                             $use_local_cache,
-                             $domainname);
+#    $self->write_resolv_conf($primary_dns,
+#                             $secondary_dns,
+#                             $use_local_cache,
+#                             $domainname);
 
     $self->write_hosts_file($hostname,
                             $domainname);
@@ -111,6 +111,7 @@ sub write_hosts_file ($$$)
     close (HOSTS);
 }
 
+# DEPRECATED; is now done via /etc/network/interfaces in NetworkInterface.pm
 sub write_resolv_conf($$$$$)
 {
     my $self = instance(shift);

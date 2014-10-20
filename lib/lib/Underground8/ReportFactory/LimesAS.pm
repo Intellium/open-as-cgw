@@ -26,10 +26,8 @@ use Underground8::Report::LimesAS::Processes;
 use Underground8::Report::LimesAS::Versions;
 use Underground8::Report::LimesAS::Update;
 use Underground8::Report::LimesAS::MailQueue;
-use Underground8::Report::LimesAS::License;
 use Underground8::ReportFactory::LimesAS::Mail;
 use Underground8::ReportFactory::LimesAS::LDAP;
-use Underground8::ReportFactory::LimesAS::License;
 use Underground8::Exception;
 use Underground8::Exception::FileOpen;
 use Underground8::Misc::Net::Traceroute;
@@ -55,7 +53,6 @@ sub new ($$$)
     my $self = $class->SUPER::new();
     $self->{'_mail'} = new Underground8::ReportFactory::LimesAS::Mail;
     $self->{'_ldap'} = new Underground8::ReportFactory::LimesAS::LDAP;
-    $self->{'_license'} = new Underground8::ReportFactory::LimesAS::License;
 
     return $self;
 }
@@ -911,50 +908,6 @@ sub trace_host ($;$)
     }
 
     return 0;
-}
-
-sub boot_uuid
-{
-    my $self = instance(shift);
-    my $uuid = "/dev/sda1"; # FALLBACK!
-
-    my @HDDs = qw(/dev/system/root /dev/md2 /dev/hda1 /dev/hdb1 /dev/hdc1 /dev/hdd1 /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1);
-    foreach my $hdd (@HDDs)
-    {
-        my $output = safe_system("$g->{'cmd_blkid'} $hdd",0,1,2);
-        chomp $output;
-        # print STDERR "Output for $hdd is: $output\n";
-        # /dev/sda1: UUID="5897170e-c8a4-4537-b92d-e87bbdfd0db9" SEC_TYPE="ext2" TYPE="ext3"
-        if ($output =~ m/^$hdd\:\s+?UUID=\"(.+?)\".*/)
-        {
-            $uuid = $1;
-            last;
-        }
-
-    }
-
-    return $uuid;
-
-}
-
-sub vm_ram
-{
-    my $self = instance(shift);
-
-    my $return = 0;
-
-    my $serial_info = serial_info();
-    if ($serial_info->{'type'} eq "V")
-    {
-        my $vm_ram = safe_system("$g->{'cmd_vmware_toolbox_cmd'} stat memory",0,1,2,255,256);
-        chomp $vm_ram;
-        if ($vm_ram =~ m/^(\d+?)\s+?MB$/)
-        {
-            $return = $1;
-        }
-    }
-    
-    return $return;
 }
 
 sub simple_maillog_stats {

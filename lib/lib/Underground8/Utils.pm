@@ -94,16 +94,6 @@ our $g = {
     cfg_system_version => "1.0",
     cfg_hw_versions => "$etc/conf/hw_versions",
 
-    # Licensing
-    file_license_key => "$etc/conf/u8-licensing.rsa.public",
-    file_license_ulf => "$etc/conf/as_license.ulf",
-#    avail_license_services => [qw(care_pack up2date)],
-    license_xmlrpc_user => 'ASappliance',
-    license_xmlrpc_passhash => '831b16900e902d9a7bd44def2b1cc426',
-    # This hash is a hash for the password "H8CC2QCQ76h3TX"
-    license_xmlrpc_serverurl => 'https://81.223.70.174/clim',
-    license_xmlrpc_voucherpath => 'voucherServlet',
-
     # Authentication
     file_guipasswd => "$etc/guipasswd",
 	cmd_usermod => "/usr/bin/sudo /usr/sbin/usermod",

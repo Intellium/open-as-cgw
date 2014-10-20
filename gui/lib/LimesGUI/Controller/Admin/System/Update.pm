@@ -32,10 +32,6 @@ sub index : Private {
 
 	$c->stash->{'versions'} = $appliance->report->versions();
 
-	# Do we have up2date license?
-	# $c->stash->{'up2date_license'} = $appliance->report->license->service_status("up2date");
-	$c->stash->{'up2date_license'} = $appliance->report->license->meta_lic_featureupdate();
-
 	# For up2date box
 	$c->stash->{'update_settings_list'} = ["update", "download", "upgrade", "auto_newest"];
 	$c->stash->{'update_settings_params'} = $appliance->system->updateservice_parameters();
@@ -64,8 +60,6 @@ sub settings : Local {
 		$c->stash->{'box_status'}->{'custom_error'} = "Automation service unknown";
 	}
 
-	# $c->stash->{'up2date_license'} = $appliance->report->license->service_status("up2date");
-	$c->stash->{'up2date_license'} = $appliance->report->license->meta_lic_featureupdate();
 	$c->stash->{'update_settings_list'} = ["update", "download", "upgrade", "auto_newest"];
 	$c->stash->{'update_settings_params'} = $appliance->system->updateservice_parameters();
 

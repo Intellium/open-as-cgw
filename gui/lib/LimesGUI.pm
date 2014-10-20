@@ -16,10 +16,6 @@
 
 package LimesGUI;
 
-# THIS IS A FIX FOR APACHE! WE NEED TO CHANGE THIS!
-#system("chown -R www-data:limes /etc/limes/xml");
-#system("chmod -R 775 /etc/limes/xml");
-
 use strict;
 use warnings;
 
@@ -134,8 +130,6 @@ __PACKAGE__->config( appliance => $appliance );
 __PACKAGE__->config( new_sec_version => $appliance->report->new_sec_version_available );
 __PACKAGE__->config( new_main_version => $appliance->report->new_main_version_available );
 __PACKAGE__->config( restart_required => $appliance->report->restart_required );
-__PACKAGE__->config( renew_licence_warning    => $appliance->report->license->renew_licence_warning );
-__PACKAGE__->config( product    => $appliance->{_product});
 
 # Start the application - loads the .yml file #
 __PACKAGE__->setup;

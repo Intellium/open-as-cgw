@@ -351,7 +351,7 @@ system_update_versions_checkforupdates => 'Check for updates',
 system_update_settings_update_automation_settings => 'Up2Date Settings: Automatically...',
 system_update_settings_automation_settings_configured => 'Up2Date Settings updated',
 system_update_oss_heading => 'Sorry, upgrades are not yet supported',
-system_update_oss_unavailable => 'Sorry, system upgrades are not yet supported in the open-source version at the moment. <b>Please do not try to upgrade from an official commercial upgrade mirror, it will break your installation!</b>',
+system_update_oss_unavailable => 'Sorry, system upgrades are not yet supported in the open-source version at the moment. <b>Use aptitude in the shell to update the packages!</b>',
 
 ### SYSTEM :: SECURITY
 system_security_abstract => 'To restrict access to the management interface of this appliance you can define IP ranges which are allowed to manage this device. Other source IP addresses will be blocked from accessing the management frontend.',

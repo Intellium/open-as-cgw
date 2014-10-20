@@ -39,7 +39,6 @@ sub update_stash {
 	my ( $self, $c ) = @_;
 	my $appliance = $c->config->{'appliance'};
 
-	$c->stash->{'up2date'} = $appliance->report->license->meta_lic_featureupdate();
 	$c->stash->{'clamav'} = $appliance->antispam->clamav();
 
 	$c->stash->{'clamav_enabled'} = $appliance->antispam->clamav_enabled();

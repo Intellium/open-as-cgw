@@ -37,7 +37,6 @@ sub update_stash {
 	my ( $self, $c ) = @_;
 	my $appliance = $c->config->{'appliance'};
 
-	$c->stash->{'up2date'}         = $appliance->report->license->meta_lic_featureupdate();
 	$c->stash->{'ctrl_cryptotag'}  = $appliance->system->smtpcrypt->get_cryptotag;
 	$c->stash->{'ctrl_packtype'}   = $appliance->system->smtpcrypt->get_packtype;
 	$c->stash->{'ctrl_enctype'}    = $appliance->system->smtpcrypt->get_pwhandling;

@@ -37,7 +37,6 @@ use Underground8::Service::Monit;
 use Underground8::Service::SyslogNG;
 use Underground8::Service::UpdateService;
 use Underground8::Service::SMTPCrypt;
-use Underground8::Service::Grub;
 use Underground8::Service::SNMP;
 use XML::Smart;
 use Data::Dumper;
@@ -68,7 +67,6 @@ sub new ($$)
     $self->{'_syslog'} = new Underground8::Service::SyslogNG;
     $self->{'_updateservice'} = new Underground8::Service::UpdateService;
 	$self->{'_smtpcrypt'} = new Underground8::Service::SMTPCrypt;
-    $self->{'_grub'} = new Underground8::Service::Grub;
     $self->{'_snmp'} = new Underground8::Service::SNMP;
     return $self;
 }
@@ -168,12 +166,6 @@ sub smtpcrypt ($@) {
     my $self = instance(shift, __PACKAGE__);
     $self->{'_smtpcrypt'} = shift if @_;
     return $self->{'_smtpcrypt'};
-}
-
-sub grub ($@) {
-    my $self = instance(shift, __PACKAGE__);
-    $self->{'_grub'} = shift if @_;
-    return $self->{'_grub'};
 }
 
 sub snmp ($@) {
@@ -564,7 +556,6 @@ sub commit($)
             $self->updateservice->commit() if $self->updateservice->is_changed;
             $self->syslog->commit() if $self->syslog->is_changed;
             $self->authentication->commit() if $self->authentication->is_changed;
-            $self->grub->commit() if $self->grub->is_changed;
             $self->snmp->commit() if $self->snmp->is_changed;
             $self->save_config();
         }
@@ -883,9 +874,6 @@ sub load_config ($)
 {
     my $self = instance(shift);
 
-    # set grub limits here!
-    $self->set_grub_limits();
-
     $self->load_config_xml_smart();
 }
 
@@ -959,7 +947,6 @@ sub load_config_xml_smart ($)
     }
 
     $self->net_interface->import_params($unblessed_net_interface);
-    $self->grub->import_params(); # only does a grub->change, so it gets written
     $self->appliance->set_alert_notify_nic_change() if ($self->net_interface->notify);
     $self->net_dns->import_params($unblessed_net_dns);
     $self->net_proxy->import_params($unblessed_net_proxy);
@@ -1116,40 +1103,6 @@ sub initiate_usus ($)
     $self->updateservice->initiate_usus($action, $version);
 }
 
-
-### Grub Service ###
-
-
-sub set_grub_limits ($)
-{
-    my $self = instance(shift);
-    my $type = $self->appliance->type();
-    my $version = $self->appliance->report->get_current_installed_full_version();
-    my $uuid = $self->appliance->report->boot_uuid();
-    
-    my $limits = {};
-    $self->grub->set_version($version);
-    $self->grub->set_type($type);
-    $self->grub->set_uuid($uuid);
-
-    if ($type ne "V")
-    {
-        $self->grub->set_limits("0","0");
-    } else {
-        my $appendix = $self->appliance->sn_appendix();
-        my $limits = $self->appliance->report->license->virtual_restrictions($appendix);
-        
-        my $vm_ram = $self->appliance->report->vm_ram();
-        if ($vm_ram < $limits->{'ram'})
-        {        
-            $self->grub->set_limits($vm_ram,$limits->{'cpus'});
-        } else {
-            $self->grub->set_limits($limits->{'ram'},$limits->{'cpus'});
-        }
-            
-    }
-
-}
 
 sub snmp_enable() {
 	my $self = instance(shift);

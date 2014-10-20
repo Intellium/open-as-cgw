@@ -13,8 +13,7 @@
 						content_scanning => ['policies', 'attachments', 'anti_virus', 'spam_handling', 'languages'],
 						quarantine => ['general_settings', 'quarantining_options', 'box_status_management', 'user_box_administration'],
 						logging => ['live_log', 'log_viewer', 'maillog_simple', 'syslog', 'statistics'],
-						modules => ['licence_management', 'email_encryption']};
-						# modules => ['licence_management']};
+						modules => ['email_encryption']};
 				%]
 				<ul id="[% id %]">
 					[% FOREACH menu_item IN main_menu.order %]

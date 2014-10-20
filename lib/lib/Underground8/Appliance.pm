@@ -50,9 +50,6 @@ sub new ($$)
     my $result = $lxs->get;
    
     $self->{'_name'} =      $name;
-    $self->{'_sn'} =       read_sn();
-    $self->{'_product'} = gen_prod_name($self->{'_sn'});
-    $self->{'_type'} = hw_or_virtual($self->{'_product'});
     $self->{'_version'} =   '0.01';
     $self->{'_config_lock'} = 0;
     $self->{'_alert_notify'} = 0;
@@ -62,24 +59,6 @@ sub new ($$)
     
     bless $self, $class;
     return $self;
-}
-
-#sub read_sn
-#{
-#    my $sn = '';
-#    if (open SN, ("<" . $g->{'cfg_sn_file'}))
-#    {
-#        $sn = <SN>;
-#        chomp($sn);
-#        close SN;
-#    }
-#    return $sn;
-#}
-
-sub sn
-{
-    my $self = instance(shift);
-    return $self->{'_sn'};
 }
 
 sub config_lock
@@ -122,18 +101,6 @@ sub total_memory
 {
     my $self = instance(shift);
     return $self->{'_total_memory'};
-}
-
-sub type
-{
-    my $self = instance(shift);
-    return $self->{'_type'};
-}
-
-sub product_name
-{
-    my $self = instance(shift);
-    return $self->{'_product'};
 }
 
 # alert_notify:

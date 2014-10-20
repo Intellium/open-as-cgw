@@ -3,9 +3,7 @@
 	additional_class = "small left",
 -%]
 	<ul class="text_list">
-		<li><strong>[% Catalyst.localize(box_path _ '_product') %]</strong>[% product %]</li>
 		<li><strong>[% Catalyst.localize(box_path _ '_version') %]</strong>[% versions.version_system %]</li>
-		<li><strong>[% Catalyst.localize(box_path _ '_sn') %]</strong>[% sn %]</li>
 		<li><strong>[% Catalyst.localize(box_path _ '_avgcpu') %]</strong>[% sysinfo.cpu_avg_1h -%] %</li>
 		<li><strong>[% Catalyst.localize(box_path _ '_avgmem') %]</strong>[% sysinfo.mem_used_percentage %] %</li>
 		<li><strong>[% Catalyst.localize(box_path _ '_hdd') %]</strong>[% advanced_sysinfo.disk_usedpercentage %] %</li>

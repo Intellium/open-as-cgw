@@ -32,7 +32,7 @@ BEGIN
 sub default : Private
 {
     my ($self, $c) = @_;
-    $c->res->redirect($c->uri_for('/admin/modules/licence_management'));
+    $c->res->redirect($c->uri_for('/admin/modules/email_encryption'));
 }
 
 1;

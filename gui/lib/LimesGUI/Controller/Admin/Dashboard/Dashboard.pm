@@ -42,8 +42,6 @@ sub index : Private {
 	$sysinfo->{'uptime'} =~ s/^(.+?d .+?h .+?m).*$/$1/;
 	$c->stash->{'sysinfo'} = $sysinfo;
 	$c->stash->{'advanced_sysinfo'} = $advanced_sysinfo;
-	$c->stash->{'sn'} = $appliance->sn;
-	$c->stash->{'product'} = $appliance->{_product};
 	$c->stash->{'versions'} = $appliance->report->versions;
 
 

@@ -1,7 +1,6 @@
 [% PROCESS 'site/box_init' %]
 [% INCLUDE 'site/box_open' %]
 <ul class="text_list two_column">
-    <li><strong>[% Catalyst.localize('product') %]</strong>[%-product-%]</li>
     <li><strong>[% Catalyst.localize('system_version') %]</strong>[%- versions.version_system -%]</li>
     <li><strong>[% Catalyst.localize('system_version_available') %]</strong>[%- versions.version_system_available -%]</li>
     <li><strong>[% Catalyst.localize('virus_engine_versions') %]</strong>[%- versions.version_clamav -%] ([%- versions.time_clamav_printable -%])</li>

@@ -1,18 +1,3 @@
 <div id="system_update_oss">
     [% INCLUDE admin/system/update/oss.inc.tt2 %]
 </div>
-
-<!--
-<div id="system_update_settings">
-    [% INCLUDE admin/system/update/settings.inc.tt2 %]
-</div>
-<div id="system_update_versions">
-    [% INCLUDE admin/system/update/versions.inc.tt2 %]
-</div>
-<div id="system_update_upgrade_info">
-    [% INCLUDE admin/system/update/upgrade_info.inc.tt2 %]
-</div>
-<div id="system_update_upgrade_table">
-    [% INCLUDE admin/system/update/upgrade_table.inc.tt2 %]
-</div>
--->

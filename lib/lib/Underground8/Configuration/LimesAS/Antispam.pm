@@ -1276,7 +1276,7 @@ sub commit ($) {
 
 			$self->clamav->commit() if ($self->clamav->is_changed && !$ldap_override);
 			#$self->kasperskyav->commit() if ($self->kasperskyav->is_changed && !$ldap_override);
-			$self->virustotal->commit() if ($self->virustotal->is_chagned && !$ldap_override);
+			$self->virustotal->commit() if ($self->virustotal->is_changed && !$ldap_override);
 			$self->spamassassin->commit() if ($self->spamassassin->is_changed && !$ldap_override);
 			$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
 			$self->amavis->commit() if (($self->amavis->is_changed || $self->spamassassin->is_changed) && (!$ldap_override));

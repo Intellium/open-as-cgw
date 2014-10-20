@@ -33,8 +33,6 @@ sub index : Private {
 	$versions->{'time_clamav_printable'} = $versions->{'time_clamav'}->strftime("%c");
 
 	$c->stash->{versions} = $versions;
-	$c->stash->{product} = $appliance->{_product};
-	$c->stash->{type} = $appliance->type();
 	$c->stash->{template} = 'admin/system/general_settings.tt2';
 }
 

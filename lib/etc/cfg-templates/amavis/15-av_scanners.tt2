@@ -17,13 +17,19 @@ use strict;
 
     [% END %]
 
-	[% # This would be for commercial Kaspersky AV scanner - obsolete %] 
-    [% IF kav_enabled -%]
-    ['Kaspersky AntiVirus',
-        ['/usr/local/bin/aveclient','aveclient'],
-        '-p /var/run/aveserver -s {}/*', [0,3,6,8], qr/\b(INFECTED|SUSPICION)\b/,
-        qr/(?:INFECTED|SUSPICION) (.+)/,
-    ],
+#    [% IF kav_enabled -%]
+#    ['Kaspersky AntiVirus',
+#        ['/usr/local/bin/aveclient','aveclient'],
+#        '-p /var/run/aveserver -s {}/*', [0,3,6,8], qr/\b(INFECTED|SUSPICION)\b/,
+#        qr/(?:INFECTED|SUSPICION) (.+)/,
+#    ],
+#    [% END %]
+
+    [% IF vt_enabled -%]
+    ['Virustotal.com API',
+        ['/usr/local/bin/virustotal.pl','virustotal'],
+    	qr/\bOK$/, qr/\bFOUND$/,
+        qr/^.*?: (?!Infected Archive)(.*) FOUND$/ ],    
     [% END %]
 
 );

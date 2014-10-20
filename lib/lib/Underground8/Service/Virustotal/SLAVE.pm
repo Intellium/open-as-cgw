@@ -19,7 +19,7 @@ use base Underground8::Service::SLAVE;
 use Template;
 use Underground8::Exception;
 use Underground8::Exception::FileOpen;
-use Underground8::Misc::VT::API;
+#use Underground8::Misc::VT::API;
 use Underground8::Utils;
 
 use strict;

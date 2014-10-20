@@ -95,7 +95,7 @@ sub clamav {
 #sub kasperskyav {
 #	my $self = instance(shift,__PACKAGE__);
 #	return $self->{'_kasperskyav'};
-}
+#}
 
 sub virustotal {
 	my $self = instance(shift,__PACKAGE__);

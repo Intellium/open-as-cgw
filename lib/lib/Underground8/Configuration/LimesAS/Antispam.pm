@@ -30,7 +30,8 @@ use Underground8::Service::SQLGrey;
 use Underground8::Service::Postfwd;
 use Underground8::Service::Spamassassin;
 use Underground8::Service::ClamAV;
-# use Underground8::Service::KasperskyAV;
+#use Underground8::Service::KasperskyAV;
+use Underground8::Service::Virustotal;
 use Underground8::ReportFactory::LimesAS::LDAP;
 use Underground8::Log;
 use XML::Smart;
@@ -49,13 +50,14 @@ sub new ($$) {
 
 	my $self = $class->SUPER::new('antispam',$appliance);
 
-	$self->{'_postfix'} =	   new Underground8::Service::Postfix();
-	$self->{'_amavis'} =		new Underground8::Service::Amavis();
-	$self->{'_sqlgrey'} =	   new Underground8::Service::SQLGrey();
-	$self->{'_postfwd'} =	   new Underground8::Service::Postfwd();
+	$self->{'_postfix'} =	    new Underground8::Service::Postfix();
+	$self->{'_amavis'} =	    new Underground8::Service::Amavis();
+	$self->{'_sqlgrey'} =	    new Underground8::Service::SQLGrey();
+	$self->{'_postfwd'} =	    new Underground8::Service::Postfwd();
 	$self->{'_spamassassin'} =  new Underground8::Service::Spamassassin();
-	$self->{'_clamav'} =		new Underground8::Service::ClamAV();
-	# $self->{'_kasperskyav'} =   new Underground8::Service::KasperskyAV();
+	$self->{'_clamav'} =	    new Underground8::Service::ClamAV();
+	#$self->{'_kasperskyav'} =   new Underground8::Service::KasperskyAV();
+	$self->{'_virustotal'} =    new Underground8::Service::Virustotal();	
 	$self->{'_ldap_report'} =   new Underground8::ReportFactory::LimesAS::LDAP();
 	$self->{'_has_changes'} = 0;
 	$self->{'_temp_dir'} = '';
@@ -93,7 +95,12 @@ sub clamav {
 #sub kasperskyav {
 #	my $self = instance(shift,__PACKAGE__);
 #	return $self->{'_kasperskyav'};
-#}
+}
+
+sub virustotal {
+	my $self = instance(shift,__PACKAGE__);
+	return $self->{'_virustotal'};
+}
 
 sub postfwd {
 	my $self = instance(shift,__PACKAGE__);
@@ -1268,7 +1275,8 @@ sub commit ($) {
 			$self->create_ca_certificates();
 
 			$self->clamav->commit() if ($self->clamav->is_changed && !$ldap_override);
-			# $self->kasperskyav->commit() if ($self->kasperskyav->is_changed && !$ldap_override);
+			#$self->kasperskyav->commit() if ($self->kasperskyav->is_changed && !$ldap_override);
+			$self->virustotal->commit() if ($self->virustotal->is_chagned && !$ldap_override);
 			$self->spamassassin->commit() if ($self->spamassassin->is_changed && !$ldap_override);
 			$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
 			$self->amavis->commit() if (($self->amavis->is_changed || $self->spamassassin->is_changed) && (!$ldap_override));

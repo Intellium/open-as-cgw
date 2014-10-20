@@ -23,7 +23,7 @@ BEGIN {
     use Exporter ();
 
     @Underground8::Utils::ISA         = qw(Exporter);
-    @Underground8::Utils::EXPORT      = qw(instance safe_system $g mk_tmp_dir read_sn sn_appendix hw_or_virtual gen_prod_name serial_info avail_lic_services);
+    @Underground8::Utils::EXPORT      = qw(instance safe_system $g mk_tmp_dir);
     @Underground8::Utils::EXPORT_OK   = qw();
 }
 
@@ -606,106 +606,6 @@ sub mk_tmp_dir ($$)
     my $dir = tempdir($tmp_dir_name,DIR=>$tmp_dir_path) or throw Underground8::Exception("FATAL ERROR: Please reboot Appliance");
     
     return $dir;
-}
-
-sub read_sn
-{
-    my $sn = '';
-    if (open SN, ("<" . $g->{'cfg_sn_file'}))
-    {
-        $sn = <SN>;
-        chomp($sn);
-        close SN;
-    }
-    return $sn;
-}
-
-
-
-sub sn_appendix($)
-{
-    #my $self = instance(shift);
-    my $sn = read_sn;
-    $sn =~ s/(\w*)((H\d{2})|(A\d{1}))$/$2/;
-    return $sn;
-
-}
-
-sub hw_or_virtual
-{
-    my $prod_name = shift;
-    # N: NOT KNOWN
-    # H: Hardware
-    # V: Virtual
-    my $type = "N";
-    if ($prod_name =~ m/^AS\s+?V\d+?$/)
-    {
-        $type = "V";
-    } elsif ($prod_name =~ m/^AS\s+?\d+?$/) {
-        $type = "H";
-    }
-
-    return $type;
-
-}
-
-sub gen_prod_name($)
-{
-    my $sn = shift;
-    $sn =~ s/(\w*)((H\d{2})|(A\d{1}))$/$2/;    #extracts the appliance type
-    #print STDERR "\n\nWe have $sn\n\n"; 
-
-    open F,"< $g->{'cfg_hw_versions'}" or return "UNKNOWN";
-    my %hws = ();
-    my @lines = <F>;
-    #we construct a hash based on the file lines.
-    foreach (@lines)
-    {
-        $_=~s/\s+//g;  # chomp and remove all spaces
-        my @words = split /=>/;
-        $hws{$words[0]} = $words[1];
-    }
-    close F;
-    #if there is an entry for the serial number then we have a HW otherwise we return an UNKNOWN
-    return (defined $hws{$sn} )? "AS $hws{$sn}" : "UNKNOWN";
-}
-
-sub serial_info
-{
-    #my $self = instance(shift);
-    my $sn = read_sn();
-    
-    my $prod_name = gen_prod_name($sn);
-    my $type = hw_or_virtual($prod_name);
-    my $sn_ending = sn_appendix($sn);
-
-    my $return = {};
-    $return->{'sn'} = $sn;
-    $return->{'prod_name'} = $prod_name;
-    $return->{'type'} = $type;
-    $return->{'sn_ending'} = $sn_ending;
-    
-    return $return;
-}
-
-sub avail_lic_services
-{
-    # well ... depending on what we are we can return what we want ...
-    # even on the serial ending!
-
-    my $return = [];
-    my $serial_info = serial_info();
-    my $type = $serial_info->{'type'};
-    if ($type eq "H")
-    {
-        $return = [qw(care_pack up2date)];
-    } elsif ($type eq "V") {
-        $return = [qw(virtual_use)];
-    } else {
-        $return = [];
-    }
-    
-    return $return;
 }
 
 1;

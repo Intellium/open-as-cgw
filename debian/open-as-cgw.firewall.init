@@ -17,7 +17,7 @@
 
 case "$1" in
   start)
-    /usr/local/bin/firewall.sh
+    /usr/bin/firewall.sh
     ;;
 
   stop)

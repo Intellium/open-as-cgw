@@ -1,3 +1,6 @@
 versions etc/open-as-cgw
 gui/lib/* var/www/LimesGUI
 gui/script/* var/www/LimesGUI/script
+lib/bin/* usr/bin
+lib/etc/* etc/open-as-cgw
+lib/lib/* usr/lib/perl5

@@ -17,7 +17,7 @@
 # Init script for quarantine-cron
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/bin/quarantine-cron.pl
+DAEMON=/usr/bin/quarantine-cron.pl
 NAME=quarantine-cron.pl
 DAEMONNAME=quarantine-cron
 DESC=quarantine-cron.pl

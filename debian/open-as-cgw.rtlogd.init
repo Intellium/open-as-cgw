@@ -17,7 +17,7 @@
 # Init script for rtlogd
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/bin/rtlogd
+DAEMON=/usr/bin/rtlogd
 NAME=rtlogd
 DAEMONNAME=rtlogd
 DESC=rtlogd

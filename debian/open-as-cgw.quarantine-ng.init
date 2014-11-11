@@ -5,7 +5,7 @@
 #
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/bin/quarantine-ng.pl
+DAEMON=/usr/bin/quarantine-ng.pl
 NAME=quarantine-ng.pl
 DAEMONNAME=quarantine-ng.pl
 DESC=quarantine-ng.pl

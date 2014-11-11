@@ -11,12 +11,12 @@
 # Description: the ldap syncronisator
 ### END INIT INFO
 
-#/usr/local/bin/ldap.pl >/dev/null 2>&1
+#/usr/bin/ldap.pl >/dev/null 2>&1
 # user limes
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=ldap.pl
-EXEC=/usr/local/bin/${NAME}
+EXEC=/usr/bin/${NAME}
 PIDFILE=/var/run/${NAME}.pid
 DESC="AS LDAP Syncronisator"
 

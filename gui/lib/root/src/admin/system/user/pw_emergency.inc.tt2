@@ -1,0 +1,12 @@
+[% PROCESS 'site/box_init' %]
+[% INCLUDE 'site/box_open' %]
+[% INCLUDE 'site/elements/form' url = Catalyst.uri_for('/admin/system/user/change_password_emergency'), -%]
+	<fieldset>
+	[% INCLUDE 'site/elements/input' name = 'pw_new_ssh', type = 'password' %]
+	[% INCLUDE 'site/elements/input' name = 'pw_admin', type = 'password' %]
+	[% INCLUDE 'site/elements/input' name = 'pw_new_ssh_verify', type = 'password' %]
+	[% INCLUDE 'site/elements/input' type = 'button' %]
+	<input type="hidden" name="adminusername" value="admin"/>
+	</fieldset>
+</form>
+[% INCLUDE 'site/box_close' %]

@@ -1,0 +1,21 @@
+    <div id="left">
+        <div id="applianceName">
+            <h1>
+                <a href="index.htm" title="Startscreen">
+                    <span class="invisible">Limes Antispam</span>
+                </a>
+            </h1>
+        </div>
+        <div id="container">
+            <div id="contentContainer">
+                [% content %]
+            </div>
+        </div>
+        <div id="underground">
+            <h2>
+                <a href="http://www.underground8.com" title="underground8 | secure computing">
+                    <span class="invisible">underground_8 | secure computing</span>
+                </a>
+            </h2>
+        </div>
+    </div>

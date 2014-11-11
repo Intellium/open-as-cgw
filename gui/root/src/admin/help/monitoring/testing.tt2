@@ -1,4 +1,0 @@
-<div id="help_appliance_monitoring">
-    <h3>[% Catalyst.localize('monitoring_testing_spam_heading') %]</h3>
-	<p>[% Catalyst.localize('help_monitoring_testing_spam') %]</p>
-</div>

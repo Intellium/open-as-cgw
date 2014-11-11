@@ -1,4 +1,0 @@
-<div id="content_scanning_policies_scanning_policy">
-    [% INCLUDE admin/content_scanning/policies/scanning_policy.inc.tt2 %]
-</div>
-

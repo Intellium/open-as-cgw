@@ -1,0 +1,6 @@
+open-as-cgw (2.1.0) trusty; urgency=low
+
+  * First version for trusty, new package name and structure
+
+ -- Stefan Wehinger <s.wehinger@gmail.com>  Tue,  11 Nov 2014 03:14:00 +0100
+

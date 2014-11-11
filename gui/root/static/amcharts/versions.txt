@@ -1,3 +1,0 @@
-ampie_1.6.3 		| 05 may 2009
-amcolumn_1.6.3 		| 05 may 2009
-amline_1.6.3 		| 05 may 2009

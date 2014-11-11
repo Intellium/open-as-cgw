@@ -1,3 +1,0 @@
-[% INCLUDE 'site/gui_lock'
-    text = Catalyst.localize('system_network_ip_redirect_text') _ '<a href="' _ redirect_url _ '">' _ redirect_url _ '</a>'  %]
-[% INCLUDE 'site/elements/redirect' %]

@@ -1,0 +1,3 @@
+versions etc/open-as-cgw
+gui/lib/* var/www/LimesGUI
+gui/script/* var/www/LimesGUI/script

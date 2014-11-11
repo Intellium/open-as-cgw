@@ -1,4 +1,0 @@
-<div id="logging_syslog_remote">
-    [% INCLUDE admin/logging/syslog/remote.inc.tt2 %]
-</div>
-

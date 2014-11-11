@@ -1,0 +1,47 @@
+Source: open-as-cgw
+Section: admin
+Priority: optional
+Maintainer: Open AS Team <team@openas.org>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: open-as-cgw
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends},
+	libfcgi0ldbl,
+	libfcgi-perl,
+	libgd-gd2-perl,
+	libtrycatch-perl
+Pre-Depends: clamav,
+	lighttpd,
+	libcairo2,
+	syslog-ng,
+	ntp,
+	sasl2-bin,
+	lzop,
+	pax,
+	p7zip,
+	unrar-free,
+	nomarch,
+	zoo,
+	cabextract,
+	amavisd-new,
+	spamassassin,
+	dnsmasq,
+	postfix,
+	sqlgrey,
+	ca-certificates,
+	mysql-server,
+	procmail,
+	clamav-daemon,
+	munin,
+	monit,
+	arj,
+	postfwd
+Conflicts: apache2,
+        exim4,
+        exim4-config,
+        exim4-base,
+        openntpd,
+	mutt,
+Description: open-as-cgw

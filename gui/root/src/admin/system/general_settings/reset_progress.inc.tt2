@@ -1,3 +1,0 @@
-[% INCLUDE 'site/gui_lock'
-    text = Catalyst.localize('system_general_settings_reset_redirect_text') -%]
-[% INCLUDE 'site/elements/redirect' %]

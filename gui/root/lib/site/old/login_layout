@@ -1,5 +1,0 @@
-<div id="main">
-<div id="login">
-[% content %]
-</div>
-</div>

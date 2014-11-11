@@ -1,3 +1,0 @@
-	<div id="form_data">
-   [% PROCESS error/send_report_form.inc.tt2 %]
-	</div>

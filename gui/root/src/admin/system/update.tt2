@@ -1,3 +1,0 @@
-<div id="system_update_oss">
-    [% INCLUDE admin/system/update/oss.inc.tt2 %]
-</div>

@@ -42,8 +42,8 @@ if ($ENV{'LIMESLIB'})
 }
 else
 {
-    $etc = "/etc/limes";
-    $bin = "/usr/local/bin";
+    $etc = "/etc/open-as-cgw";
+    $bin = "/usr/bin";
     $var = "/var/limes";
 }
 
@@ -85,10 +85,10 @@ our $g = {
     cfg_backup_include => "$etc/xml/backup.include",
     cfg_backup_exclude => "$etc/xml/backup.exclude",
                     
-    cfg_sn_file => '/etc/limes/sn',
-	cfg_vconfig_file => '/etc/limes/conf/vconfig',
-    cfg_system_version_file => '/etc/limes/versions',
-    cfg_system_version_available_file => "/etc/limes/avail_secversion",
+    cfg_sn_file => '$etc/sn',
+	cfg_vconfig_file => '$etc/conf/vconfig',
+    cfg_system_version_file => '$etc/versions',
+    cfg_system_version_available_file => "$etc/avail_secversion",
     cfg_update_last_timestamp => "$etc/update_timestamp",
     cfg_system_version_all_file => "$etc/avail_versions",
     cfg_system_version => "1.0",
@@ -159,7 +159,7 @@ our $g = {
 
     file_sasl_conf => '/etc/sasl.cf',
 
-    file_firewall => '/usr/local/bin/firewall.sh',
+    file_firewall => '$bin/firewall.sh',
 
     file_mysql => '/etc/mysql/my.cnf',
     file_monit => '/etc/monit/monitrc',
@@ -304,7 +304,7 @@ our $g = {
     cmd_network_ifup => '/usr/bin/sudo /sbin/ifup',
     cmd_network_ifdown => '/usr/bin/sudo /sbin/ifdown',
     cmd_network_route => '/usr/bin/sudo /sbin/route',
-    cmd_network_restart => "/usr/local/bin/restart_network.pl",
+    cmd_network_restart => "$bin/restart_network.pl",
     
     cmd_hostname_change => '/usr/bin/sudo service hostname restart', 
     cmd_dnsmasq_restart => '/usr/bin/sudo /etc/init.d/dnsmasq restart',
@@ -387,7 +387,7 @@ our $g = {
 	cmd_sshd_stop => '/usr/bin/sudo /etc/init.d/sshd stop',
 	cmd_sshd_restart => '/usr/bin/sudo /etc/init.d/sshd restart',
 
-    cmd_grub_update => '/usr/bin/sudo /usr/local/bin/update-grub.sh >/dev/null 2>&1',
+    cmd_grub_update => '/usr/bin/sudo $bin/update-grub.sh >/dev/null 2>&1',
     cmd_blkid => '/usr/bin/sudo /sbin/blkid',
 
     cmd_vmware_toolbox_cmd => '/usr/bin/sudo /usr/bin/vmware-toolbox-cmd',
@@ -456,7 +456,7 @@ our $g = {
 
     # mime types
     mime_types => '/etc/mime.types',
-    mime_types_amavis => '/etc/limes/conf/mime.types.amavis',
+    mime_types_amavis => '$etc/conf/mime.types.amavis',
 
 
 	# This is for senseless obscurity in WebGUI process list... get rid of it

@@ -308,7 +308,7 @@ prepare_ssh(){
 	restartssh=0
 	
 	# Obscurity?
-	/usr/local/bin/sshd_srvstr_scramble.sh /usr/sbin/sshd
+	/usr/bin/sshd_srvstr_scramble.sh /usr/sbin/sshd
 	SCRAMBLING_RC=$?
 	if [ $SCRAMBLING_RC -eq 0 ]; then
 		echo "SSHd service string scrambling done"
@@ -425,7 +425,7 @@ prepare_lighty(){
 	# Make self-signed certificate
 	# there is a security-check for the date later in this file
 	if [ ! -f /etc/lighttpd/standard.pem ]; then
-		/usr/local/bin/lighttpd-ssl-certificate -batch
+		/usr/bin/lighttpd-ssl-certificate -batch
 	fi
 
 	# all certificates before dateval are definitly broken which
@@ -434,7 +434,7 @@ prepare_lighty(){
 	dateval=200805141200
 
 	if [ `date +%Y%m%d%H%M -r /etc/lighttpd/standard.pem` -lt $dateval ]; then
-		/usr/local/bin/lighttpd-ssl-certificate --force -batch
+		/usr/bin/lighttpd-ssl-certificate --force -batch
 	fi
 
 	echo "*** Lighty Config Done"
@@ -449,7 +449,7 @@ prepare_system(){
 	fi
 
 	# hackhackhack
-	ln -sf /usr/local/bin/firewall /usr/local/bin/firewall.sh
+	ln -sf /usr/bin/firewall /usr/bin/firewall.sh
 
 	# enable UTF-8
 	/usr/sbin/update-locale LANG=en_US.UTF-8
@@ -466,11 +466,11 @@ prepare_system(){
 	echo "AS Communication Gateway" > /etc/issue.net
 	echo "Updated MOTD"
 
-	chown limes:limes /usr/local/bin/mail_logacc.pl
-	chown limes:limes /usr/local/bin/logacc_rotate.pl
-	chown limes:limes /usr/local/bin/daily_spam_report.pl
-	chown limes:limes /usr/local/bin/firewall.sh
-	chmod 775 /usr/local/bin/firewall.sh
+	chown limes:limes /usr/bin/mail_logacc.pl
+	chown limes:limes /usr/bin/logacc_rotate.pl
+	chown limes:limes /usr/bin/daily_spam_report.pl
+	chown limes:limes /usr/bin/firewall.sh
+	chmod 775 /usr/bin/firewall.sh
 
 	mkdir -p /var/limes/backup
 	mkdir -p /var/log/limes/upgrades
@@ -499,15 +499,15 @@ prepare_system(){
 	echo "/usr/bin/aptitude -f install >/dev/null 2>&1" >> /etc/rc.local
 
 	# on commercial virtual appliances, go to setup (obsolete for OSS version)
-	echo "/usr/local/bin/virtual_setup.sh >/dev/null 2>&1" >> /etc/rc.local
+	echo "/usr/bin/virtual_setup.sh >/dev/null 2>&1" >> /etc/rc.local
 
 	# on commercial virtual appliances, one may extend the pre-defined virtual HDD
 	echo "if grep -w -q hddextend /proc/cmdline 2>/dev/null; then" >> /etc/rc.local
-	echo " /usr/local/bin/virtual_hdd_extend.sh >/dev/null 2>&1" >> /etc/rc.local
+	echo " /usr/bin/virtual_hdd_extend.sh >/dev/null 2>&1" >> /etc/rc.local
 	echo "fi" >> /etc/rc.local
 
 	### not needed anymore
-	# echo "/usr/bin/nohup /usr/local/bin/launch.pl >/dev/null 2>&1" >> /etc/rc.local
+	# echo "/usr/bin/nohup /usr/bin/launch.pl >/dev/null 2>&1" >> /etc/rc.local
 	echo "exit 0" >> /etc/rc.local
 	echo "Updated rc.local"
 
@@ -527,9 +527,9 @@ prepare_system(){
 	chgrp limes /var/log/mail-simple*
 	echo "Set up simple log"
 
-	if [ ! -f "/usr/local/bin/firewall.sh" ]; then
-		echo '#!/bin/bash' > /usr/local/bin/firewall.sh
-		echo 'exit 0' >> /usr/local/bin/firewall.sh
+	if [ ! -f "/usr/bin/firewall.sh" ]; then
+		echo '#!/bin/bash' > /usr/bin/firewall.sh
+		echo 'exit 0' >> /usr/bin/firewall.sh
 		echo "wrote standard firewall.sh file, this will soon be overwritten by catalyst"
 	fi
 
@@ -662,7 +662,7 @@ case "$1" in
 	prepare_smtpcrypt;
 	prepare_networking;
 
-	#sudo -u www-data /usr/local/bin/update_backup_conf.pl
+	#sudo -u www-data /usr/bin/update_backup_conf.pl
 
 	# restart rtlogd
 	/etc/init.d/rtlogd restart

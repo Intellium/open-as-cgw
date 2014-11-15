@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This file is part of the Open AS Communication Gateway.
 #
 # The Open AS Communication Gateway is free software: you can redistribute it
@@ -269,6 +269,9 @@ prepare_mysql(){
 		echo "MySQL already set"
 	fi
 	echo "primary MySQL check done - now comparing versions"
+	if [ ! -f /etc/open-as-cgw/db_version ]; then
+		echo "0" > /etc/open-as-cgw/db_version
+	fi
 
 	DBVERSION=`cat /etc/open-as-cgw/db_version`
 	if [ "${DBVERSION}" -lt "1" ]; then

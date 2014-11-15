@@ -15,7 +15,7 @@ NAME=lighttpd
 DESC="web server"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+ENV="env -i LANG=C PATH=/usr/bin:/bin"
 SSD="/sbin/start-stop-daemon"
 
 DAEMON_OPTS="-f /etc/lighttpd/lighttpd.conf"
@@ -29,7 +29,7 @@ set -e
 case "$1" in
   start)
 	log_daemon_msg "Starting $DESC" $NAME
-	/usr/local/bin/set_cfg_permissions.pl
+	/usr/bin/set_cfg_permissions.pl
 	if ! $ENV $SSD --start --quiet\
 	--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_OPTS ; then
             log_end_msg 1

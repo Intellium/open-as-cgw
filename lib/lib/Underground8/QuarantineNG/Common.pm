@@ -86,7 +86,7 @@ sub  read_quarantine_config
         }
         else
         {
-            $cpath = "/etc/limes/conf/$config_file";
+            $cpath = "/etc/open-as-cgw/conf/$config_file";
             if ( ! -e $cpath)
             {   
                 log_message("err", "$cpath not found, unable to startup!");
@@ -131,7 +131,7 @@ sub write_config
         }
         else
         {   
-            $cpath = "/etc/limes/conf/$config_file";
+            $cpath = "/etc/open-as-cgw/conf/$config_file";
             if ( ! -e $cpath)
             {
                 log_message("err", "$cpath not found, unable to startup!");

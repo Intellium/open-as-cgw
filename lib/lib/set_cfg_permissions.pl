@@ -86,17 +86,17 @@ my @files = qw(
 /etc/mail/batv-filter.relay
 /etc/mail/batv-filter.domains
 /etc/mail/batv-filter.key
-/etc/limes/xml/antispam.xml
-/etc/limes/xml/backup.exclude
-/etc/limes/xml/backup.include
-/etc/limes/xml/backup.xml
-/etc/limes/xml/notification.xml
-/etc/limes/xml/postfwd.xml
-/etc/limes/xml/quarantine.xml
-/etc/limes/xml/system.xml
-/etc/limes/xml/usermaps.xml
-/etc/limes/xml/smtpcrypt.xml
-/etc/limes/conf/as_license.ulf
+/etc/open-as-cgw/xml/antispam.xml
+/etc/open-as-cgw/xml/backup.exclude
+/etc/open-as-cgw/xml/backup.include
+/etc/open-as-cgw/xml/backup.xml
+/etc/open-as-cgw/xml/notification.xml
+/etc/open-as-cgw/xml/postfwd.xml
+/etc/open-as-cgw/xml/quarantine.xml
+/etc/open-as-cgw/xml/system.xml
+/etc/open-as-cgw/xml/usermaps.xml
+/etc/open-as-cgw/xml/smtpcrypt.xml
+/etc/open-as-cgw/conf/as_license.ulf
 /etc/default/snmpd
 /etc/snmp/snmpd.conf
 );
@@ -123,6 +123,6 @@ foreach my $file (@files) {
     } # else { printf("\tPermissions: %04o --> %04o\n",$info->mode & 07777, $mode); }
 }
 
-system("/bin/chmod 755 /usr/local/bin/sasl_auth.pl");
-system("/bin/chown smtpcrypt:limes /etc/limes/xml/smtpcrypt.xml");
+system("/bin/chmod 755 /usr/bin/sasl_auth.pl");
+system("/bin/chown smtpcrypt:limes /etc/open-as-cgw/xml/smtpcrypt.xml");
 system("/bin/chgrp limes /var/log/mail-simple*");

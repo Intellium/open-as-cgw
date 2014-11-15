@@ -38,7 +38,7 @@ BEGIN
     }
     else
     {
-        push @INC, '/var/www/LimesGUI/lib';
+        push @INC, '/var/www/LimesGUI';
     }
 }
 

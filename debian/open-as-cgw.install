@@ -1,5 +1,6 @@
 versions etc/open-as-cgw
 lib/etc/* etc/open-as-cgw
+lib/lib/set_cfg_permissions.pl usr/bin
 lib/lib/* usr/lib/perl5
 lib/bin/* usr/bin
 gui/lib/* var/www/LimesGUI

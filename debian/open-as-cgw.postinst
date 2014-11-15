@@ -519,8 +519,6 @@ prepare_system(){
 		rm /etc/syslog-ng/mail.log
 	fi
 
-	cp /etc/open-as-cgw/conf/tty/tty* /etc/event.d/
-
 	if [ ! -e "/var/log/mail-simple.log" ]; then
 		/usr/bin/touch /var/log/mail-simple.log
 	fi

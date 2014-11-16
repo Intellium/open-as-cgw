@@ -591,7 +591,7 @@ sub get_current_installed_main_version
         or throw Underground8::Exception::FileOpen($g->{'cmd_dpkg'});
     foreach my $line (<DPKG>)
     {
-        if ( $line =~ m/^i[i|U]\s+?limesas\s+?(\d+?\.\d+?)\.\d+?[a|b|s]\d*?\-\d+?/ )
+        if ( $line =~ m/^i[i|U]\s+?open-as-cgw\s+?(\d+?\.\d+?)\.\d+?[a|b|s]\d*?\-\d+?/ )
         {
             $version = $1;
         }
@@ -604,11 +604,11 @@ sub get_current_installed_main_version
 sub get_current_installed_full_version
 {
     my $version = "0";
-    open(DPKG, "$g->{'cmd_dpkg'} --list limesas |")
+    open(DPKG, "$g->{'cmd_dpkg'} --list open-as-cgw |")
         or throw Underground8::Exception::FileOpen($g->{'cmd_dpkg'});
     foreach my $line (<DPKG>)
     {
-        if ( $line =~ m/^i[i|U]\s+?limesas\s+?(\d+?\.\d+?\.\d+?[a|b|s]\d*?)\-\d+?/ )
+        if ( $line =~ m/^i[i|U]\s+?open-as-cgw\s+?(\d+?\.\d+?\.\d+?[a|b|s]\d*?)\-\d+?/ )
         {
             $version = $1;
         }

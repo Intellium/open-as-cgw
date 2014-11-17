@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 
+BEGIN {
+	unshift(@INC,"/var/www/LimesGUI");
+}
 use Catalyst::ScriptRunner;
 Catalyst::ScriptRunner->run('LimesGUI', 'FastCGI');
 

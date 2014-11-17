@@ -1,0 +1,15 @@
+This is the debian package for the Catalyst::Plugin::FormValidator module.
+It was created by cpanplus@example.com.
+
+The upstream author is Devin Austin <devin.austin@gmail.com>.
+
+Copyright (c) 2014 by Devin Austin
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself (GPL or Artistic license).
+
+On Debian systems the complete text of the GPL and Artistic
+licenses can be found at:
+	/usr/share/common-licenses/GPL
+	/usr/share/common-licenses/Artistic
+

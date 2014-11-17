@@ -85,9 +85,9 @@ our $g = {
     cfg_backup_include => "$etc/xml/backup.include",
     cfg_backup_exclude => "$etc/xml/backup.exclude",
                     
-    cfg_sn_file => '$etc/sn',
-	cfg_vconfig_file => '$etc/conf/vconfig',
-    cfg_system_version_file => '$etc/versions',
+    cfg_sn_file => "$etc/sn",
+    cfg_vconfig_file => "$etc/conf/vconfig",
+    cfg_system_version_file => "$etc/versions",
     cfg_system_version_available_file => "$etc/avail_secversion",
     cfg_update_last_timestamp => "$etc/update_timestamp",
     cfg_system_version_all_file => "$etc/avail_versions",
@@ -159,7 +159,7 @@ our $g = {
 
     file_sasl_conf => '/etc/sasl.cf',
 
-    file_firewall => '$bin/firewall.sh',
+    file_firewall => "$bin/firewall.sh",
 
     file_mysql => '/etc/mysql/my.cnf',
     file_monit => '/etc/monit/monitrc',
@@ -456,7 +456,7 @@ our $g = {
 
     # mime types
     mime_types => '/etc/mime.types',
-    mime_types_amavis => '$etc/conf/mime.types.amavis',
+    mime_types_amavis => "$etc/conf/mime.types.amavis",
 
 
 	# This is for senseless obscurity in WebGUI process list... get rid of it

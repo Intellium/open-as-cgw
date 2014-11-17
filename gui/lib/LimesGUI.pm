@@ -91,7 +91,7 @@ if ($ENV{'LIMESLIB'})
 }
 else
 {
-    $etc = "/etc/limes";
+    $etc = "/etc/open-as-cgw";
 }
 
 system("rm -rf $limesgui/session_store/*");

@@ -20,7 +20,7 @@ server {
     location / {
         gzip off;
         include /etc/nginx/proxy_params;
-        proxy_pass  http://unix:/var/run/LimesGUI.socket:/;
+        proxy_pass  http://unix:/tmp/LimesGUI.socket:/;
     }
 
     location /static {

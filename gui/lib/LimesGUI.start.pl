@@ -8,7 +8,7 @@ my $program  = '/usr/bin/starman';
 my $name     = 'LimesGUI';
 my $workers  = 1;
 my $pid_file = '/var/run/LimesGUI.pid';
-my $socket   = '/var/run/LimesGUI.socket';
+my $socket   = '/tmp/LimesGUI.socket';
 
 Daemon::Control->new({
     name        => $name,
@@ -24,8 +24,8 @@ Daemon::Control->new({
     program     => "$program -Ilib LimesGUI.psgi --workers $workers --listen $socket",
 
     pid_file    => $pid_file,
-    stderr_file => '/var/log/LimesGUI.out',
-    stdout_file => '/var/log/LimesGUI.out',
+    stderr_file => '/var/log/openas/LimesGUI.out',
+    stdout_file => '/var/log/openas/LimesGUI.out',
 
     fork        => 2,
 })->run;

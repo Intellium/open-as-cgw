@@ -110,6 +110,9 @@ our $VERSION = '1.00';
 
 __PACKAGE__->config( name => 'LimesGUI' );
 
+# So uri_for knows we use https and not http...
+__PACKAGE__->config( using_frontend_proxy => 1);
+
 # Add the appliance to the global context
 use Underground8::Appliance::LimesAS;
 my $appliance = new Underground8::Appliance::LimesAS ();

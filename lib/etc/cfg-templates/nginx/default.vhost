@@ -3,8 +3,8 @@
 ##
 
 server {
-    listen 980;
-    listen [::]:980 ipv6only=on;
+    listen 443;
+    listen [::]:443 ipv6only=on;
     root /var/www/LimesGUI;
     access_log /var/log/nginx/access.log combined;
     error_log /var/log/nginx/error.log error;

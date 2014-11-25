@@ -196,7 +196,7 @@ II.4: Installing all required CPAN modules
 
 * The WebGUI is seemingly broken (there is an error-message)
    -> Have you installed all dependencies? Try
-      # tail /var/log/lighttpd/error.log 
-      and look what lighty is complaining about. If there is nothing to see,
+      # tail /var/log/nginx/error.log 
+      and look what nginx is complaining about. If there is nothing to see,
       try starting /var/www/LimesGUI/scripts/limesgui_fastcgi.pl and look for
       errors.

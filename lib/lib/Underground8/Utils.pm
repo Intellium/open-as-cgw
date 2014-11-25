@@ -336,7 +336,7 @@ our $g = {
     cmd_revoke_network_settings => "$bin/revoke_networksettings.pl",
     cmd_revoke_firewall_settings => "$bin/revoke_firewallsettings.pl",
 
-    cmd_webserver_restart => '/usr/bin/sudo /etc/init.d/lighttpd restart',
+    cmd_webserver_restart => '/usr/bin/sudo /etc/init.d/nginx restart',
 
     cmd_usus => "/usr/bin/sudo /usr/bin/nohup $bin/usus.pl",
     cmd_dpkg => '/usr/bin/dpkg',

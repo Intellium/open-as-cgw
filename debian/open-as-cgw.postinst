@@ -416,31 +416,29 @@ prepare_cron(){
 	echo "*** CRON Config Done"
 }
 
-prepare_lighty(){
-	echo "*** Preparing Lighty Configuration..."
+prepare_nginx(){
+	echo "*** Preparing Nginx Configuration..."
 
-	# overwrite current lighttpd config and create ssl certificate
-	cp -f /etc/open-as-cgw/cfg-templates/lighttpd/ssleay.cnf /etc/lighttpd
-	cp -f /etc/open-as-cgw/cfg-templates/lighttpd/lighttpd.conf /etc/lighttpd
-	cp -f /etc/open-as-cgw/cfg-templates/lighttpd/lighttpd.init /etc/init.d/lighttpd
-	chmod +x /etc/init.d/lighttpd
+	# overwrite current nginx config and create ssl certificate
+	cp -f /etc/open-as-cgw/cfg-templates/nginx/nginx.conf /etc/nginx
+	cp -f /etc/open-as-cgw/cfg-templates/nginx/ssleay.cnf /etc/nginx 
+	cp -f /etc/open-as-cgw/cfg-templates/nginx/default.vhost /etc/nginx/sites-available/default
 
 	# Make self-signed certificate
 	# there is a security-check for the date later in this file
-	if [ ! -f /etc/lighttpd/standard.pem ]; then
-		/usr/bin/lighttpd-ssl-certificate -batch
+	if [ ! -f /etc/nginx/ssl/default.pem ] && [ ! -f /etc/nginx/ssl/default.key ]; then
+		/usr/bin/openas-generate-sslcert -batch
 	fi
 
 	# all certificates before dateval are definitly broken which
 	# is a security leak
 	# 12:00, 14 May 2008 is the date
-	dateval=200805141200
+	#dateval=200805141200
+	#if [ `date +%Y%m%d%H%M -r /etc/nginx/ssl/default.pem` -lt $dateval ]; then
+	#	/usr/bin/openas-generate-sslcert --force -batch
+	#fi
 
-	if [ `date +%Y%m%d%H%M -r /etc/lighttpd/standard.pem` -lt $dateval ]; then
-		/usr/bin/lighttpd-ssl-certificate --force -batch
-	fi
-
-	echo "*** Lighty Config Done"
+	echo "*** Nginx Config Done"
 }
 
 prepare_system(){
@@ -657,7 +655,7 @@ case "$1" in
 	prepare_postfwd;
 	prepare_spamassassin;
 	prepare_mysql;
-	prepare_lighty;
+	prepare_nginx;
 	prepare_ldap;
 	prepare_quarantine;
 	prepare_smtpcrypt;
@@ -668,8 +666,8 @@ case "$1" in
 	# restart rtlogd
 	/etc/init.d/rtlogd restart
 
-	# restart lighthttpd
-	/etc/init.d/lighttpd restart
+	# restart nginx 
+	/etc/init.d/nginx restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

@@ -10,7 +10,7 @@ Runas_Alias     OP = root
 
 # Cmnd alias specification
 
-Cmnd_Alias      CONFIG = /usr/sbin/postmap, /usr/sbin/postconf, /etc/init.d/postfix, /sbin/ifup, /sbin/ifdown, /etc/init.d/hostname.sh, /etc/init.d/amavis, /etc/init.d/sqlgrey, /etc/init.d/saslauthd, /usr/sbin/update-rc.d, /usr/bin/crontab, /etc/init.d/lighttpd, /sbin/route, /etc/init.d/firewall, /etc/init.d/openntpd, /etc/init.d/dnsmasq, /etc/init.d/mysql, /etc/init.d/rtlogd
+Cmnd_Alias      CONFIG = /usr/sbin/postmap, /usr/sbin/postconf, /etc/init.d/postfix, /sbin/ifup, /sbin/ifdown, /etc/init.d/hostname.sh, /etc/init.d/amavis, /etc/init.d/sqlgrey, /etc/init.d/saslauthd, /usr/sbin/update-rc.d, /usr/bin/crontab, /etc/init.d/nginx, /sbin/route, /etc/init.d/firewall, /etc/init.d/openntpd, /etc/init.d/dnsmasq, /etc/init.d/mysql, /etc/init.d/rtlogd
 
 
 # Defaults
@@ -31,5 +31,5 @@ aspoweroff ALL = NOPASSWD: /sbin/poweroff
 asreboot   ALL = NOPASSWD: /sbin/reboot
 asinfo     ALL = NOPASSWD: /usr/local/bin/sysinfo.sh
 asreset    ALL = NOPASSWD: /usr/local/bin/resetter.pl
-asrestartgui  ALL = NOPASSWD: /etc/init.d/lighttpd
-# admin      ALL = NOPASSWD: /usr/local/bin/cli.pl, /etc/init.d/lighttpd
+asrestartgui  ALL = NOPASSWD: /etc/init.d/nginx
+admin      ALL = NOPASSWD: /usr/local/bin/cli.pl, /etc/init.d/nginx

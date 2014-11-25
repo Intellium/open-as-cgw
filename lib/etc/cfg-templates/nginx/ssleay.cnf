@@ -2,7 +2,6 @@
 # SSLeay example configuration file.
 #
 
-#RANDFILE                = $ENV::HOME/.rnd
 RANDFILE		= /tmp/.rnd
 
 [ req ]
@@ -17,23 +16,23 @@ countryName_min                 = 2
 countryName_max                 = 2
 
 stateOrProvinceName             = State or Province Name (full name)
-stateOrProvinceName_default     = Upper Austria
+stateOrProvinceName_default     = Tyrol
 
 localityName                    = Locality Name (eg, city)
-localityName_default		= Linz
+localityName_default		= Innsbruck 
 
 organizationName                = Organization Name (eg, company; recommended)
 organizationName_max            = 64
-organizationName_default	= underground_8
+organizationName_default	= Open AS 
 
 organizationalUnitName          = Organizational Unit Name (eg, section)
 organizationalUnitName_max      = 64
-organizationalUnitName_default	= underground_8 IT
+organizationalUnitName_default	= CGW
 
 commonName                      = server name (eg. ssl.domain.tld; required!!!)
 commonName_max                  = 64
-commonName_default		= limesas.underground8.com
+commonName_default		= cgw.openas.org
 
 emailAddress                    = Email Address
 emailAddress_max                = 40
-emailAddress_default		= info@underground8.com
+emailAddress_default		= team@openas.org 

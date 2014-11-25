@@ -44,9 +44,9 @@ sub start_diagnostics : Local {
 
 	# Network-related self-diagnostics
 	$c->stash->{'pri_dns_reachable'} = 
-		$appliance->report->test_dns_server( 'underground8.com', $appliance->system->primary_dns );
+		$appliance->report->test_dns_server( 'openas.org', $appliance->system->primary_dns );
 	$c->stash->{'sec_dns_reachable'} = 
-		$appliance->report->test_dns_server( 'underground8.com', $appliance->system->secondary_dns );
+		$appliance->report->test_dns_server( 'openas.org', $appliance->system->secondary_dns );
 	$c->stash->{'default_gw_reachable'} = 
 		$appliance->report->ping_host( $appliance->system->default_gateway );
 

@@ -9,11 +9,11 @@ curl
 dnsmasq
 libmoose-perl
 libcairo2
-lighttpd
 lzop
 monit
 munin
 mysql-server
+nginx
 nomarch
 ntp
 p7zip

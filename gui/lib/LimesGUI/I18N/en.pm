@@ -283,7 +283,7 @@ dashboard_dashboard_notifications_update_running => 'The appliance is currently 
 dashboard_dashboard_notifications_default_text_heading => 'Everything\'s fine',
 dashboard_dashboard_notifications_default_text => 'Your appliance is correctly up and running.',
 
-dashboard_dashboard_support_text => 'If you have any questions or need help with something, don\'t hesitate to visit the project web-page. If you purchased a commercial license or you intend to do it, you\'re welcome <a href="http://www.underground8.com/en/support/support.html">contact the underground_8 support team!</a>',
+dashboard_dashboard_support_text => 'If you have any questions or need help with something, don\'t hesitate to visit the project web-page. If you purchased a commercial license or you intend to do it, you\'re welcome <a href="http://www.openas.org">contact the Open AS support team!</a>',
 
 
 ### SYSTEM :: GENERAL SETTINGS
@@ -1193,7 +1193,7 @@ modules_licence_management_info_heading => 'Licencing information',
 modules_licence_management_info_lastupdate => 'The licensing information has last been updated on ',
 modules_licence_management_info_neverupdated => 'The licencing information has up until now never been updated.',
 modules_licence_management_info_lastupdated => 'The licensing information has last been updated on ',
-modules_licence_management_info_getinfo => 'get more detailed information on the underground_8 website',
+modules_licence_management_info_getinfo => 'get more detailed information on the Open AS website',
 modules_licence_management_info_service => 'TBD',
 modules_licence_management_info_licence_not_activated => 'hasn\'t been activated',
 modules_licence_management_info_request_licence => 'request a licence for this module',
@@ -1206,7 +1206,7 @@ modules_licence_management_info_updatelicence => 'Update licence file',
 
 modules_licence_management_info_lic_never_updated => 'The licencing information has up until now never been updated.',
 modules_licence_management_info_lic_last_updated => 'The licencing information has been updated on ',
-modules_licence_management_info_lic_get_info => 'get more detailed information on the underground_8 website',
+modules_licence_management_info_lic_get_info => 'get more detailed information on the Open AS website',
 modules_licence_management_info_lic_not_activated => 'hasn\'t yet been activated',
 modules_licence_management_info_lic_request => 'request a licence for this module',
 modules_licence_management_info_lic_valid_until => 'is valid until',
@@ -1231,12 +1231,12 @@ modules_licence_management_update_k8 => 'part 8',
 
 modules_licence_management_upload_heading => 'Upload a licence file',
 modules_licence_management_upload_ulf => 'Upload ULF key',
-modules_licence_management_upload_text => 'Upload an underground_8 licence key file (.ULF).',
+modules_licence_management_upload_text => 'Upload an Open AS licence key file (.ULF).',
 modules_licence_management_upload_upload => 'Upload licence',
 
 modules_email_encryption_abstract => 'Administer your E-mail encryption settings. Using this feature, the Open AS Communication Gateway will automatically encrypt outgoing e-mails if you place a previously defined tag within the subject, and put the contents (text and attachments) into an encrypted ZIP archive. The engine also includes experimental PDF-conversion and encryption support.',
 modules_email_encryption_control_heading => 'E-mail encryption',
-modules_email_encryption_control_commercial => 'Sorry, this feature is only available in the commercial version. Please contact underground_8 Support if you want to purchase a licence (Note: E-mail encryption is the only functional restriction in the OSS version, aside from an additional commercial virus-scanning engine).',
+modules_email_encryption_control_commercial => 'Sorry, this feature is only available in the commercial version. Please contact Open AS Support if you want to purchase a licence (Note: E-mail encryption is the only functional restriction in the OSS version, aside from an additional commercial virus-scanning engine).',
 modules_email_encryption_control_id_cryptotag => 'Identification tag',
 modules_email_encryption_control_id_packtype => 'Encoding type',
 modules_email_encryption_control_id_enctype => 'Password assignment',
@@ -1262,7 +1262,7 @@ help_dashboard_dashboard_mailtraffic_stats => 'Provides a graphical summary of t
 ### SYSTEM :: GENERAL SETTINGS
 help_system_general_settings_version => 'Displays all relevant version information about numerous appliance-specific software packages like anti-virus engine, anti-spam engine, installed and available firmware version, revision number and a timestamp of the last system update.',
 help_system_general_settings_reboot_shutdown => 'Hereby, you may reboot or shutdown your appliance. Note that, with certain appliance types, shutting down the machine doesn\'t necessarily mean that the machine will power itself off.',
-help_system_general_settings_reset => 'This dialog gives you the possibility to reset your underground_8 Open AS Communication Gateway&trade; to default settings. The appliance reset will be done according to the chosen reset-level, which may be <em>Statistics only</em>, <em>Soft reset</em> and <em>Hard reset</em>. While the first option will delete all mail statistics and livelog records, the remaining environment (including settings, backups, mailqueue items and logfiles) is kept untouched. The second option, the <em>Soft reset</em>, will reset the appliance to its factory defaults. Only logfiles, backups and mail-queue are kept. The last option <em>Hard reset</em> will reset the appliance to its factory defaults and delete everything else. <strong>Note:</strong> Soft- and hard-resets will force the appliance to reset the network configuration!',
+help_system_general_settings_reset => 'This dialog gives you the possibility to reset your Open AS Open AS Communication Gateway&trade; to default settings. The appliance reset will be done according to the chosen reset-level, which may be <em>Statistics only</em>, <em>Soft reset</em> and <em>Hard reset</em>. While the first option will delete all mail statistics and livelog records, the remaining environment (including settings, backups, mailqueue items and logfiles) is kept untouched. The second option, the <em>Soft reset</em>, will reset the appliance to its factory defaults. Only logfiles, backups and mail-queue are kept. The last option <em>Hard reset</em> will reset the appliance to its factory defaults and delete everything else. <strong>Note:</strong> Soft- and hard-resets will force the appliance to reset the network configuration!',
 
 ### SYSTEM :: TIME SETTINGS
 help_system_time_settings_timezone => 'Select your timezone here. In terms of e-mailing, correct configuration of time and timezone is essential in order to keep e-mail headers and logs consistent.',
@@ -1288,7 +1288,7 @@ help_system_security_ssl => 'During the configuration of your SMTP servers, you 
 help_system_update_settings => 'You can edit the update automation settings here.</p><ul><li><em>Automatically get the latest Update Information</em> does not install or download anything. The newest available informations on updates (security and system updates) are being downloaded, nothing is being installed</li><li><em>Automatically download security updates</em> as soon as they are available. If the next options are disabled you can install the updates in the box below manually.</li><li><em>Automatically install security updates</em> is highly recommended. E-Mail delivery is only suspended for about 30 to 60 seconds. The updates are designed to be installable even during office hours.</li><li>If you want your appliance stay on the newest feature version you may want to activate <em>Automatically install the latest system version</em>. If an update requires a restart (major feature updates) or if the service interruption could exceed 60 seconds you will still to have to install it manually.</li></ul>',
 help_system_update_versions => 'The currently installed system version and the available security updates (for this particular system version) are displayed here, as well as a timestamp of the last successful check for updates. If this timestamp is older than two hours and you have automatic checking enabled please check your firewall settings since your Open AS Communication Gateway&trade; seems to be unable to connect to the update server.<br />Searching for updates manually is possible at any time.',
 help_system_update_upgrade_info => 'If a security version is available you can start the installation here. If you have <em>automatically download security updates</em> enabled the installation will start almost immediately.',
-help_system_update_upgrade_table => 'If new system versions are available you can install them here. They will be downloaded and installed. Information on the updates can be found on our homepage <a href="http://www.underground8.com/de/support/updates.html">underground8.com - Updates</a>',
+help_system_update_upgrade_table => 'If new system versions are available you can install them here. They will be downloaded and installed. Information on the updates can be found on our homepage <a href="http://www.openas.org">openas.org - Updates</a>',
 
 ### SYSTEM :: BACKUP MANAGER
 help_system_backup_manager_list => 'To generate a backup of your current settings (that also can be stored on your local hard drive) simply click the"Create" button. An encrypted backup-archive will be created, and added to your list of backups stored directly on the appliance. Once a backup has been created, you may download, install and delete it through the list of backups in the same dialog.',
@@ -1410,7 +1410,7 @@ help_monitoring_testing_spam => 'This letter combination can be used to test the
 
 #################################################### LOGGING
 ### LOGGING :: LIVELOG
-help_logging_live_log_livelog => 'The Live-Log, based on the underground_8 Real-Time-Mailflow Engine, is a consecutively refreshing list of emails, which is updated immediately upon arrival of a new e-mail.',
+help_logging_live_log_livelog => 'The Live-Log, based on the Open AS Real-Time-Mailflow Engine, is a consecutively refreshing list of emails, which is updated immediately upon arrival of a new e-mail.',
 
 ### LOGGING :: LOVE VIEWER
 help_logging_log_viewer_search => 'The brand new <em>Log Viewer</em> is made to search and examine logs easily and effectively. Simply chose the desired time interval the search should take place in, and any search pattern to look for. The search is performed upon the appliance\' raw log files. In addition, the search pattern may also be a standard <em>Regular Expression</em>. Check the corresponding check-boxes in order to ignore case sensitivity or reverse the result order (by time).<br/><strong>Note:</strong> Depending on traffic, load and log scale, complex searches over long periods of time may take a considerable amount of time to succeed!',
@@ -1426,8 +1426,8 @@ help_logging_statistics_entire_traffic_stats => 'This page gives detailed statis
 #################################################### MODULES
 ### MODULES :: LICENCE MANAGEMENT
 help_modules_licence_management_info => 'Here you can see what licenses you have already activated and how long they will be active. If (for some reason) that information does not seem correct to you, click on "Update License File" to get the newest information. Only licenses available for the firmware version you have currently installed are listed here.',
-help_modules_licence_management_update => 'Here you may enter a voucher. The license file will be downloaded from underground_8 and the desired feature is immediately unlocked.',
-help_modules_licence_management_upload => 'If the appliance can not connect to the underground_8 license server you can get a license file from the underground_8 support team via <a href="mailto:support@underground8.com?subject=I%20need%20a%20valid%20license%20file%20to%20upload%20to%20my%20AS%20Communication%20Gateway">e-mail</a>. Upload the file you will receive here and it will override any current licensing information.<br/> <strong>We recommend, that you enable direct internet access for your appliance so it can connect to our license server online</strong>',
+help_modules_licence_management_update => 'Here you may enter a voucher. The license file will be downloaded from Open AS and the desired feature is immediately unlocked.',
+help_modules_licence_management_upload => 'If the appliance can not connect to the Open AS license server you can get a license file from the Open AS support team via <a href="mailto:team@openas.org?subject=I%20need%20a%20valid%20license%20file%20to%20upload%20to%20my%20AS%20Communication%20Gateway">e-mail</a>. Upload the file you will receive here and it will override any current licensing information.<br/> <strong>We recommend, that you enable direct internet access for your appliance so it can connect to our license server online</strong>',
 
 
 
@@ -1668,7 +1668,7 @@ up2date									=> 'Up2Date',
 virtual_use                             => 'Operating Licence (virtual)',
 update_license_file                     => 'Update Licence File',
 heading_appliance_license_enter_voucher => 'Enter a new licence key',
-licence_get_info                        => 'get more detailed information on the underground_8 website',
+licence_get_info                        => 'get more detailed information on the Open AS website',
 error_code_short_xmlrpc_400				=> 'Transfered licence key was not accepted.',
 error_code_short_xmlrpc_403				=> 'Authentication with License Server failed.',
 error_code_short_xmlrpc_404				=> 'The entered licence key is not valid.',
@@ -1677,7 +1677,7 @@ error_code_short_xmlrpc_409				=> 'Licence key already used.',
 error_code_short_xmlrpc_410				=> 'Licence unknown to the Licence Server.',
 error_code_short_xmlrpc_417				=> 'Licence Information could not be updated, please contact support.',
 error_code_short_xmlrpc_500				=> 'An unknown error has occurred.',
-error_code_short_xmlrpc_999				=> 'The underground_8 Licence Management is currently not reachable.',
+error_code_short_xmlrpc_999				=> 'The Open AS Licence Management is currently not reachable.',
 
 
 
@@ -1718,7 +1718,7 @@ current_system_version					=> 'Currently installed System Version',
 latest_security_version					=> 'Latest available Security Update',
 latest_feature_version					=> 'Latest available System Version',
 last_version_information_update			=> 'Last Update of Version Information',
-update_info_underground_website			=> 'For information on this update, check the underground_8 support website',
+update_info_underground_website			=> 'For information on this update, check the Open AS support website',
 update_now                              => 'Get latest Update Information',
 
 
@@ -1744,7 +1744,7 @@ title_appliance_about                   => 'About Open AS Communication Gateway'
 abstract_appliance_about                => 'Information about used software components and a list of the development team.',
 development_team                		=> 'Open AS Communication Gateway&trade; Development Team',
 open_source_as	                		=> 'Software used in the Open AS Communication Gateway',
-open_source_as_text                		=> '<p>The Open AS Communication Gateway&trade; utilizes various customized open source software components like <a href="http://spamassassin.apache.org/">SpamAssassin</a> and <a href="http://www.amavis.org/">AMaViS</a>.</p><p>For a complete list and the source code, please write an e-mail to <a href="mailto:support@underground8.com?subject=AS%20Communication%20Gateway%20open%20source%20software%20component%20list">support@underground8.com</a> and underground_8 will send you a CD with the required data.</p>',
+open_source_as_text                		=> '<p>The Open AS Communication Gateway&trade; utilizes various customized open source software components like <a href="http://spamassassin.apache.org/">SpamAssassin</a> and <a href="http://www.amavis.org/">AMaViS</a>.</p><p>For a complete list and the source code, please write an e-mail to <a href="mailto:team@openas.org?subject=AS%20Communication%20Gateway%20open%20source%20software%20component%20list">team@openas.org</a> and Open AS will send you a CD with the required data.</p>',
 heading_appliance_user_change_password_ssh => 'Set password for Emergency Commands',
 
 
@@ -2427,7 +2427,7 @@ dr_help => 'need help?',
 # global
 quar_product => 'Open AS Communication Gateway&trade;',
 quar_footer_signature => 'This end-user quarantine is brought to you  by',
-quar_footer_company => 'underground_8',
+quar_footer_company => 'Open AS',
 quar_footer_brand => 'via the Open AS Communication Gateway',
 quar_today => 'Today,',
 quar_confirmation_subject => '[QUARANTINE] Personal End-User quarantine',

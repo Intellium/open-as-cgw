@@ -159,7 +159,7 @@ L<LimesGUI::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Matthias,L0LR00M,,
+Open AS Team
 
 =head1 LICENSE
 

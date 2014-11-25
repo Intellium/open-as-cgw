@@ -18,7 +18,7 @@
 
 if [ "$1" != "--force" -a -f /etc/nginx/ssl/default.pem ] ||
    [ "$1" != "--force" -a -f /etc/nginx/ssl/default.key ]; then
-   echo "/etc/lighttpd/standard.pem exists!  Use \"$0 --force.\""
+   echo "/etc/nginx/ssl/default.pem or /etc/nginx/ssl/default.key exists!  Use \"$0 --force.\""
    exit 0
 fi
 

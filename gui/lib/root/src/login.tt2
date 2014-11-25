@@ -9,7 +9,7 @@
         <meta http-equiv="cache-control" content="no-cache"/>
         <meta http-equiv="content-language" content="[% Catalyst.language %]" />
         <meta http-equiv="expires" content="0" />
-	<link rel="shortcut icon" href="img/favicon.ico" />
+	<link rel="shortcut icon" href="/static/img/favicon.ico" />
         <link href="/static/css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!--[if lt IE 7]>
 	<link href="/static/css/style_ie.css" rel="stylesheet" type="text/css" media="all" />

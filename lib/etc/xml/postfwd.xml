@@ -1,42 +1,42 @@
 <perldata>
- <hashref memory_address="0x82ae578">
+ <hashref memory_address="0x69ea080">
   <item key="blacklist">
-   <arrayref memory_address="0x8019870">
+   <arrayref memory_address="0x66cdb00">
    </arrayref>
   </item>
   <item key="rbl_threshold">2</item>
   <item key="rbls">
-   <hashref memory_address="0x82ac1e8">
+   <hashref memory_address="0x69e81b8">
     <item key="bl.spamcop.net">
-     <hashref memory_address="0x82a8020">
+     <hashref memory_address="0x69ea518">
       <item key="enabled">1</item>
       <item key="rank">1</item>
       <item key="type">system</item>
      </hashref>
     </item>
     <item key="dnsbl-1.uceprotect.net">
-     <hashref memory_address="0x8310f90">
+     <hashref memory_address="0x6a4c178">
       <item key="enabled">1</item>
       <item key="rank">5</item>
       <item key="type">system</item>
      </hashref>
     </item>
     <item key="dyna.spamrats.com">
-     <hashref memory_address="0x8311020">
+     <hashref memory_address="0x6a4c208">
       <item key="enabled">1</item>
       <item key="rank">3</item>
       <item key="type">system</item>
      </hashref>
     </item>
     <item key="t1.dnsbl.net.au">
-     <hashref memory_address="0x83110b0">
+     <hashref memory_address="0x6a4c298">
       <item key="enabled">1</item>
       <item key="rank">4</item>
       <item key="type">system</item>
      </hashref>
     </item>
     <item key="zen.spamhaus.org">
-     <hashref memory_address="0x8311140">
+     <hashref memory_address="0x6a4c328">
       <item key="enabled">1</item>
       <item key="rank">2</item>
       <item key="type">system</item>
@@ -50,7 +50,7 @@
   <item key="status_rbl">disabled</item>
   <item key="status_selective_greylisting">disabled</item>
   <item key="whitelist">
-   <arrayref memory_address="0x80198a0">
+   <arrayref memory_address="0x66cdb30">
    </arrayref>
   </item>
  </hashref>

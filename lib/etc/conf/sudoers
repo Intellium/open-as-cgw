@@ -23,6 +23,9 @@ root    ALL=(ALL) ALL
 # Members of the admin group may gain root privileges
 %admin ALL=(ALL) ALL
 
+# Allow members of group sudo to execute any command
+%sudo  ALL=(ALL:ALL) ALL
+
 %limes  ALL = (OP) NOPASSWD: ALL
 aspoweroff ALL = NOPASSWD: /sbin/poweroff
 asreboot   ALL = NOPASSWD: /sbin/reboot

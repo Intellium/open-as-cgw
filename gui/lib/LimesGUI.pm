@@ -117,7 +117,7 @@ $appliance->load_config();
 
 # The following line will be uncommented during svn export in the build system
 # So DO NOT REMOVE
-#$appliance->commit();
+$appliance->commit();
 
  
 # Configuration for Plugin Email ( use the system's sendmail program )

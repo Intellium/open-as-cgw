@@ -45,7 +45,7 @@
 				<p id="login_error">[% Catalyst.localize( error_msg ) %]</p>
 				[% END %]
             </div> 
-			<div id="copy_note">Open AS Communication Gateway | Licensed under AGPL | <a href="#">www.openas.org</a></div>
+			<div id="copy_note">Open AS Communication Gateway | Licensed under AGPL | <a href="http://www.openas.org" target="_blank">www.openas.org</a></div>
             [% PROCESS redirect.inc.tt2 
                redirect_url = Catalyst.uri_for('/login') %]
         </div>

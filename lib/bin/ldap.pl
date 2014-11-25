@@ -56,7 +56,7 @@ $md5after = chomp($md5after);
 
 if($md5before ne $md5after){
 	print "transport file changed, restarting GUI\n";
-	system("/etc/init.d/lighttpd restart");
+	system("/etc/init.d/nginx restart");
 } else {
 	print "transport file did not change\n";
 }

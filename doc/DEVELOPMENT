@@ -26,7 +26,7 @@ External software-components used:
  * monit to ensure service- and daemon availability
  * munin to do some resource graphs
  * MySQL as the common database-backend, used for greylisting-db, stats, etc
- * lighttpd is the web-server of choice for serving the web-frontend and
+ * Nginx is the web-server of choice for serving the web-frontend and
    the munin graphs
  * ntpd
  * syslog-ng as syslog daemon

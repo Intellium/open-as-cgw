@@ -440,7 +440,7 @@ prepare_nginx(){
 
         # Make self-signed certificate
         # there is a security-check for the date later in this file
-        if [ ! -f /etc/nginx/ssl/default.pem ] && [ ! -f /etc/nginx/ssl/default.key ]; then
+        if [ ! -f /etc/nginx/ssl/default.pem ] || [ ! -f /etc/nginx/ssl/default.key ]; then
 		mkdir -p /etc/nginx/ssl
                 /usr/bin/openas-generate-sslcert -batch
         fi

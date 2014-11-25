@@ -19,7 +19,7 @@ package LimesGUI;
 use strict;
 use warnings;
 
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime;
 
 # Set flags and add plugins for the application
 #

@@ -3,8 +3,7 @@
 ##
 
 server {
-    listen 443;
-    listen [::]:443 ipv6only=on;
+    listen 443 ssl;
     root /var/www/LimesGUI;
     access_log /var/log/nginx/access.log combined;
     error_log /var/log/nginx/error.log error;
@@ -20,9 +19,8 @@ server {
 
     location / {
         gzip off;
-        include /etc/nginx/fastcgi_params;
-        fastcgi_pass  unix:/tmp/limesgui.socket;
-        fastcgi_param HTTPS on;
+        include /etc/nginx/proxy_params;
+        proxy_pass  http://unix:/var/www/LimesGUI/LimesGUI.socket:/;
     }
 
     location /static {

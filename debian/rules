@@ -10,6 +10,7 @@
 	dh_installinit --name=lcd_menu -- defaults 61
 	dh_installinit --name=as-ldap-sync --no-start -- defaults 60
 #	dh_installinit --name=as-ldap-sync --no-start -- stop 60 0 6 . 
+        dh_installinit --name=openas-backend -- defaults 60
 	dh_install
 	dh_installcron
 	dh_install

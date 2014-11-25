@@ -39,7 +39,7 @@ Catalyst Controller.
 
 =cut
 
-my $u8_support = 'support@underground8.com';
+my $u8_support = 'team@openas.org';
 
 sub index : Private {
     my ( $self, $c ) = @_;

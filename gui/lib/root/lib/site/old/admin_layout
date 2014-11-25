@@ -2,7 +2,7 @@
         <div id="applienceName">
             <h1>
                 <a href="index.htm" title="Startscreen">
-                    <span class="invisible">Limes Managed Firewall</span>
+                    <span class="invisible">Open AS Communication Gateway</span>
                 </a>
             </h1>
         </div>
@@ -15,8 +15,8 @@
         </div>
         <div id="underground">
             <h2>
-                <a href="http://www.underground8.com" title="underground8 | secure computing">
-                    <span class="invisible">underground_8 | secure computing</span>
+                <a href="http://www.openas.org" title="Open AS">
+                    <span class="invisible">Open AS</span>
                 </a>
             </h2>
         </div>

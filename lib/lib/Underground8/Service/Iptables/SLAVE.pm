@@ -63,11 +63,6 @@ sub write_config($$$$)
 	my $additional_ssh_port = shift;
 	my $use_snmp = shift;
 
-    my $use_gui = $self->report->license->meta_lic_usegui();
-    my $use_25 = $self->report->license->meta_lic_use25();
-	$use_25 = 1; # This is a hack for 2.0.1, NOT to disbale port 25
-	             # just because an VAS license is out of date
-    
     my $template = Template->new (
 	{
 	    INCLUDE_PATH => $g->{'cfg_template_dir'},
@@ -78,8 +73,6 @@ sub write_config($$$$)
         if_name => $if_name,
 		additional_ssh_port => $additional_ssh_port,
 		use_snmp => $use_snmp,
-        use_gui => $use_gui,
-        use_25 => $use_25,
     };
     
     my $config_content;

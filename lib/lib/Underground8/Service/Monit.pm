@@ -50,13 +50,15 @@ sub commit($)
     my $files;
     push @{$files}, $g->{'file_monit'};
     push @{$files}, $g->{'file_monit_default'};
-    safe_system($g->{'cmd_monit_perm'});
+    safe_system($g->{'cmd_monit_perm_addgrp'});
     my $md5_first = $self->create_md5_sums($files);
     
     $self->slave->write_config();
 
-    safe_system($g->{'cmd_monit_perm'});
+    safe_system($g->{'cmd_monit_perm_addgrp'});
     my $md5_second = $self->create_md5_sums($files);
+
+    safe_system($g->{'cmd_monit_perm_delgrp'});
 
     if ($self->compare_md5_hashes($md5_first, $md5_second))
     {

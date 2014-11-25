@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Default Variables
-admin_source_linz=81.223.70.160/28
-
 modprobe ip_tables				# core iptables
 modprobe ip_conntrack			# connectrion tracking
 modprobe ip_conntrack_ftp		# ip conntrack
@@ -42,28 +40,11 @@ iptables -N USER
 			iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport [% additional_ssh_port %] -j ACCEPT
 		[% END %]
 
-		### use_gui was to prevent unlicensed users from using the gui - obsolete
-		[% # IF use_gui %]
-		iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport 980 -j ACCEPT
-		[% # END %]
 	[% END -%]
 
-	iptables -A USER -i [% if_name %] -m state --state NEW -p tcp --source $admin_source_linz --dport 2200 -j ACCEPT
-
-	[% IF additional_ssh_port != 0 %]
-	iptables -A USER -i [% if_name %] -m state --state NEW -p tcp --source $admin_source_linz --dport [% additional_ssh_port %] -j ACCEPT
-	[% END %]
-
-	[% # IF use_gui %]
-	iptables -A USER -i [% if_name %] -m state --state NEW -p tcp --source $admin_source_linz --dport 980 -j ACCEPT
-	[% # END %]
 [% ELSE %]
 	iptables -A USER -i [% if_name %] -p tcp --dport 2200 -j ACCEPT # ssh
 
-	### use_gui was to prevent unlicensed users from using the gui - obsolete
-	[% # IF use_gui %]
-	iptables -A USER -i [% if_name %] -p tcp --dport 980 -j ACCEPT
-	[% # END %]
 	[% IF additional_ssh_port != 0 %]
 		iptables -A USER -i [% if_name %] -p tcp --dport [% additional_ssh_port %] -j ACCEPT # ssh
 	[% END %]

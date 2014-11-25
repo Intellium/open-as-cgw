@@ -32,8 +32,10 @@ sub write_config
 
     my $parameters = shift;
 
+    # TO BE REMOVED
     # License enforcement
-    my $auto_newest_license = $self->report->license->meta_lic_featureupdate();
+#    my $auto_newest_license = $self->report->license->meta_lic_featureupdate();
+    my $auto_newest_license = 1;
     if (!$auto_newest_license) { $parameters->{'auto_newest'} = 0; }
 
     my $template = Template->new ({

@@ -325,8 +325,6 @@ our $g = {
     cmd_postfwd_kill => '/usr/bin/sudo /usr/bin/killall postfwd',
     cmd_postfwd_reload => '/usr/bin/sudo /etc/init.d/postfwd reload',
     
-    cmd_monit_restart => '/usr/bin/sudo /etc/init.d/monit restart',
-    
     cmd_rtlogd_restart => '/usr/bin/sudo /etc/init.d/rtlogd restart',
 
     cmd_saslauthd_stop => '/usr/bin/sudo /etc/init.d/saslauthd stop',

@@ -45,8 +45,8 @@ sub service_restart ($$)
 {
     my $self = instance(shift);
     
-    safe_system($g->{'cmd_hostname_change'},1); # return code 1 is ok
-    safe_system($g->{'cmd_dnsmasq_restart'}); # return code 1 is ok
+    safe_system($g->{'cmd_hostname_change'},0,1); # return code 1 is ok
+    safe_system($g->{'cmd_dnsmasq_restart'},0,1); # return code 1 is ok
 }
 
 sub write_config ($$$$$)

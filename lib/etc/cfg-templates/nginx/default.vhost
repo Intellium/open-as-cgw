@@ -20,9 +20,8 @@ server {
 
     location / {
         gzip off;
-        include /etc/nginx/fastcgi_params;
-        fastcgi_pass  unix:/tmp/limesgui.socket;
-        fastcgi_param HTTPS on;
+        include /etc/nginx/proxy_params;
+        proxy_pass http://unix:/tmp/limesgui.socket:/;
     }
 
     location /static {

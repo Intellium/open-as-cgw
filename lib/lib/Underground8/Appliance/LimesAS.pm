@@ -98,14 +98,19 @@ sub commit ($)
 {
     my $self = instance(shift);
     $self->system->commit();
+    print STDERR "SYSTEM commit done.\n";
     
     # some components like mysql need time to start up
     sleep(3);
 
     $self->antispam->commit();
+    print STDERR "ANTISPAM commit done.\n";
     $self->notification->commit();
+    print STDERR "NOTIFICATION commit done.\n";
     $self->quarantine->commit();
+    print STDERR "QUARANTINE commit done.\n";
     $self->backup->commit();
+    print STDERR "BACKUP commit done.\n";
 }
 
 sub load_config ($)

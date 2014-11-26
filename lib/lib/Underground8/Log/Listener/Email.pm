@@ -33,17 +33,17 @@ sub new {
 	$DEBUG = $debug;
 
 	my $self = {
-		_writer => new Underground8::Log::Writer::Email($mq_offset),
+		_writer => { new Underground8::Log::Writer::Email($mq_offset),
+                _listen_services => [   'sqlgrey',
 								'postfix/smtpd',
 								'postfix/smtp',
 								'postfix/qmgr',
 								'postfix/cleanup',
 								'amavis',
-								'postfwd/master',		# legacy?
-								'postfwd/policy',		# legacy?
+								'postfwd/master',
+								'postfwd/policy',
 								'postfwd',
-								'sqlgrey',	
-								],
+                                     ],
 		_mails => {
 				msg_id		=> { },
 				queue_nr	=> { },
@@ -54,7 +54,7 @@ sub new {
 		_queuenr_to_ip => { },
 		_queuenr_to_msgid => { },
 		_queuenr_to_subject => { },
-		_initialized => 0, # first mail arrived
+		_initialized => 0,
 	};
 
 	$self = bless $self, $class;

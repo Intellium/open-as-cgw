@@ -1273,15 +1273,25 @@ sub commit ($) {
 
 			# TODO what is this?
 			$self->create_ca_certificates();
+                        print STDERR "Executed ominous \"create_ca_certificates\"\n";
 
 			$self->clamav->commit() if ($self->clamav->is_changed && !$ldap_override);
+                        print STDERR "Commited service clamav\n";
 			#$self->kasperskyav->commit() if ($self->kasperskyav->is_changed && !$ldap_override);
 			$self->virustotal->commit() if ($self->virustotal->is_changed && !$ldap_override);
+                        print STDERR "Commited service virustotal\n";
 			$self->spamassassin->commit() if ($self->spamassassin->is_changed && !$ldap_override);
-			$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
+                        print STDERR "Commited service spamassassin\n";
+                        
+                        # SQL Grey Commit is BROKEN, please investigate
+			#$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
+                        print STDERR "Commited service sqlgrey\n";
 			$self->amavis->commit() if (($self->amavis->is_changed || $self->spamassassin->is_changed) && (!$ldap_override));
+                        print STDERR "Commited service amavis\n";
 			$self->postfix->commit() if $self->postfix->is_changed || $sqlgrey_changed || $ldap_override;  # after sqlgrey (whitelists)
+                        print STDERR "Commited service postfix\n";
 			$self->postfwd->commit();
+                        print STDERR "Commited service postfwd\n";
 			$self->save_config() if (!$ldap_override);
 			$self->{'_has_changes'} = 0;
 		}

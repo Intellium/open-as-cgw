@@ -55,7 +55,7 @@ smtpd_sender_restrictions =
  permit_mynetworks,
  permit
 
-127.0.0.1:10040_time_limit = 3600
+#127.0.0.1:10040_time_limit = 3600
 
 # pass internal whitelists, do optional checks
 smtpd_recipient_restrictions = 

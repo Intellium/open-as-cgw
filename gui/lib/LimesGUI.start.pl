@@ -24,8 +24,8 @@ Daemon::Control->new({
     program     => "$program -Ilib LimesGUI.psgi --workers $workers --listen $socket",
 
     pid_file    => $pid_file,
-    stderr_file => '/var/log/openas/LimesGUI.out',
-    stdout_file => '/var/log/openas/LimesGUI.out',
+    stderr_file => '/var/log/openas/LimesGUI.log',
+    stdout_file => '/var/log/openas/LimesGUI.log',
 
     fork        => 2,
 })->run;

@@ -99,7 +99,7 @@ my @files = qw(
 /etc/open-as-cgw/conf/as_license.ulf
 /etc/default/snmpd
 /etc/snmp/snmpd.conf
-/var/log/openas
+/var/log/openas/LimesGUI.log
 );
 
 print "\n\nChanging file ownerships and permissions to read/write for group: $group\n";

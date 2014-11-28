@@ -34,10 +34,10 @@ DESC="Open AS Quarantine Cron"
 do_start()
 {
     echo -n "Starting $DESC: "
-    if start-stop-daemon --start --quiet --pidfile ${PIDFILE} --name ${NAME} --startas ${DAEMON} -- start >/dev/null ; then
+    if start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} -- start >/dev/null ; then
             echo "${NAME}."
     else
-            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --name ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
+            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
                     echo "(failed)."
                     exit 1
             else
@@ -51,10 +51,10 @@ do_start()
 do_stop()
 {
     echo -n "Stopping $DESC: "
-    if start-stop-daemon --stop --quiet --pidfile ${PIDFILE} --name ${NAME} --retry 10 >/dev/null ; then
+    if start-stop-daemon --stop --quiet --pidfile ${PIDFILE} --exec ${NAME} --retry 10 >/dev/null ; then
             echo "${NAME}."
     else
-            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --name ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
+            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
                     echo "(not running)."
                     exit 0
             else

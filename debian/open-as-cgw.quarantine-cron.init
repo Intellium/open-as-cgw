@@ -1,4 +1,5 @@
-#! /bin/sh
+#!/bin/bash
+#
 # This file is part of the Open AS Communication Gateway.
 #
 # The Open AS Communication Gateway is free software: you can redistribute it
@@ -13,14 +14,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License along
 # with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
-
-# Init script for quarantine-cron
+#
+### BEGIN INIT INFO
+# Provides:          quarantine-cron
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Init script for Open AS quarantine-cron.
+# Description:       Init script for Open AS quarantine-cron.
+### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/quarantine-cron.pl
-NAME=quarantine-cron.pl
+NAME=quarantine-cron
 DAEMONNAME=quarantine-cron
-DESC=quarantine-cron.pl
+DESC=quarantine-cron
 
 test -f ${DAEMON} || exit 0
 

@@ -34,35 +34,18 @@ DESC="Open AS rtlogd"
 do_start()
 {
     echo -n "Starting $DESC: "
-    if start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} -- start >/dev/null ; then
-            echo "${NAME}."
-    else
-            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
-                    echo "(failed)."
-                    exit 1
-            else
-                    echo "(already running)."
-                    exit 0
-            fi
-    fi
+    start-stop-daemon --start --exec $NAME --user limes --chuid limes:limes --make-pidfile --pidfile $PIDFILE --background --startas $DAEMON
     echo "$NAME."
 }
 
 do_stop()
 {
     echo -n "Stopping $DESC: "
-    if start-stop-daemon --stop --quiet --pidfile ${PIDFILE} --exec ${NAME} --retry 10 >/dev/null ; then
-            echo "${NAME}."
-    else
-            if start-stop-daemon --test --start --quiet --pidfile ${PIDFILE} --exec ${NAME} --startas ${DAEMON} >/dev/null 2>&1; then
-                    echo "(not running)."
-                    exit 0
-            else
-                    echo "(failed)."
-                    exit 1
-            fi
+    start-stop-daemon --stop --exec $NAME --pidfile $PIDFILE --user limes --retry=TERM/30/KILL/5
+    if [ "$?" -eq 0 ]; then
+        echo "$NAME."
+        rm -f $PIDFILE
     fi
-    echo "$NAME."
 }
 
 case "$1" in

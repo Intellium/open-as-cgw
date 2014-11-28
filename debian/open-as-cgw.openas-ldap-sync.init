@@ -34,7 +34,7 @@ DESC="Open AS LDAP Syncronisator"
 do_start()
 {
     echo -n "Starting $DESC: "
-    start-stop-daemon -v --start --exec $NAME --user limes --chuid limes --make-pidfile --pidfile $PIDFILE --background --startas $DAEMON
+    start-stop-daemon --start --exec $NAME --user limes --chuid limes:limes --make-pidfile --pidfile $PIDFILE --background --startas $DAEMON
     echo "$NAME."
 }
 

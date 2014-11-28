@@ -525,10 +525,10 @@ sub commit ($)
     $self->write_quarantine_scores($self->score_map); #updating SQL DB with new scores.
     
     my $files;
-    push @{$files}, $g->{'file_amavis_99_limes'};
+    push @{$files}, $g->{'file_amavis_15_vs'};
     push @{$files}, $g->{'file_amavis_15_cfm'};
     push @{$files}, $g->{'file_amavis_20_dd'};
-    push @{$files}, $g->{'file_amavis_vs'};
+    push @{$files}, $g->{'file_amavis_99_openas'};
 
     my $md5_first = $self->create_md5_sums($files);
 

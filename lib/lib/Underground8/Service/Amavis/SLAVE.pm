@@ -77,7 +77,7 @@ sub write_config ($$)
     $self->write_amavis_vs($clamav_enabled);
 }
 
-# write amavis 99-limes
+# write amavis 99-openas
 sub write_amavis_config($$)
 {
     my $self = shift;
@@ -120,11 +120,11 @@ sub write_amavis_config($$)
     
 
     my $config_content;
-    $template->process($g->{'template_amavis_99_limes'},$options,\$config_content) 
+    $template->process($g->{'template_amavis_99_openas'},$options,\$config_content) 
         or throw Underground8::Exception($template->error);
 
-    open (AMAVIS_LIMES,'>',$g->{'file_amavis_99_limes'})
-        or throw Underground8::Exception::FileOpen($g->{'file_amavis_99_limes'});
+    open (AMAVIS_LIMES,'>',$g->{'file_amavis_99_openas'})
+        or throw Underground8::Exception::FileOpen($g->{'file_amavis_99_openas'});
 
     print AMAVIS_LIMES $config_content;
 
@@ -245,11 +245,11 @@ sub write_amavis_vs($@)
     };
 
     my $config_content;
-    $template->process($g->{'template_amavis_vs'},$options,\$config_content)
+    $template->process($g->{'template_amavis_15_vs'},$options,\$config_content)
       or throw Underground8::Exception($template->error);
     
-    open (AMAVIS_VS,'>',$g->{'file_amavis_vs'})
-      or throw Underground8::Exception::FileOpen($g->{'file_amavis_vs'});
+    open (AMAVIS_VS,'>',$g->{'file_amavis_15_vs'})
+      or throw Underground8::Exception::FileOpen($g->{'file_amavis_15_vs'});
     
     print AMAVIS_VS $config_content;
     

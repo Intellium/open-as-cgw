@@ -320,7 +320,7 @@ reset_hard_action_message => 'The configuration will be set back to factory defa
 ### SYSTEM :: REMOTE ASSISTANCE
 system_remote_assistance_abstract => 'Administer all settings relating to remote assistance of your Open AS Communication Gateway.',
 system_remote_assistance_ssh_heading => 'Secure Shell Service',
-system_remote_assistance_ssh_text => '<strong>SSH</strong> enables you to utilize <em>Emergency Commands</em> and it will always listen on port 2200/tcp. In addition, you may also enable SSH to listen on port 22/tcp. The SSH service can be used in conjuction with Emergency Commands, managable under <em>System - User</em>.',
+system_remote_assistance_ssh_text => '<strong>SSH</strong> enables you to utilize <em>Emergency Commands</em> and it will always listen on port 22/tcp. In addition, you may also enable SSH to listen on port 22/tcp. The SSH service can be used in conjuction with Emergency Commands, managable under <em>System - User</em>.',
 system_remote_assistance_ssh_ssh => 'Listen on port 22/tcp',
 system_remote_assistance_ssh_status_set => 'The new setting has been applied.',
 system_remote_assistance_snmp_heading => 'SNMP MONITORING',
@@ -1269,7 +1269,7 @@ help_system_time_settings_timezone => 'Select your timezone here. In terms of e-
 help_system_time_settings_ntp => 'Here you can administer, add and delete network time servers. By default there is a correctly working set of servers enlisted, change these settings only if you want to use a timeserver in your local network. To get a list of NTP-servers in your area please visit <a href="http://www.pool.ntp.org/zone/@">http://www.pool.ntp.org/zone/@</a>.',
 
 ### SYSTEM :: REMOTE ASSISTANCE
-help_system_remote_assistance_ssh => 'The Open AS Communication Gateway&trade; utilizes a Secure-Shell daemon in order to allow you to deposit <em>Emergency Commands</em> for e.g. restarting the appliance or retrieving system information without using the web-interface. <strong>SSH will always actively listen on port 2200 for incoming connections, despite the setting of this configuration option</strong>. However, this setting forces the SSH daemon to additionally listen on port 22.',
+help_system_remote_assistance_ssh => 'The Open AS Communication Gateway&trade; utilizes a Secure-Shell daemon in order to allow you to deposit <em>Emergency Commands</em> for e.g. restarting the appliance or retrieving system information without using the web-interface. <strong>SSH will always actively listen on port 22 for incoming connections, despite the setting of this configuration option</strong>. However, this setting forces the SSH daemon to additionally listen on port 22.',
 help_system_remote_assistance_snmp => 'Once activated, the on-appliance SNMP agent will provide useful information about the appliance common health status, performance and activities. To successfully activate SNMP, an SNMP community string is substantial to identify SNMP packet ownerships, as well as a CIDR network-address which acts as basic network-level querying limitation range. Only SNMP walks from within the given network range are allowed to retrieve information. Moreover, you must include a system contact and system location string.',
 
 ### SYSTEM :: NETWORK

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default Variables
-modprobe ip_tables				# core iptables
+modprobe ip_tables			# core iptables
 modprobe ip_conntrack			# connectrion tracking
 modprobe ip_conntrack_ftp		# ip conntrack
 modprobe ipt_iprange			# ip range
@@ -32,7 +32,7 @@ iptables -N USER
 
 # Rules for USER chain
 # if adminrange is defined, allow only connections from u8 or the defined adminrange
-	iptables -A USER -i eth0 -p tcp --dport 2200 -j ACCEPT # ssh
+	iptables -A USER -i eth0 -p tcp --dport 22 -j ACCEPT # ssh
 
 	
 

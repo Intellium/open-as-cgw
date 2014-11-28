@@ -176,7 +176,7 @@ II.4: Installing all required CPAN modules
 
 
 == V. LOG IN ==================================================================
- Open your browser and go to https://<ip>:980. The default credentials for the
+ Open your browser and go to https://<ip>. The default credentials for the
  WebGUI are username = "admin", password = "password".
  Everything on the system, even the network configuration, is managed via the
  Perl code. If you want to permanently change your network settings, either do
@@ -189,7 +189,6 @@ II.4: Installing all required CPAN modules
 === TROUBLESHOOTING ===========================================================
 * I can't connect to the WebGUI (the HTTP request just times out)
    -> Are you on https:// ?
-   -> Are you on port 980 ?
    -> Does the on-appliance firewall block your request? Try
       # /etc/init.d/firewall stop
       This would have to be done after every time Lighty is restarted

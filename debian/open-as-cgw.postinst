@@ -428,7 +428,7 @@ prepare_nginx(){
 	# there is a security-check for the date later in this file
 	if [ ! -f /etc/nginx/ssl/default.pem ] || [ ! -f /etc/nginx/ssl/default.key ]; then
 		mkdir -p /etc/nginx/ssl
-		/usr/bin/openas-generate-sslcert -batch
+		/usr/bin/generate-sslcert.sh -batch
 	fi
 
 	# all certificates before dateval are definitly broken which
@@ -436,7 +436,7 @@ prepare_nginx(){
 	# 12:00, 14 May 2008 is the date
 	#dateval=200805141200
 	#if [ `date +%Y%m%d%H%M -r /etc/nginx/ssl/default.pem` -lt $dateval ]; then
-	#	/usr/bin/openas-generate-sslcert --force -batch
+	#	/usr/bin/generate-sslcert.sh --force -batch
 	#fi
 
 	echo "*** Nginx Config Done"

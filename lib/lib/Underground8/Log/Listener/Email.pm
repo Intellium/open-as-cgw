@@ -33,7 +33,7 @@ sub new {
 	$DEBUG = $debug;
 
 	my $self = {
-		_writer => { new Underground8::Log::Writer::Email($mq_offset) },
+		_writer => new Underground8::Log::Writer::Email($mq_offset),
                 _listen_services => [   'amavis', 
 					'sqlgrey',
 					'postfix/smtpd',

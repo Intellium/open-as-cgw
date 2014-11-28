@@ -34,7 +34,7 @@ iptables -N USER
 # if adminrange is defined, allow only connections from u8 or the defined adminrange
 [%- IF admin_range.size > 0 -%]
 	[%- FOREACH entry IN admin_range %]
-		iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport 2200 -j ACCEPT
+		iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport 22 -j ACCEPT
 
 		[% IF additional_ssh_port != 0 %]
 			iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport [% additional_ssh_port %] -j ACCEPT
@@ -43,7 +43,7 @@ iptables -N USER
 	[% END -%]
 
 [% ELSE %]
-	iptables -A USER -i [% if_name %] -p tcp --dport 2200 -j ACCEPT # ssh
+	iptables -A USER -i [% if_name %] -p tcp --dport 22 -j ACCEPT # ssh
 
 	[% IF additional_ssh_port != 0 %]
 		iptables -A USER -i [% if_name %] -p tcp --dport [% additional_ssh_port %] -j ACCEPT # ssh

@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 # This file is part of the Open AS Communication Gateway.
 #
 # The Open AS Communication Gateway is free software: you can redistribute it
@@ -13,41 +14,63 @@
 #
 # You should have received a copy of the GNU Affero General Public License along
 # with the Open AS Communication Gateway. If not, see http://www.gnu.org/licenses/.
+#
+### BEGIN INIT INFO
+# Provides:          openas-firewall
+# Required-Start:    $local_fs $network $remote_fs $syslog
+# Required-Stop:     $local_fs $network $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Init script for Open AS firewall.
+# Description:       Init script for Open AS firewall.
+### END INIT INFO
 
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/firewall.sh
+NAME=openas-firewall
+DESC="Open AS firewall"
+
+test -f ${DAEMON} || exit 0
+set -e
 
 case "$1" in
   start)
-    /usr/bin/firewall.sh
+    echo -n "Starting $DESC: "
+    $DAEMON
+    echo "$NAME."
+    exit 0
     ;;
 
   stop)
-    # Tabelle flushen
+    echo -n "Stopping $DESC: "
+    # Flush tables
     iptables -F
     iptables -t nat -F
     iptables -t mangle -F
     iptables -X
     iptables -t nat -X
     iptables -t mangle -X
-    # Default-Policies setzen
+    # Set default-policies
     iptables -P INPUT ACCEPT
     iptables -P OUTPUT ACCEPT
     iptables -P FORWARD ACCEPT
+    echo "$NAME."
     exit 0
     ;;
 
   status)
-    echo "Tabelle filter"
+    echo "Filter:"
     iptables -L -vn
-    echo "Tabelle nat"
+    echo "NAT:"
     iptables -t nat -L -vn
-    echo "Tabelle mangle"
+    echo "Mangle:"
     iptables -t mangle -L -vn
+    exit 0
     ;;
 
   *)
-    echo "Fehlerhafter Aufruf"
     echo "Syntax: $0 {start|stop|status}"
-    exit 1
+    exit 0
     ;;
 
 esac

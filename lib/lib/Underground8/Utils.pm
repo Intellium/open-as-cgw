@@ -129,11 +129,10 @@ our $g = {
     file_hostname => '/etc/hostname',
     file_mailname => '/etc/mailname',
 
-    
+    file_amavis_15_vs => '/etc/amavis/conf.d/15-av_scanners',
     file_amavis_15_cfm => '/etc/amavis/conf.d/15-content_filter_mode',
-    file_amavis_99_limes => '/etc/amavis/conf.d/99-limes',
     file_amavis_20_dd => '/etc/amavis/conf.d/20-debian_defaults',
-    file_amavis_vs => '/etc/amavis/conf.d/15-av_scanners',
+    file_amavis_99_openas => '/etc/amavis/conf.d/99-openas',
 
     file_spamassassin_20_dnsbl_tests => '/var/lib/spamassassin/updates_spamassassin_org/20_dnsbl_tests.cf',
     file_spamassassin_local_cf => '/etc/spamassassin/local.cf',
@@ -208,11 +207,10 @@ our $g = {
     template_postfix_filter_dynip => 'postfix/filter-dynip.pcre.tt2',
 	template_postfix_header_checks => 'postfix/header_checks.tt2',
 
-
+    template_amavis_15_vs => 'amavis/15-av_scanners.tt2',
     template_amavis_15_cfm => 'amavis/15-content_filter_mode.tt2',
-    template_amavis_99_limes => 'amavis/99-limes.tt2',
     template_amavis_20_dd => 'amavis/20-debian_defaults.tt2',
-    template_amavis_vs => 'amavis/15-av_scanners.tt2',
+    template_amavis_99_openas => 'amavis/99-openas.tt2',
 
     template_clients_fqdn_whitelist => 'sqlgrey/clients_fqdn_whitelist.tt2',
     template_clients_ip_whitelist => 'sqlgrey/clients_ip_whitelist.tt2',

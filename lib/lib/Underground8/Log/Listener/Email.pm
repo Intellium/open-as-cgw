@@ -33,16 +33,16 @@ sub new {
 	$DEBUG = $debug;
 
 	my $self = {
-		_writer => { new Underground8::Log::Writer::Email($mq_offset),
-                _listen_services => [   'sqlgrey',
-								'postfix/smtpd',
-								'postfix/smtp',
-								'postfix/qmgr',
-								'postfix/cleanup',
-								'amavis',
-								'postfwd/master',
-								'postfwd/policy',
-								'postfwd',
+		_writer => new Underground8::Log::Writer::Email($mq_offset),
+                _listen_services => [   'amavis', 
+					'sqlgrey',
+					'postfix/smtpd',
+					'postfix/smtp',
+					'postfix/qmgr',
+					'postfix/cleanup',
+					'postfwd/master',
+					'postfwd/policy',
+					'postfwd'
                                      ],
 		_mails => {
 				msg_id		=> { },
@@ -552,49 +552,49 @@ sub commit_relayed {
 	my ($self, $mail) = @_;
 	$self->writer->commit_relayed($mail);
 	debug ("**commit_relayed ".$mail->msg_id, 4);
-	sysrtlog "RELAYED", $mail;
+	sysrtlog ("RELAYED", $mail);
 }
 
 sub commit_accepted {
 	my ($self, $mail) = @_;
 	$self->writer->commit_accepted($mail);
 	debug ("**commit_accepted ".$mail->msg_id, 4);
-	sysrtlog "ACCEPTED", $mail;
+	sysrtlog ("ACCEPTED", $mail);
 }
 
 sub commit_greylisted {
 	my ($self, $mail) = @_;
 	$self->writer->commit_greylisted($mail);
 	debug ("**commit_greylisted ".$mail->msg_id, 4);
-	sysrtlog "GREYLISTED", $mail;
+	sysrtlog ("GREYLISTED", $mail);
 }
 
 sub commit_blocked_blacklist {
 	my ($self, $mail) = @_;
 	$self->writer->commit_blocked_blacklist($mail);
 	debug ("**commit_blocked_blacklist ".$mail->msg_id, 4);
-	sysrtlog "BLACKLISTED", $mail;
+	sysrtlog ("BLACKLISTED", $mail);
 }
  
 sub commit_blocked_virus {
 	my ($self, $mail) = @_;
 	$self->writer->commit_blocked_virus($mail);
 	debug ("**commit_blocked_virus ".$mail->msg_id, 4);
-	sysrtlog "VIRUS_INFECTED", $mail;
+	sysrtlog ("VIRUS_INFECTED", $mail);
 }
 
 sub commit_blocked_bannedfile {
 	my ($self, $mail) = @_;
 	$self->writer->commit_blocked_bannedfile($mail);
 	debug ("**commit_blocked_bannedfile ".$mail->msg_id, 4);
-	sysrtlog "BANNED_ATTACHMENT", $mail;
+	sysrtlog ("BANNED_ATTACHMENT", $mail);
 }
 
 sub commit_blocked_spam {
 	my ($self, $mail) = @_;
 	$self->writer->commit_blocked_spam($mail);
 	debug ("**commit_blocked_spam ".$mail->msg_id, 4);
-	sysrtlog "SPAM", $mail;
+	sysrtlog ("SPAM", $mail);
 }
 
 

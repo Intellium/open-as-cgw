@@ -35,6 +35,6 @@ Quick install instructions:
 
 
 Viola, your brand-new Open AS Communication Gateway is ready. Open your
-favourite browser, and log in to https://<ip>:980, username "admin", password
+favourite browser, and log in to https://<ip>, username "admin", password
 "password".
-Note: By default, SSH only listens on port 2200/tcp.
+Note: By default, SSH listens on port 22/tcp.

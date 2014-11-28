@@ -33,10 +33,10 @@ my @files = qw(
 /etc/hosts
 /etc/hostname
 /etc/mailname
-/etc/amavis/conf.d/15-content_filter_mode
-/etc/amavis/conf.d/99-limes
-/etc/amavis/conf.d/20-debian_defaults
 /etc/amavis/conf.d/15-av_scanners
+/etc/amavis/conf.d/15-content_filter_mode
+/etc/amavis/conf.d/20-debian_defaults
+/etc/amavis/conf.d/99-openas
 /etc/clamav/clamd.conf
 /etc/clamav/freshclam.conf
 /etc/kav/kav_server.conf

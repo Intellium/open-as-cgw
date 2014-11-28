@@ -34,17 +34,23 @@ DESC="Open AS Quarantine NG"
 do_start()
 {
     echo -n "Starting $DESC: "
-    start-stop-daemon --start --exec $NAME --user limes --chuid limes:limes --make-pidfile --pidfile $PIDFILE --background --startas $DAEMON
+    start-stop-daemon -oqb --start --user limes --chuid limes --pidfile $PIDFILE --startas $DAEMON
     echo "$NAME."
 }
-
 do_stop()
 {
     echo -n "Stopping $DESC: "
-    start-stop-daemon --stop --exec $NAME --pidfile $PIDFILE --user limes --retry=TERM/30/KILL/5
-    if [ "$?" -eq 0 ]; then
-        echo "$NAME."
-        rm -f $PIDFILE
+    start-stop-daemon -oqb --stop --user limes --chuid limes --pidfile $PIDFILE --retry=TERM/30/KILL/5
+    rm -f $PIDFILE
+    echo "$NAME."
+}
+do_status()
+{
+    echo -n "Status $DESC is: "
+    if [ -f $PIDFILE ]; then
+    echo "(running)"
+    else
+    echo "(not running)"
     fi
 }
 
@@ -66,7 +72,7 @@ case "$1" in
     ;;
 
   status)
-    status_of_proc -p $PIDFILE "$DAEMON" "$NAME" && exit 0 || exit $?
+    do_status
     exit 0
     ;;
 

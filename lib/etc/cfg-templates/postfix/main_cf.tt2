@@ -37,10 +37,10 @@ alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 
 # Size limits
-mailbox_size_limit = 0 # unlimited
-message_size_limit = 500000000 # 500MB
-virtual_mailbox_limit  = 1000000000 # 1GB 
-queue_minfree = 1000000000 # 1GB
+mailbox_size_limit = 0
+message_size_limit = 500000000
+virtual_mailbox_limit  = 1000000000
+queue_minfree = 1000000000
 
 # Queue settings
 maximal_queue_lifetime = [% config.smtpd_queuetime %]h
@@ -89,11 +89,11 @@ smtpd_sender_restrictions =
  permit
 
 # Recipient restrictions
-# pass internal whitelists, do optional checks
+# pass internal whitelists, do optional checks, postfwd
 smtpd_recipient_restrictions = 
  check_client_access cidr:/etc/postfix/amavis_bypass_internal_accept,
  check_recipient_access regexp:/etc/postfix/filter-quarantine.regexp,
- check_policy_service inet:127.0.0.1:10040, #postfwd
+ check_policy_service inet:127.0.0.1:10040,
  permit_mynetworks,
  permit_sasl_authenticated,
  reject_unauth_destination,
@@ -110,11 +110,13 @@ smtpd_recipient_restrictions =
 smtpd_data_restrictions = reject_unauth_pipelining
 
 # Other restrictions
+# check for RFC and protocol confirmity
 strict_rfc821_envelopes = [% config.strict_rfc821_envelopes %]
 smtpd_helo_required = [% config.smtpd_helo_required %]
 
 # Content scanner
-content_filter = smtp-amavis:[127.0.0.1]:10024 #amavis
+# powered by Amavis
+content_filter = smtp-amavis:[127.0.0.1]:10024
 
 
 #================== SASL-AUTH =======================

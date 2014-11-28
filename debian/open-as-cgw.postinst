@@ -450,9 +450,6 @@ prepare_system(){
 		echo "Recreated localtime"
 	fi
 
-	# hackhackhack
-	ln -sf /usr/bin/firewall /usr/bin/firewall.sh
-
 	# enable UTF-8
 	/usr/sbin/update-locale LANG=en_US.UTF-8
 	echo "Set locale to UTF8"

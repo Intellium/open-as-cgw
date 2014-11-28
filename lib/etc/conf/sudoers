@@ -10,7 +10,7 @@ Runas_Alias     OP = root
 
 # Cmnd alias specification
 
-Cmnd_Alias      CONFIG = /usr/sbin/postmap, /usr/sbin/postconf, /etc/init.d/postfix, /sbin/ifup, /sbin/ifdown, /etc/init.d/hostname.sh, /etc/init.d/amavis, /etc/init.d/sqlgrey, /etc/init.d/saslauthd, /usr/sbin/update-rc.d, /usr/bin/crontab, /etc/init.d/nginx, /sbin/route, /etc/init.d/firewall, /etc/init.d/openntpd, /etc/init.d/dnsmasq, /etc/init.d/mysql, /etc/init.d/rtlogd
+Cmnd_Alias      CONFIG = /usr/sbin/postmap, /usr/sbin/postconf, /etc/init.d/postfix, /sbin/ifup, /sbin/ifdown, /etc/init.d/hostname.sh, /etc/init.d/amavis, /etc/init.d/sqlgrey, /etc/init.d/saslauthd, /usr/sbin/update-rc.d, /usr/bin/crontab, /etc/init.d/nginx, /sbin/route, /etc/init.d/openntpd, /etc/init.d/dnsmasq, /etc/init.d/mysql, /etc/init.d/openas-firewall, /etc/init.d/openas-rtlogd, /etc/init.d/openas-quarantine-cron, /etc/init.d/openas-quarantine-ng, /etc/init.d/openas-ldap-sync, /etc/init.d/openas-backend
 
 
 # Defaults

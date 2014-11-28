@@ -87,7 +87,7 @@ if ($debug)
 # daemonize if not in debugging mode
 if (!$debug)
 {
-    daemonize("/var/run/quarantine-cron.pl.pid");
+    daemonize("/var/run/openas-quarantine-cron.pid");
 }
 
 my $config = read_quarantine_config();
@@ -104,7 +104,7 @@ my $config = read_quarantine_config();
     my $disk_space_interval = $config->{'disk_space_interval'};
 
     # Create new object with default dispatcher
-    my $cron = new Schedule::Cron(\&dispatcher, nofork => 1, skip => 1, catch => 1, processprefix => "quarantine-cron");
+    my $cron = new Schedule::Cron(\&dispatcher, nofork => 1, skip => 1, catch => 1, processprefix => "openas-quarantine-cron");
 
     # Add dynamically crontab entries
 

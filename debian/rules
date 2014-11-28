@@ -2,13 +2,11 @@
 
 %:
 	dh $@
-	dh_installinit --name=firewall -- defaults 20
-	dh_installinit --name=rtlogd -- defaults 20
-	dh_installinit --name=factory_defaults -- defaults 20
-	dh_installinit --name=quarantine-cron -- defaults 60
-	dh_installinit --name=quarantine-ng -- defaults 60
-	dh_installinit --name=lcd_menu -- defaults 61
-	dh_installinit --name=as-ldap-sync --no-start -- defaults 60
+	dh_installinit --name=openas-firewall -- defaults 20
+	dh_installinit --name=openas-rtlogd -- defaults 20
+	dh_installinit --name=openas-quarantine-cron -- defaults 60
+	dh_installinit --name=openas-quarantine-ng -- defaults 60
+	dh_installinit --name=openas-ldap-sync --no-start -- defaults 60
 	dh_installinit --name=openas-backend -- defaults 60
 	dh_install
 	dh_installcron

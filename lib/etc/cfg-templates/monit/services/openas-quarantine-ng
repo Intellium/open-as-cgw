@@ -1,0 +1,7 @@
+ check process openas-quarantine-ng with pidfile /var/run/openas-quarantine-ng.pid
+   group mail
+   start program = "/etc/init.d/openas-quarantine-ng restart"
+   stop  program = "/etc/init.d/openas-quarantine-ng stop"
+   if failed port 10010 type TCP within 2 cycles then start
+   if 99 restarts within 99 cycles then timeout
+

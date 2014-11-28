@@ -190,7 +190,7 @@ II.4: Installing all required CPAN modules
 * I can't connect to the WebGUI (the HTTP request just times out)
    -> Are you on https:// ?
    -> Does the on-appliance firewall block your request? Try
-      # /etc/init.d/firewall stop
+      # /etc/init.d/openas-firewall stop
       This would have to be done after every time Lighty is restarted
 
 * The WebGUI is seemingly broken (there is an error-message)

@@ -26,22 +26,19 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-NAME=ldap.pl
-EXEC=/usr/bin/${NAME}
-PIDFILE=/var/run/${NAME}.pid
+PIDFILE=/var/run/openas-ldap-sync.pid
+DAEMON=/usr/bin/ldap.pl
+NAME=openas-ldap-sync
 DESC="Open AS LDAP Syncronisator"
 
-test -x $EXEC || exit 0
-
-start()
+do_start()
 {
     echo -n "Starting $DESC: "
-    start-stop-daemon -v --start --name $NAME --user limes --chuid limes --make-pidfile --pidfile $PIDFILE\
-        --background --startas $EXEC
-#    echo "$NAME."
+    start-stop-daemon -v --start --name $NAME --user limes --chuid limes --make-pidfile --pidfile $PIDFILE --background --startas $DAEMON
+    echo "$NAME."
 }
 
-stop()
+do_stop()
 {
     echo -n "Stopping $DESC: "
     start-stop-daemon --stop --name $NAME --pidfile $PIDFILE --user limes --retry=TERM/30/KILL/5 
@@ -49,27 +46,32 @@ stop()
         echo "$NAME."
         rm -f $PIDFILE
     fi
-
 }
-
-#set -e
 
 case "$1" in
   start)
-    start
-	;;
-  stop)
-    stop
-	;;
-  restart)
-    stop
-    start
-	;;
-  *)
-	N=/etc/init.d/$NAME
-	echo "Usage: $N {start|stop|restart}" >&2
-	exit 1
-	;;
-esac
+    do_start
+    exit 0
+    ;;
 
-exit 0
+  stop)
+    do_stop
+    exit 0
+    ;;
+    
+  restart)
+    do_stop
+    do_start
+    exit 0
+    ;;
+    
+  status)
+    status_of_proc -p $PIDFILE "$DAEMON" "$NAME" && exit 0 || exit $?
+    exit 0
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|status}" >&2
+    exit 0
+    ;;
+esac

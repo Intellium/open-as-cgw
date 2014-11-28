@@ -57,8 +57,8 @@ use Date::Format qw(time2str);
 #######    VARS    ########
 
 
-our $progname = 'rtlogd';
-our $pidfile = '/var/run/rtlogd.pid';
+our $progname = 'openas-rtlogd';
+our $pidfile = '/var/run/openas-rtlogd.pid';
 our $named_pipe = "/var/limes/rt_log";
 our $mq_offset = 0; 
 

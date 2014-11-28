@@ -664,8 +664,8 @@ case "$1" in
 
 	#sudo -u www-data /usr/bin/update_backup_conf.pl
 
-	# restart rtlogd
-	/etc/init.d/rtlogd restart
+	# restart openas-rtlogd
+	/etc/init.d/openas-rtlogd restart
 
 	# restart nginx 
 	/etc/init.d/nginx restart

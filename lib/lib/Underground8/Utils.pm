@@ -278,8 +278,8 @@ our $g = {
 
 
     # Command
-    cmd_iptables_stop => '/usr/bin/sudo /etc/init.d/firewall stop',
-    cmd_iptables_start => '/usr/bin/sudo /etc/init.d/firewall start',
+    cmd_iptables_stop => '/usr/bin/sudo /etc/init.d/openas-firewall stop',
+    cmd_iptables_start => '/usr/bin/sudo /etc/init.d/openas-firewall start',
 
     cmd_reboot => "/usr/bin/sudo $bin/haltreboot.pl reboot",
     cmd_shutdown => "/usr/bin/sudo $bin/haltreboot.pl halt",
@@ -309,8 +309,8 @@ our $g = {
 
     cmd_amavis_restart => '/usr/bin/sudo /etc/init.d/amavis restart',        
     cmd_amavis_release => '/usr/bin/sudo /usr/sbin/amavisd-release ',
-    cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/quarantine-cron restart',        
-    cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/quarantine-ng restart',        
+    cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/openas-quarantine-cron restart',        
+    cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/openas-quarantine-ng restart',        
     
     cmd_sqlgrey_start => '/usr/bin/sudo /etc/init.d/sqlgrey start',
     cmd_sqlgrey_stop => '/usr/bin/sudo /etc/init.d/sqlgrey stop',
@@ -323,7 +323,7 @@ our $g = {
     cmd_postfwd_kill => '/usr/bin/sudo /usr/bin/killall postfwd',
     cmd_postfwd_reload => '/usr/bin/sudo /etc/init.d/postfwd reload',
     
-    cmd_rtlogd_restart => '/usr/bin/sudo /etc/init.d/rtlogd restart',
+    cmd_rtlogd_restart => '/usr/bin/sudo /etc/init.d/openas-rtlogd restart',
 
     cmd_saslauthd_stop => '/usr/bin/sudo /etc/init.d/saslauthd stop',
     cmd_saslauthd_start=> '/usr/bin/sudo /etc/init.d/saslauthd start',

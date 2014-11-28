@@ -1,4 +1,0 @@
- check process rtlogd with pidfile /var/run/rtlogd.pid
-   start program = "/etc/init.d/rtlogd start"
-   stop  program = "/etc/init.d/rtlogd stop"
-   if cpu > 60% for 2 cycles then alert

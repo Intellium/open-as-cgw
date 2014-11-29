@@ -385,7 +385,7 @@ my $config = read_quarantine_config();
 # daemonize if not in debugging mode
 if (!$debug)
 {
-    daemonize("/var/run/openas-quarantine-ng.pid");
+    daemonize("/var/run/openas-qng.pid");
 }
 
 # signal handling

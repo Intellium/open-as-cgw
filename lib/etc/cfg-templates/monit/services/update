@@ -1,5 +1,0 @@
- check host update.underground8.com with address update.underground8.com
-    if failed icmp type echo count 3 with timeout 5 seconds then alert
-    if failed host update.underground8.com port 80 protocol http
-       and request "/sysmon_check.txt"
-       then alert

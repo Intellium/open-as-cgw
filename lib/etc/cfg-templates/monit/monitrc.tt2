@@ -7,6 +7,7 @@ set daemon  60
 #set logfile syslog facility log_daemon 
 set logfile /var/log/monit.log
 
+# set default mailserver
 set mailserver localhost               # 
 
 ## By default monit will drop the event alert, in the case that there is no
@@ -20,8 +21,7 @@ set mailserver localhost               #
 #     basedir /var/monit  # set the base directory where events will be stored
 #     slots 100           # optionaly limit the queue size
 
-#set alert sw@underground8.com                            # receive all alerts
-set alert limesas-alert@underground8.com { timeout }     # receive all alerts
+set alert postmaster@localhost { timeout }     # receive all alerts
 
 set httpd port 2812 and
      use address localhost  # only accept connection from localhost
@@ -37,19 +37,20 @@ set httpd port 2812 and
 #
 #  include /etc/monit.d/*
 include /etc/limes/cfg-templates/monit/services/amavisd-new
-include /etc/limes/cfg-templates/monit/services/quarantine-ng
-#include /etc/limes/cfg-templates/monit/services/quarantine-cron
+include /etc/limes/cfg-templates/monit/services/batv-filter
 include /etc/limes/cfg-templates/monit/services/clamav
-#include /etc/limes/cfg-templates/monit/services/kav-server
-include /etc/limes/cfg-templates/monit/services/sambucus
-include /etc/limes/cfg-templates/monit/services/nginx
+include /etc/limes/cfg-templates/monit/services/kav-server
 #include /etc/limes/cfg-templates/monit/services/localhost
 #include /etc/limes/cfg-templates/monit/services/locutus
 include /etc/limes/cfg-templates/monit/services/mysql
+include /etc/limes/cfg-templates/monit/services/nginx
 include /etc/limes/cfg-templates/monit/services/ntp
+include /etc/limes/cfg-templates/monit/services/openas-backend
+include /etc/limes/cfg-templates/monit/services/openas-ldapsync
+include /etc/limes/cfg-templates/monit/services/openas-qcron
+include /etc/limes/cfg-templates/monit/services/openas-qng
+include /etc/limes/cfg-templates/monit/services/openas-rtlogd
 include /etc/limes/cfg-templates/monit/services/postfix
-include /etc/limes/cfg-templates/monit/services/sqlgrey
-include /etc/limes/cfg-templates/monit/services/rtlogd
 include /etc/limes/cfg-templates/monit/services/postfwd
-#include /etc/limes/cfg-templates/monit/services/update
-include /etc/limes/cfg-templates/monit/services/batv-filter
+include /etc/limes/cfg-templates/monit/services/sambucus
+include /etc/limes/cfg-templates/monit/services/sqlgrey

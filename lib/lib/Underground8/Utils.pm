@@ -309,8 +309,8 @@ our $g = {
 
     cmd_amavis_restart => '/usr/bin/sudo /etc/init.d/amavis restart',        
     cmd_amavis_release => '/usr/bin/sudo /usr/sbin/amavisd-release ',
-    cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/openas-quarantine-cron restart',        
-    cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/openas-quarantine-ng restart',        
+    cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/openas-qcron restart',        
+    cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/openas-qng restart',        
     
     cmd_sqlgrey_start => '/usr/bin/sudo /etc/init.d/sqlgrey start',
     cmd_sqlgrey_stop => '/usr/bin/sudo /etc/init.d/sqlgrey stop',

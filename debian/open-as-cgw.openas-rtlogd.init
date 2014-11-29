@@ -26,15 +26,15 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/bin/rtlogd
+DAEMON=/usr/bin/rtlogd.sh
 NAME=openas-rtlogd
 DESC="Open AS rtlogd"
 
 test -f ${DAEMON} || exit 0
 set -e
 
-START="--start --quiet --background --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
-STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"
+START="--start --quiet --background --user limes --chuid limes --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
+STOP="--stop --quiet --user limes --pidfile /var/run/${NAME}.pid --name ${NAME}"
 
 case "$1" in
   start)

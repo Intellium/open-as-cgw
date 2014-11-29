@@ -33,8 +33,8 @@ DESC="Open AS Quarantine Cron"
 test -f ${DAEMON} || exit 0
 set -e
 
-START="--start --quiet --user limes --chuid limes --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
-STOP="--stop --quiet --user limes --pidfile /var/run/${NAME}.pid --name ${NAME}"
+START="--start --quiet --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
+STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"
 
 case "$1" in
   start)

@@ -231,4 +231,12 @@ CREATE TABLE quarantine (
 --                   request but not yet released; targeted to banned parts)
 --   'D' => marked for deletion; a cleanup script may delete it
 
+--
+-- Amavis 2.7-1 Additions 
+-- This fixes the old amavis db schema to be compatible again
+-- http://lists.amavis.org/pipermail/amavis-users/2013-March/002213.html
+ALTER TABLE msgrcpt ADD rseqnum     integer  DEFAULT 0   NOT NULL;
+ALTER TABLE msgrcpt ADD content     char(1)  DEFAULT ' ' NOT NULL;
+ALTER TABLE msgrcpt ADD is_local    char(1)  DEFAULT ' ' NOT NULL;
+ALTER TABLE msgs    ADD originating char(1)  DEFAULT ' ' NOT NULL;
 

@@ -31,7 +31,6 @@ NAME=openas-qng
 DESC="Open AS Quarantine NG"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 START="--start --quiet --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
 STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"

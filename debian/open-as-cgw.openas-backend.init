@@ -31,33 +31,33 @@ NAME=openas-backend
 DESC="Open AS Backend"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 case "$1" in
   start)
     /usr/bin/set_cfg_permissions.pl >/dev/null
     echo -n "Starting $DESC: "    
-    $DAEMON $1 >/dev/null
+    $DAEMON stop >/dev/null
+    $DAEMON start >/dev/null
     echo "$NAME."
     exit 0
     ;;
 
   stop)
     echo -n "Stopping $DESC: "    
-    $DAEMON $1 >/dev/null
+    $DAEMON stop >/dev/null
     echo "$NAME."
     exit 0
     ;;
     
   restart)
     echo -n "Restarting $DESC: "    
-    $DAEMON $1 >/dev/null
+    $DAEMON restart >/dev/null
     echo "$NAME."
     exit 0
     ;;
     
   status)
-    $DAEMON $1
+    $DAEMON status 
     ;;
 
   *)

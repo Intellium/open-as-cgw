@@ -31,7 +31,6 @@ NAME=openas-rtlogd
 DESC="Open AS rtlogd"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 START="--start --quiet --background --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
 STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"

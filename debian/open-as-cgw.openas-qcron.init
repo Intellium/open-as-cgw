@@ -31,7 +31,6 @@ NAME=openas-qcron
 DESC="Open AS Quarantine Cron"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 START="--start --quiet --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
 STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"

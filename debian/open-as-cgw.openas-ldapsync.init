@@ -31,7 +31,6 @@ NAME=openas-ldapsync
 DESC="Open AS LDAP Syncronisator"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 START="--start --quiet --background --make-pidfile --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
 STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME} --retry=TERM/30/KILL/5"

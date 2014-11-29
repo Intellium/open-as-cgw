@@ -36,27 +36,33 @@ set -e
 case "$1" in
   start)
     /usr/bin/set_cfg_permissions.pl >/dev/null
-    $DAEMON $1
+    echo -n "Starting $DESC: "    
+    $DAEMON $1 >/dev/null
+    echo "$NAME."
     exit 0
     ;;
 
   stop)
     $DAEMON $1
+    echo -n "Stopping $DESC: "    
+    $DAEMON $1 >/dev/null
+    echo "$NAME."
     exit 0
     ;;
     
   restart)
     $DAEMON $1
+    echo -n "Restarting $DESC: "    
+    $DAEMON $1 >/dev/null
+    echo "$NAME."
     exit 0
     ;;
     
   status)
     $DAEMON $1
-    exit 0
     ;;
 
   *)
     $DAEMON $1
-    exit 0
     ;;
 esac

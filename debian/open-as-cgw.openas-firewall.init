@@ -31,7 +31,6 @@ NAME=openas-firewall
 DESC="Open AS Firewall"
 
 test -f ${DAEMON} || exit 0
-set -e
 
 case "$1" in
   start)
@@ -61,7 +60,6 @@ case "$1" in
   restart)
     $0 stop
     $0 start
-    exit 0
     ;;
     
   status)

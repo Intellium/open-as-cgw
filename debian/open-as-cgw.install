@@ -1,6 +1,5 @@
 versions etc/open-as-cgw
 lib/etc/* etc/open-as-cgw
-lib/bin/set_cfg_permissions.pl usr/bin
 lib/lib/* usr/lib/perl5
 lib/lib-external/usr/local/* usr
 lib/bin/* usr/bin

@@ -29,44 +29,47 @@ iptables -A MY_REJECT -j REJECT --reject-with icmp-proto-unreachable
 
 # USER chain
 iptables -N USER
+iptables -A USER -i [% if_name %] -p tcp --dport 443 -j ACCEPT # HTTPS
+iptables -A USER -i [% if_name %] -p tcp --dport 22 -j ACCEPT  # SSH
+iptables -A USER -i [% if_name %] -j DROP
 
 # Rules for USER chain
 # if adminrange is defined, allow only connections from u8 or the defined adminrange
-[%- IF admin_range.size > 0 -%]
-	[%- FOREACH entry IN admin_range %]
-		iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport 22 -j ACCEPT
-
-		[% IF additional_ssh_port != 0 %]
-			iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport [% additional_ssh_port %] -j ACCEPT
-		[% END %]
-
-	[% END -%]
-
-[% ELSE %]
-	iptables -A USER -i [% if_name %] -p tcp --dport 22 -j ACCEPT # ssh
-
-	[% IF additional_ssh_port != 0 %]
-		iptables -A USER -i [% if_name %] -p tcp --dport [% additional_ssh_port %] -j ACCEPT # ssh
-	[% END %]
-[% END %]
-
-iptables -A USER -i [% if_name %] -j DROP
+#[%- IF admin_range.size > 0 -%]
+#	[%- FOREACH entry IN admin_range %]
+#		iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport 22 -j ACCEPT
+#
+#		[% IF additional_ssh_port != 0 %]
+#			iptables -A USER -i [% if_name %] -m state --state NEW -p tcp -m iprange --src-range [% entry.start %]-[% entry.end %] --dport [% additional_ssh_port %] -j ACCEPT
+#		[% END %]
+#
+#	[% END -%]
+#[% ELSE %]
+#
+#iptables -A USER -i [% if_name %] -p tcp --dport 22 -j ACCEPT # ssh
+#
+#[% IF additional_ssh_port != 0 %]
+#	iptables -A USER -i [% if_name %] -p tcp --dport [% additional_ssh_port %] -j ACCEPT # ssh
+#[% END %]
+#[% END %]
+#iptables -A USER -i [% if_name %] -j DROP
 
 # MY_DROP-Chain
 iptables -N MY_DROP
-#    iptables -A MY_DROP -m limit --limit 7200/h -j LOG --log-prefix "PORTSCAN DROP "
+#iptables -A MY_DROP -m limit --limit 7200/h -j LOG --log-prefix "PORTSCAN DROP "
 iptables -A MY_DROP -j DROP
 
 # log all blocked packages
-#    iptables -A INPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "INPUT INVALID "
-#    iptables -A OUTPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "OUTPUT INVALID "
+#iptables -A INPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "INPUT INVALID "
+#iptables -A OUTPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "OUTPUT INVALID "
 
 # block corrupt packages
 iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A OUTPUT -m state --state INVALID -j DROP
 
 [% IF use_snmp != 0 %]
-	iptables -A INPUT -i [% if_name %] -p udp --dport [% 161 %] -j ACCEPT # snmp
+# SNMP
+iptables -A INPUT -i [% if_name %] -p udp --dport [% 161 %] -j ACCEPT
 [% END %]
 
 # drop Stealth Scans etc.
@@ -98,17 +101,15 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-
-#ICMP
+# ICMP
 iptables -A INPUT -p icmp -j ACCEPT
 
-
 [% IF use_25 %]
-	# SMTP
-	iptables -A INPUT -i [% if_name %] -m state --state NEW -p tcp --dport 25 -j ACCEPT
+# SMTP
+iptables -A INPUT -i [% if_name %] -m state --state NEW -p tcp --dport 25 -j ACCEPT
 
-	# SMTPS
-	iptables -A INPUT -i [% if_name %] -m state --state NEW -p tcp --dport 465 -j ACCEPT
+# SMTPS
+iptables -A INPUT -i [% if_name %] -m state --state NEW -p tcp --dport 465 -j ACCEPT
 [% END %]
 
 # previously defined USER table which contains ssh and adminrange

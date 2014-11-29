@@ -51,9 +51,9 @@ sub write_config ($$$$$)
     my $hostname = shift;
     my $domainname = shift;
 
+    $self->change_hostname($hostname,$domainname);
     $self->write_hosts_file($hostname,$domainname);
     $self->write_mailname_file($domainname);
-    $self->change_hostname($hostname,$domainname);
 }
 
 sub change_hostname ($$)
@@ -61,8 +61,16 @@ sub change_hostname ($$)
     my $self = instance(shift);
     my $hostname = shift;
     my $domainname = shift;
- 
-    safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1);
+    
+    # hostnamectl set-hostname method resets the permissions of /etc/hostname
+    # we have to find a possible work around  
+    #safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1);
+
+    # old method
+    open (HOSTNAME, '>', $g->{'file_hostname'})
+    or throw Underground8::Exception::FileOpen($g->{'file_hostname'});
+    print "$hostname.$domainname\n";
+    close (HOSTNAME);
 }
 
 sub write_hosts_file ($$$)

@@ -51,9 +51,9 @@ sub write_config ($$$$$)
     my $hostname = shift;
     my $domainname = shift;
 
-    $self->change_hostname($hostname,$domainname);    
     $self->write_hosts_file($hostname,$domainname);
     $self->write_mailname_file($domainname);
+    $self->change_hostname($hostname,$domainname);
 }
 
 sub change_hostname ($$)

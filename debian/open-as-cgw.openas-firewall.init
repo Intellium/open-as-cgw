@@ -26,19 +26,22 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-PIDFILE=/var/run/openas-firewall.pid
 DAEMON=/usr/bin/firewall.sh
 NAME=openas-firewall
 DESC="Open AS Firewall"
 
-do_start()
-{
+test -f ${DAEMON} || exit 0
+set -e
+
+case "$1" in
+  start)
     echo -n "Starting $DESC: "    
     $DAEMON
     echo "$NAME."
-}
-do_stop()
-{
+    exit 0
+    ;;
+
+  stop)
     echo -n "Stopping $DESC: "
     # Flush tables
     iptables -F
@@ -52,22 +55,12 @@ do_stop()
     iptables -P OUTPUT ACCEPT
     iptables -P FORWARD ACCEPT
     echo "$NAME."
-}
-
-case "$1" in
-  start)
-    do_start
-    exit 0
-    ;;
-
-  stop)
-    do_stop
     exit 0
     ;;
     
   restart)
-    do_stop
-    do_start
+    $0 stop
+    $0 start
     exit 0
     ;;
     

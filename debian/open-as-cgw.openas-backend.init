@@ -26,10 +26,12 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-PIDFILE=/var/run/openas-backend.pid
 DAEMON=/var/www/LimesGUI/LimesGUI.start.pl
 NAME=openas-backend
 DESC="Open AS Backend"
+
+test -f ${DAEMON} || exit 0
+set -e
 
 case "$1" in
   start)

@@ -26,54 +26,61 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-PIDFILE=/var/run/openas-quarantine-cron.pid
 DAEMON=/usr/bin/quarantine-cron.pl
-NAME=openas-quarantine-cron
+NAME=openas-qcron
 DESC="Open AS Quarantine Cron"
 
-do_start()
-{
-    echo -n "Starting $DESC: "
-    start-stop-daemon -oqb --start --user limes --chuid limes --pidfile $PIDFILE --startas $DAEMON
-    echo "$NAME."
-}
-do_stop()
-{
-    echo -n "Stopping $DESC: "
-    start-stop-daemon -oqb --stop --user limes --chuid limes --pidfile $PIDFILE --retry=TERM/30/KILL/5
-    rm -f $PIDFILE
-    echo "$NAME."
-}
-do_status()
-{
-    echo -n "Status $DESC is: "
-    if [ -f $PIDFILE ]; then
-    echo "(running)"
-    else
-    echo "(not running)"
-    fi
-}
+test -f ${DAEMON} || exit 0
+set -e
+
+START="--start --quiet --background --pidfile /var/run/${NAME}.pid --name ${NAME} --startas ${DAEMON}"
+STOP="--stop --quiet --pidfile /var/run/${NAME}.pid --name ${NAME}"
 
 case "$1" in
   start)
-    do_start
-    exit 0
+    echo -n "Starting $DESC: "  
+    if start-stop-daemon ${START} -- start >/dev/null ; then
+            echo "${NAME}."
+    else
+            if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+                echo "(failed)."
+                exit 1
+            else
+                echo "(already running)."
+                exit 0
+            fi
+    fi
     ;;
 
   stop)
-    do_stop
-    exit 0
+    echo -n "Stopping $DESC: "
+    if start-stop-daemon ${STOP} --retry 10 >/dev/null ; then
+            echo "${NAME}."
+    else
+            if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+                echo "(not running)."
+                exit 0
+            else
+                echo "(failed)."
+                exit 1
+            fi
+    fi
     ;;
 
   restart)
-    do_stop
-    do_start
-    exit 0
+    $0 stop
+    $0 start
     ;;
 
   status)
-    do_status
-    exit 0
+    echo -n "Status $DESC is: "
+    if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+        echo "(not running)."
+        exit 1
+    else
+        echo "(running)."
+        exit 0
+    fi
     ;;
 
   *)

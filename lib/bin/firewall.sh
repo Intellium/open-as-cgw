@@ -32,29 +32,24 @@ iptables -N USER
 
 # Rules for USER chain
 # if adminrange is defined, allow only connections from u8 or the defined adminrange
-	iptables -A USER -i eth0 -p tcp --dport 22 -j ACCEPT # ssh
-
-	
-
-
+iptables -A USER -i eth0 -p tcp --dport 443 -j ACCEPT # https
+iptables -A USER -i eth0 -p tcp --dport 22 -j ACCEPT # ssh
 iptables -A USER -i eth0 -j DROP
 
 # MY_DROP-Chain
 iptables -N MY_DROP
-#    iptables -A MY_DROP -m limit --limit 7200/h -j LOG --log-prefix "PORTSCAN DROP "
 iptables -A MY_DROP -j DROP
 
 # log all blocked packages
-#    iptables -A INPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "INPUT INVALID "
-#    iptables -A OUTPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "OUTPUT INVALID "
+#iptables -A INPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "INPUT INVALID "
+#iptables -A OUTPUT -m state --state INVALID -m limit --limit 7200/h -j LOG --log-prefix "OUTPUT INVALID "
 
 # block corrupt packages
 iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A OUTPUT -m state --state INVALID -j DROP
 
-
-	iptables -A INPUT -i eth0 -p udp --dport 161 -j ACCEPT # snmp
-
+# SNMP
+iptables -A INPUT -i eth0 -p udp --dport 161 -j ACCEPT
 
 # drop Stealth Scans etc.
 iptables -A INPUT -p tcp --tcp-flags ALL NONE -j MY_DROP
@@ -85,12 +80,8 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-
 #ICMP
 iptables -A INPUT -p icmp -j ACCEPT
-
-
-
 
 # previously defined USER table which contains ssh and adminrange
 iptables -A INPUT -i eth0 -p tcp -j USER

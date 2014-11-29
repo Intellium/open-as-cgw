@@ -62,8 +62,7 @@ sub change_hostname ($$)
     my $hostname = shift;
     my $domainname = shift;
  
-    safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1)
-        or throw Underground8::Exception::Execution($g->{'cmd_hostname_change'});
+    safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1);
 }
 
 sub write_hosts_file ($$$)

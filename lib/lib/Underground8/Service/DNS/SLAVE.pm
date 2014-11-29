@@ -40,13 +40,9 @@ sub service_stop ($)
     # nothing to do here
 }
 
-# call /etc/init.d/hostname.sh
 sub service_restart ($$)
 {
-    my $self = instance(shift);
-
-    safe_system($g->{'cmd_dnsmasq_restart'},0,1)
-        or throw Underground8::Exception::Execution($g->{'cmd_dnsmasq_restart'});
+    # nothing to do here
 }
 
 sub write_config ($$$$$)
@@ -70,6 +66,21 @@ sub change_hostname ($$)
         or throw Underground8::Exception::Execution($g->{'cmd_hostname_change'});
 }
 
+sub write_hosts_file ($$$)
+{
+    my $self = instance(shift);
+    my $hostname = shift;
+    my $domainname = shift;
+
+    open (HOSTS, '>', $g->{'file_hosts'})
+        or throw Underground8::Exception::FileOpen($g->{'file_hosts'});
+
+    print HOSTS "127.0.0.1    localhost\n";
+    print HOSTS "127.0.1.1    $hostname.$domainname $hostname\n";
+
+    close (HOSTS);
+}
+
 sub write_mailname_file ($$)
 {
     my $self = instance(shift);
@@ -81,21 +92,6 @@ sub write_mailname_file ($$)
     print MAILNAME "$mailname\n";
 
     close (MAILNAME);
-}
-
-sub write_hosts_file ($$$)
-{
-    my $self = instance(shift);
-    my $hostname = shift;
-    my $domainname = shift;
-
-    open (HOSTS, '>', $g->{'file_hosts'})
-        or throw Underground8::Exception::FileOpen($g->{'file_hosts'}); 
-    
-    print HOSTS "127.0.0.1    localhost\n";
-    print HOSTS "127.0.1.1    $hostname.$domainname $hostname\n";
-
-    close (HOSTS);
 }
 
 1;

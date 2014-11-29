@@ -305,7 +305,6 @@ our $g = {
     cmd_network_restart => "$bin/restart_network.pl",
     
     cmd_hostname_change => '/usr/bin/sudo hostnamectl set-hostname', 
-    cmd_dnsmasq_restart => '/usr/bin/sudo /etc/init.d/dnsmasq restart',
 
     cmd_amavis_restart => '/usr/bin/sudo /etc/init.d/amavis restart',        
     cmd_amavis_release => '/usr/bin/sudo /usr/sbin/amavisd-release ',
@@ -474,7 +473,6 @@ our $g = {
 		'mysql.*' => 'database-engine',
 		'aveserver.*' => 'kaspersky-antivirus',
 		'keepup2date.*' => 'kaspersky-upate-engine',
-		'dnsmasq.*' => 'dns-forwarder',
 		'qmgr.*' => 'maild-qmgr',
 		'pickup.*' => 'maild-mail-pickup',
 		'smtpd.*' => 'maild-smtpd',

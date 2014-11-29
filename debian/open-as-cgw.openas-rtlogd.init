@@ -26,7 +26,7 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/bin/rtlogd.sh
+DAEMON=/usr/bin/rtlogd.pl
 NAME=openas-rtlogd
 DESC="Open AS rtlogd"
 

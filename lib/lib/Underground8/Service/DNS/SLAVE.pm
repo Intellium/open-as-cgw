@@ -44,50 +44,37 @@ sub service_stop ($)
 sub service_restart ($$)
 {
     my $self = instance(shift);
-    
-    safe_system($g->{'cmd_hostname_change'},0,1); # return code 1 is ok
-    safe_system($g->{'cmd_dnsmasq_restart'},0,1); # return code 1 is ok
+
+    safe_system($g->{'cmd_dnsmasq_restart'},0,1)
+        or throw Underground8::Exception::Execution($g->{'cmd_dnsmasq_restart'});
 }
 
 sub write_config ($$$$$)
 {
     my $self = instance(shift);
-#    my $primary_dns = shift;
-#    my $secondary_dns = shift;
-#    my $use_local_cache = shift;
     my $hostname = shift;
     my $domainname = shift;
 
-#    $self->write_resolv_conf($primary_dns,
-#                             $secondary_dns,
-#                             $use_local_cache,
-#                             $domainname);
-
-    $self->write_hosts_file($hostname,
-                            $domainname);
-    
-    $self->write_hostname_file($hostname);
+    $self->change_hostname($hostname,$domainname);    
+    $self->write_hosts_file($hostname,$domainname);
     $self->write_mailname_file($domainname);
 }
 
-sub write_hostname_file ($$)
+sub change_hostname ($$)
 {
     my $self = instance(shift);
     my $hostname = shift;
-    
-    open (HOSTNAME, '>', $g->{'file_hostname'})
-        or throw Underground8::Exception::FileOpen($g->{'file_hostname'});
-    
-    print HOSTNAME "$hostname\n";
-
-    close (HOSTNAME);
+    my $domainname = shift;
+ 
+    safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1)
+        or throw Underground8::Exception::Execution($g->{'cmd_hostname_change'});
 }
 
 sub write_mailname_file ($$)
 {
     my $self = instance(shift);
     my $mailname = shift;
-    
+     
     open (MAILNAME, '>', $g->{'file_mailname'})
         or throw Underground8::Exception::FileOpen($g->{'file_mailname'});
     
@@ -111,29 +98,4 @@ sub write_hosts_file ($$$)
     close (HOSTS);
 }
 
-# DEPRECATED; is now done via /etc/network/interfaces in NetworkInterface.pm
-sub write_resolv_conf($$$$$)
-{
-    my $self = instance(shift);
-    my $primary_dns = shift;
-    my $secondary_dns = shift;
-    my $use_local_cache = shift;
-    my $domainname = shift;
-
-    open (RESOLV, '>', $g->{'file_resolv'})
-        or throw Underground8::Exception::FileOpen($g->{'file_resolv'});
-
-    print RESOLV "### automatically created by LIMES ###\n";
-    print RESOLV "search $domainname\n";
-
-    if ($use_local_cache)
-    {
-        print RESOLV "nameserver 127.0.0.1\n";
-    }
-    
-    print RESOLV "nameserver $primary_dns\n";
-    print RESOLV "nameserver $secondary_dns\n";
-    
-    close (RESOLV);
-}
 1;

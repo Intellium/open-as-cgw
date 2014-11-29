@@ -304,7 +304,7 @@ our $g = {
     cmd_network_route => '/usr/bin/sudo /sbin/route',
     cmd_network_restart => "$bin/restart_network.pl",
     
-    cmd_hostname_change => '/usr/bin/sudo service hostname restart', 
+    cmd_hostname_change => '/usr/bin/sudo hostnamectl set-hostname', 
     cmd_dnsmasq_restart => '/usr/bin/sudo /etc/init.d/dnsmasq restart',
 
     cmd_amavis_restart => '/usr/bin/sudo /etc/init.d/amavis restart',        

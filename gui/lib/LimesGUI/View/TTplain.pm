@@ -28,6 +28,7 @@ __PACKAGE__->config({
     WRAPPER      => 'site/ttplain_wrapper',
     ERROR        => 'catalyst_error.tt2',
     TIMER        => 0,
+    render_die   => 1,
 });
 
 1;

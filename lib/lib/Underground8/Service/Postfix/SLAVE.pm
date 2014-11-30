@@ -320,13 +320,27 @@ sub write_bypass ($$)
     
     print AMAVIS_BYPASS_INTERNAL $config_content;
     
-    close (AMAVIS_BYPASS_INTERNAL);  
+    close (AMAVIS_BYPASS_INTERNAL);
+
+    $config_content = "";
+    $template->process($g->{'template_postfix_mynetworks'},$options,\$config_content)
+      or throw Underground8::Exception($template->error);
+
+    open (AMAVIS_BYPASS_INTERNAL,'>',$g->{'file_postfix_mynetworks'})
+      or throw Underground8::Exception::FileOpen($g->{'file_postfix_mynetworks'});
+
+    print AMAVIS_BYPASS_INTERNAL $config_content;
+
+    close (AMAVIS_BYPASS_INTERNAL);
+
 
     my $command = ($g->{'cmd_postfix_postmap'} . " " . $g->{'file_postfix_amavis_bypass_internal_filter'});
     my $output = safe_system($command);
     $command = ($g->{'cmd_postfix_postmap'} . " " . $g->{'file_postfix_amavis_bypass_internal_warn'});
     $output = safe_system($command);
     $command = ($g->{'cmd_postfix_postmap'} . " " . $g->{'file_postfix_amavis_bypass_internal_accept'});
+    $output = safe_system($command);
+    $command = ($g->{'cmd_postfix_postmap'} . " " . $g->{'file_postfix_mynetworks'});
     $output = safe_system($command);
 }
 

@@ -18,7 +18,7 @@ BEGIN {
     print "Using lib-path: $libpath\nUsing gui-path: $guipath\n";
 
     unshift(@INC,"$libpath/lib/");
-    unshift(@INC,"$guipath");
+    unshift(@INC,"$guipath/lib");
 
 
 

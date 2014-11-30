@@ -60,6 +60,7 @@ my @files = qw(
 /etc/postfix/amavis_bypass_internal_filter
 /etc/postfix/amavis_bypass_internal_warn
 /etc/postfix/amavis_bypass_internal_accept
+/etc/postfix/mynetworks
 /etc/postfix/local_rcpt_map
 /etc/postfix/mbox_transport
 /etc/postfix/virtual_mbox

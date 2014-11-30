@@ -6,7 +6,7 @@
 #==================== GENERAL =======================
 myhostname = [% config.myhostname %]
 mydestination = localhost, $myhostname
-mynetworks = 127.0.0.0/8
+mynetworks = cidr:/etc/postfix/mynetworks
 inet_protocols = ipv4
 inet_interfaces = all
 recipient_delimiter = +

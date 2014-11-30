@@ -134,6 +134,8 @@ __PACKAGE__->config( new_sec_version => $appliance->report->new_sec_version_avai
 __PACKAGE__->config( new_main_version => $appliance->report->new_main_version_available );
 __PACKAGE__->config( restart_required => $appliance->report->restart_required );
 
+print Dumper __PACKAGE__->config;
+
 # Start the application - loads the .yml file #
 __PACKAGE__->setup;
 

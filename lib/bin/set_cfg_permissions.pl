@@ -79,7 +79,7 @@ my @files = qw(
 /etc/mysql/my.cnf
 /etc/monit/monitrc
 /etc/default/monit
-/etc/syslog-ng/syslog-ng.conf
+/etc/syslog-ng/conf.d/open-as-cgw.conf
 /etc/logrotate.d/syslog-ng
 /boot/grub/menu.lst
 /etc/lsb-release

@@ -167,7 +167,7 @@ our $g = {
     
     file_usus_conf => "$etc/conf/usus.conf",
 
-    file_syslogng =>'/etc/syslog-ng/syslog-ng.conf',
+    file_syslogng =>'/etc/syslog-ng/conf.d/open-as-cgw.conf',
     file_syslogng_logrotate => '/etc/logrotate.d/syslog-ng',
 
     file_quarantine_ng_conf => "$etc/conf/quarantine-ng.conf",
@@ -245,13 +245,11 @@ our $g = {
     #template_kaspersky_kavserverconf => 'kaspersky/kav_server.conf.tt2',
     #template_kaspersky_kavupdaterconf => 'kaspersky/kav_updater.conf.tt2',
 
-    template_syslogng => 'syslog-ng/syslog-ng.conf.tt2',
+    template_syslogng => 'syslog-ng/open-as-cgw.conf.tt2',
     template_syslogng_logrotate => 'syslog-ng/syslog-ng.logrotate.tt2',
 
     template_usus_conf => 'usus/usus.conf.tt2',
 
-    template_syslogng => 'syslog-ng/syslog-ng.conf.tt2',
-    template_syslogng_logrotate => 'syslog-ng/syslog-ng.logrotate.tt2',
     template_quarantine_ng_conf => 'quarantine_ng/quarantine_ng_conf.tt2',
     template_email_quarantine_report_html => 'email/quarantine_report_html.tt2',
     template_email_quarantine_report_plain => 'email/quarantine_report_plain.tt2',
@@ -368,9 +366,9 @@ our $g = {
     cmd_monit_perm_delgrp => '/usr/bin/sudo /bin/chmod g-rw /etc/monit/monitrc',
 
 
-    cmd_syslogng_stop => '/usr/bin/sudo /etc/init.d/syslog-ng stop',
-    cmd_syslogng_start => '/usr/bin/sudo /etc/init.d/syslog-ng start',
-    cmd_syslogng_restart => '/usr/bin/sudo /etc/init.d/syslog-ng restart',
+    cmd_syslogng_stop => '/usr/bin/sudo /usr/sbin/service syslog-ng stop',
+    cmd_syslogng_start => '/usr/bin/sudo /usr/sbin/service syslog-ng start',
+    cmd_syslogng_restart => '/usr/bin/sudo /usr/sbin/service syslog-ng restart',
 
 	cmd_snmp_stop => '/usr/bin/sudo /etc/init.d/snmpd stop',
 	cmd_snmp_start => '/usr/bin/sudo /etc/init.d/snmpd start',

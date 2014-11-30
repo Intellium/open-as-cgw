@@ -22,6 +22,7 @@ External software-components used:
  * amavisd-new as virus-scanning middleware
  * clamav for the actually scanning process
  * snmpd for SNMP
+ * dnsmasq as lightweight DNS forwarder and caching daemon 
  * monit to ensure service- and daemon availability
  * munin to do some resource graphs
  * MySQL as the common database-backend, used for greylisting-db, stats, etc

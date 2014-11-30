@@ -42,7 +42,10 @@ sub service_stop ($)
 
 sub service_restart ($$)
 {
-    # nothing to do here
+    my $self = instance(shift);
+
+    safe_system($g->{'cmd_dnsmasq_restart'},0,1)
+	or throw Underground8::Exception::Execution($g->{'cmd_dnsmasq_restart'});
 }
 
 sub write_config ($$$$$)
@@ -61,16 +64,9 @@ sub change_hostname ($$)
     my $self = instance(shift);
     my $hostname = shift;
     my $domainname = shift;
-    
-    # hostnamectl set-hostname method resets the permissions of /etc/hostname
-    # we have to find a possible work around  
-    #safe_system($g->{'cmd_hostname_change'.' '.$hostname.$domainname},0,1);
 
-    # old method
-    open (HOSTNAME, '>', $g->{'file_hostname'})
-    or throw Underground8::Exception::FileOpen($g->{'file_hostname'});
-    print "$hostname.$domainname\n";
-    close (HOSTNAME);
+    # hostnamectl set-hostname method
+    safe_system("$g->{'cmd_hostname_change'} $hostname.$domainname",0,1);
 }
 
 sub write_hosts_file ($$$)

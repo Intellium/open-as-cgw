@@ -1,6 +1,6 @@
 Howdy contributors,
-
 thank you for you interest in this project.
+
 The code-base is supposed to build, and packaging should work so far. However,
 there are plenty of tasks which could be accomplished to make things better.
 
@@ -11,11 +11,6 @@ General:
     (specifically, Ubuntu Server 10.04(.1) Lucid). Chances are low that
     the AS system will work on any other distribution without considerable
     changes.
-  * Build-script: Clean up, get rid of regexing and substitutions in sources
-  * Revise Debian packaging stuff (mainly debian/rules and debian/*postinst)
-  * Databases: Everything is just adapted to run on MySQL. SQL statements are
-    distributed all over the code base :( Go for database independence, maybe
-    support Postgres...
   * Code: ton's of die() calls
   * Code: code-duplication at any place
   * rtlogd: Currently, the rtlogd/LiveLog is based on scanning syslog lines.
@@ -51,7 +46,5 @@ Component update:
     integration in the AS, postfwd has dramatically enhanced its functionality.
     Moreover, parsing postfwd stats (as printed in syslog) would be cool
     
-
-
 Cheers,
-Erik
+The Open AS Team

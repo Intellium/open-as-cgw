@@ -104,8 +104,13 @@ max_connect_age = [%- greylisting_connectage OR 24 -%]
 
 ## Auto whitelists settings
 # default is tailored for small sites
+[% IF greylisting == 1 && selective_greylisting == 1 -%]
 awl_age = [%- greylisting_authtime OR 30 -%]
 group_domain_level = [%- greylisting_authtime OR 2 -%]
+[%ELSE -%]
+awl_age = 0
+group_domain_level = 0
+[%END-%]
 
 # For bigger sites you may want
 # a smaller awl_age and a bigger group_domain_level

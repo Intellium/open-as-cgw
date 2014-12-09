@@ -24,7 +24,7 @@
     <_options rbl_checks="0" sender_domain_verify="1" sender_fqdn_required="1"/>
   </postfix>
   <sqlgrey _addr_blacklist="" _addr_whitelist="" _ip_blacklist="" _ip_whitelist="" _mysql_database="sqlgrey" _mysql_host="localhost" _mysql_password="loltruck2000" _mysql_username="sqlgrey-user">
-    <_config addr_blacklisting="0" addr_whitelisting="0" greylisting="1" selective_greylisting="0" greylisting_message="You have been greylisted. Come back in 4min." greylisting_triplettime="5" greylisting_connectage="24" greylisting_authtime="30" greylisting_domainlevel="2" ip_blacklisting="0" ip_whitelisting="0"/>
+    <_config addr_blacklisting="0" addr_whitelisting="0" greylisting="1" selective_greylisting="0" greylisting_message="You have been greylisted. Come back in 5min." greylisting_triplettime="5" greylisting_connectage="24" greylisting_authtime="30" greylisting_domainlevel="2" ip_blacklisting="0" ip_whitelisting="0"/>
   </sqlgrey>
   <amavis _archive_maxfiles="1000" _archive_recursion="12" _banned_attachments="" _block_score="50" _clamav_enabled="1" _info_score="0" _kav_enabled="1" _notification_admin="" _quarantine_admin="" _spam_admin="" _spam_score="5" _spam_subject_tag="** SPAM ** " _unchecked_subject_tag="** UNCHECKED **" _use_anti_virus="1" _warn_recipient_banned_file="0" _warn_recipient_virus="0">
     <_policy>

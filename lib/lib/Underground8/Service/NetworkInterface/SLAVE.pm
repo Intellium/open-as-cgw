@@ -183,7 +183,7 @@ sub write_network_config($$$$$)
             } else {
                 push (@interface_file,"    dns-nameservers $primary_dns $secondary_dns\n");
             }
-            push (@interface_file,"    dns-search $domainname\n");
+            if ($domainname ne '') { push (@interface_file,"    dns-search $domainname\n"); }
                
         }
         elsif($line =~ m/$end_marker/)

@@ -144,11 +144,6 @@ our $g = {
     #file_kaspersky_kavserverconf => '/etc/kav/kav_server.conf',
     #file_kaspersky_kavupdaterconf => '/etc/kav/kav_updater.conf',
     
-    file_clients_fqdn_whitelist => '/etc/sqlgrey/clients_fqdn_whitelist',
-    file_clients_ip_whitelist => '/etc/sqlgrey/clients_ip_whitelist',
-    file_discrimination_regexp => '/etc/sqlgrey/discrimination.regexp',
-    file_dyn_fqdn_regexp => '/etc/sqlgrey/dyn_fqdn.regexp',
-    file_sqlgrey_smtp_server_regexp => '/etc/sqlgrey/smtp_server.regexp',
     file_sqlgrey_conf => '/etc/sqlgrey/sqlgrey.conf',
     file_sqlgrey_default => '/etc/default/sqlgrey',
 
@@ -214,11 +209,6 @@ our $g = {
     template_amavis_20_dd => 'amavis/20-debian_defaults.tt2',
     template_amavis_99_openas => 'amavis/99-openas.tt2',
 
-    template_clients_fqdn_whitelist => 'sqlgrey/clients_fqdn_whitelist.tt2',
-    template_clients_ip_whitelist => 'sqlgrey/clients_ip_whitelist.tt2',
-    template_discrimination_regexp => 'sqlgrey/discrimination.regexp.tt2',
-    template_dyn_fqdn_regexp => 'sqlgrey/dyn_fqdn.regexp.tt2',
-    template_sqlgrey_smtp_server_regexp => 'sqlgrey/smtp_server.regexp.tt2',
     template_sqlgrey_conf => 'sqlgrey/sqlgrey.conf.tt2',
     template_sqlgrey_default => 'sqlgrey/default_sqlgrey.tt2',
 

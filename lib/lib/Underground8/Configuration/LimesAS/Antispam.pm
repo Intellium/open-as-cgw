@@ -778,14 +778,24 @@ sub greylisting_authtime {
 	return $self->sqlgrey->greylisting_authtime(shift);
 }
 
-sub greylisting_message {
-	my $self = instance(shift);
-	return $self->sqlgrey->greylisting_message(shift);
-}
-
 sub greylisting_triplettime {
 	my $self = instance(shift);
 	return $self->sqlgrey->greylisting_triplettime(shift);
+}
+
+sub greylisting_connectage {
+        my $self = instance(shift);
+        return $self->sqlgrey->greylisting_connectage(shift);
+}
+
+sub greylisting_domainlevel {
+        my $self = instance(shift);
+        return $self->sqlgrey->greylisting_domainlevel(shift);
+}
+
+sub greylisting_message {
+        my $self = instance(shift);
+        return $self->sqlgrey->greylisting_message(shift);
 }
 
 ### Obsolete white/blacklists

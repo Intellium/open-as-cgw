@@ -365,56 +365,36 @@ sub write_sqlgrey_config ($$$$$)
         $expire) = getpwnam($self->{'_system_username'});    
 
     my $template = Template->new({
-                                INCLUDE_PATH => $g->{'cfg_template_dir'},
+                    INCLUDE_PATH => $g->{'cfg_template_dir'},
                    });   
     my $options = {
-                    uid => $uid,
-                    gid => $gid,
-                    mysql_host => $mysql_host,
-                    mysql_database => $mysql_database,
-                    mysql_username => $mysql_username,
-                    mysql_password => $mysql_password,
-                    ip_whitelisting => $config->{'ip_whitelisting'},
-                    ip_blacklisting => $config->{'ip_blacklisting'},
-                    addr_whitelisting => $config->{'addr_whitelisting'},
-                    addr_blacklisting => $config->{'addr_blacklisting'},
-                    greylisting => $config->{'greylisting'},
-                    selective_greylisting => $config->{'selective_greylisting'},
-                    greylisting_authtime => $config->{'greylisting_authtime'},
-                    greylisting_triplettime => $config->{'greylisting_triplettime'},
-                    greylisting_message => $config->{'greylisting_message'},
+                  uid => $uid,
+                  gid => $gid,
+                  mysql_host => $mysql_host,
+                  mysql_database => $mysql_database,
+                  mysql_username => $mysql_username,
+                  mysql_password => $mysql_password,
+                  ip_whitelisting => $config->{'ip_whitelisting'},
+                  ip_blacklisting => $config->{'ip_blacklisting'},
+                  addr_whitelisting => $config->{'addr_whitelisting'},
+                  addr_blacklisting => $config->{'addr_blacklisting'},
+                  greylisting => $config->{'greylisting'},
+                  selective_greylisting => $config->{'selective_greylisting'},
+                  greylisting_authtime => $config->{'greylisting_authtime'},
+                  greylisting_triplettime => $config->{'greylisting_triplettime'},
+		  greylisting_connectage => $config->{'greylisting_connectage'},
+		  greylisting_domainlevel => $config->{'greylisting_domainlevel'},
+		  greylisting_message => $config->{'greylisting_message'},
     };                                                                                                                       
-    ## up from now there are two sqlgrey demons runing (a trick to implement selective greylisting) , one for greylisting and the other instance for White and Black-listing  
-    #Thus we need to write two config files.
-    #
-    #We write also the init script and the default configuration            
-    
                                                                      
     my $config_content;                                                                                                         
-    my $config_content2;
-    my $init_content;
     my $default_content;
+
     $template->process($g->{'template_sqlgrey_conf'},$options,\$config_content)                                     
         or throw Underground8::Exception($template->error);                                                            
-     
-    open (POLICYD_LIMES,'>',$g->{'file_sqlgrey_conf'})
+    open (SQLGREY,'>',$g->{'file_sqlgrey_conf'})
         or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_conf'});
-    print POLICYD_LIMES $config_content;
-
-    $template->process($g->{'template_sqlgrey2_conf'},$options,\$config_content2)                                     
-        or throw Underground8::Exception($template->error);                                                            
-
-    open (POLICYD2_LIMES,'>',$g->{'file_sqlgrey2_conf'})
-        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey2_conf'});                     
-    print POLICYD2_LIMES $config_content2;
-
-    $template->process($g->{'template_sqlgrey_init'},$options,\$init_content)                                     
-        or throw Underground8::Exception($template->error);                                                            
-
-    open (INIT_POLICYD,'>',$g->{'file_sqlgrey_init'})
-        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_init'});                     
-
-    print INIT_POLICYD $init_content;
+    print SQLGREY $config_content;
 
     $template->process($g->{'template_sqlgrey_default'},$options,\$default_content)                                     
         or throw Underground8::Exception($template->error);                                                            
@@ -422,10 +402,7 @@ sub write_sqlgrey_config ($$$$$)
         or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_default'});                     
     print DEFAULT $default_content;
 
-    
-    close (POLICYD_LIMES);
-    close (POLICYD2_LIMES);
-    close (INIT_POLICYD);
+    close (SQLGREY);
     close (DEFAULT);
 }
 

@@ -35,10 +35,12 @@ sub new ($$)
     $self->{'_slave'} = new Underground8::Service::SQLGrey::SLAVE();
     $self->{'_config'} = { greylisting => 1,
                            selective_greylisting => 0,
-							greylisting_authtime => 30,
-							greylisting_triplettime => 4,
-							greylisting_message => 'You have been greylisted.',
-							 };
+			   greylisting_authtime => 30,
+			   greylisting_triplettime => 5,
+			   greylisting_connectage => 24,
+			   greylisting_domainlevel => 2,
+			   greylisting_message => 'You have been greylisted.',
+			 };
     $self->{'_ip_blacklist'} = {};
     $self->{'_ip_whitelist'} = {};
     $self->{'_addr_blacklist'} = {};
@@ -191,18 +193,6 @@ sub greylisting_triplettime ($;$) {
 	}
 }
 
-sub greylisting_message ($;$) {
-	my $self = instance(shift);
-	my $val = shift;
-
-	if($val) {
-		$self->config->{'greylisting_message'} = $val;
-		$self->change;
-	} else {
-		return $self->config->{'greylisting_message'};
-	}
-}
-
 sub greylisting_authtime ($;$) {
 	my $self = instance(shift);
 	my $val = shift;
@@ -215,6 +205,41 @@ sub greylisting_authtime ($;$) {
 	}
 }
 
+sub greylisting_connectage ($;$) {
+        my $self = instance(shift);
+        my $val = shift;
+
+        if($val) {
+                $self->config->{'greylisting_connectage'} = $val;
+                $self->change;
+        } else {
+                return $self->config->{'greylisting_connectage'};
+        }
+}
+
+sub greylisting_domainlevel ($;$) {
+        my $self = instance(shift);
+        my $val = shift;
+
+        if($val) {
+                $self->config->{'greylisting_domainlevel'} = $val;
+                $self->change;
+        } else {
+                return $self->config->{'greylisting_domainlevel'};
+        }
+}
+
+sub greylisting_message ($;$) {
+        my $self = instance(shift);
+        my $val = shift;
+
+        if($val) {
+                $self->config->{'greylisting_message'} = $val;
+                $self->change;
+        } else {
+                return $self->config->{'greylisting_message'};
+        }
+}
 
 ###                 ###
 ### Blacklisting IP ###

@@ -634,11 +634,12 @@ sub process {
 		} 
 	}
 
-	### POLICYD: Recognize newly arrived Greylisted mails, Greylisting-Updates and Greylisting-Abuse
+	### SQLGREY: Recognize newly arrived Greylisted mails, Greylisting-Updates and Greylisting-Abuse
 	elsif ($service =~ qr/sqlgrey/) {
 		my ($sqlgrey_msg, $type, $client_ip, $from, $to, $module);
 
 		# rcpt=13, greylist=update, host=10.2.200.10 (unknown), from=abc@orf.at, to=lol@domain.tld, size=0
+		# sqlgrey: grey: new: 193.99.144(193.99.144.71), emailcheck-robot@ct.de -> hello@spam-me.org
 		if ($message =~ qr/rcpt=\d+,\s(.+)/) {
 			$sqlgrey_msg = $1;
 			debug ("sqlgrey msg: $sqlgrey_msg",4);

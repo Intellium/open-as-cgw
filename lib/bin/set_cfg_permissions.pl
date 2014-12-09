@@ -43,11 +43,6 @@ my @files = qw(
 /etc/kav/kav_updater.conf
 /etc/sambucus/main.cfg
 /etc/sambucus/roles.cfg
-/etc/sqlgrey/clients_fqdn_whitelist
-/etc/sqlgrey/clients_ip_whitelist
-/etc/sqlgrey/discrimination.regexp
-/etc/sqlgrey/dyn_fqdn.regexp
-/etc/sqlgrey/smtp_server.regexp
 /etc/sqlgrey/sqlgrey.conf
 /etc/init.d/sqlgrey
 /etc/postfix/main.cf

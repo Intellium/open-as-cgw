@@ -64,7 +64,7 @@ milter_default_action = accept
 [%- END -%]
 
 [% IF config.selective_greylisting == 1 || config.greylisting == 1 -%]
-# Selective greylisting
+# Greylisting senders 
 # powered by SQLGrey daemon 
 smtpd_restriction_classes = rc_greylisting
 rc_greylisting = reject_unauth_destination, check_policy_service inet:127.0.0.1:2501
@@ -97,12 +97,12 @@ smtpd_recipient_restrictions =
  permit_mynetworks,
  permit_sasl_authenticated,
  reject_unauth_destination,
-#[% 'reject_invalid_hostname,' IF options.sender_helo_bad_syntax -%]
-#[% 'reject_non_fqdn_hostname,' IF options.sender_helo_fqdn_required -%]
+ [% 'reject_invalid_hostname,' IF options.sender_helo_bad_syntax -%]
+ [% 'reject_non_fqdn_hostname,' IF options.sender_helo_fqdn_required -%]
  [% 'reject_non_fqdn_sender,' IF options.sender_fqdn_required -%]
  [% 'reject_unknown_sender_domain,' IF options.sender_domain_verify -%] 
-#[% 'reject_non_fqdn_recipient,' IF options.recipient_fqdn_required -%]
-#[% 'reject_unknown_recipient_domain,' IF options.recipient_domain_verify -%]
+ [% 'reject_non_fqdn_recipient,' IF options.recipient_fqdn_required -%]
+ [% 'reject_unknown_recipient_domain,' IF options.recipient_domain_verify -%]
  permit
 
 # Data restrictions

@@ -105,6 +105,8 @@ sub set_greylisting_params : Local {
 		constraint_methods => {
 			triplettime => qr/^[1-9]?\d$/,
 			authtime => qr/^[1-9]?[1-9]?\d$/,
+			connectage => qr/^[1-9]?[1-9]?\d$/,
+			domainlevel => qr/^[1-9]?\d$/, 
 			message => qr/^.{5,80}$/,
 		}
 	};
@@ -118,12 +120,13 @@ sub set_greylisting_params : Local {
 
 			print STDERR " *** trying to set triplettime:$triplettime authtime:$authtime message:$message\n";
 			$appliance->antispam->greylisting_authtime($authtime);
-			$appliance->antispam->greylisting_message($message);
 			$appliance->antispam->greylisting_triplettime($triplettime);
-
+                        $appliance->antispam->greylisting_connectage($connectage);
+                        $appliance->antispam->greylisting_domainlevel($domainlevel);
+			$appliance->antispam->greylisting_message($message);
 			$appliance->antispam->commit;
 
-			aslog "info", "Set greylisting params (triplettime = $triplettime, authtime = $authtime, msg = $message)";
+			aslog "info", "Set greylisting params (triplettime = $triplettime, authtime = $authtime, connectage = $connectage, domainlevel = $domainlevel, msg = $message)";
 			$c->stash->{'box_status'}->{'success'} = 'success';
 		} catch Underground8::Exception with {
 			my $E = shift;

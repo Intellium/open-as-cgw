@@ -656,7 +656,6 @@ envelope_scanning_bwlist_manager_whitelist_action                        => 'Act
 envelope_scanning_bwlist_manager_whitelist_noentries                     => 'There are currently no whitelisted addresses or domains defined.',
 envelope_scanning_bwlist_manager_whitelist_del_success                   => 'Selected entry has been successfully removed.',
 envelope_scanning_bwlist_manager_whitelist_del_error                     => 'Unable to delete selected entry.',
-
 envelope_scanning_bwlist_manager_disabled                                => 'The black-/whitelisting engine is currently disabled.',
 
 
@@ -669,9 +668,11 @@ envelope_scanning_envelope_processing_greylisting_greylisting_enable_success    
 envelope_scanning_envelope_processing_greylisting_greylisting_disable_success       => 'Greylisting has been successfully disabled.',
 envelope_scanning_envelope_processing_greylisting_botnetblocker_enable_success      => 'Botnet Blocker has been successfully enabled.',
 envelope_scanning_envelope_processing_greylisting_botnetblocker_disable_success     => 'Botnet Blocker has been successfully disabled.',
-envelope_scanning_envelope_processing_greylisting_message   => 'SMTP response text upon greylisting',
+envelope_scanning_envelope_processing_greylisting_message   => 'Greylisting reject text',
 envelope_scanning_envelope_processing_greylisting_authtime   => 'Authentication time <em>(days)</em>',
-envelope_scanning_envelope_processing_greylisting_triplettime   => 'Triplet time <em>(min)</em>',
+envelope_scanning_envelope_processing_greylisting_domainlevel   => 'Domain-level whitelist required <em>(mails)</em>',
+envelope_scanning_envelope_processing_greylisting_triplettime   => 'Greylisting delay time <em>(min)</em>',
+envelope_scanning_envelope_processing_greylisting_connectage   => 'Max reconnect time <em>(hours)</em>',
 envelope_scanning_envelope_processing_greylisting_success => 'New greylisting parameters have been successfully applied.',
 
 

@@ -56,11 +56,11 @@ loglevel = 2
 ## Log identification
 # by default this is the process name. If you define the following variable
 # SQLgrey will use whatever you set it to
-# log_ident =
+log_ident = [% uid %]
 
 ## username and groupname the daemon runs as
-user = sqlgrey
-group = sqlgrey
+user = [% uid %]
+group = [% gid %]
 
 ## Socket
 # On which socket do SQLgrey wait for queries
@@ -78,11 +78,11 @@ pidfile = /var/run/sqlgrey.pid
 ## Greylisting delays
 # If you want to be really strict (RFC-wise) use these
 # This is *not* recommended, you'll have false positives
-reconnect_delay = 15    # don't allow a reconnection before 15 minutes
-max_connect_age = 2     # don't allow a reconnection after 2 hours
+# reconnect_delay = 15    # don't allow a reconnection before 15 minutes
+# max_connect_age = 2     # don't allow a reconnection after 2 hours
 # default: (based on real-life experience)
-reconnect_delay = 5
-max_connect_age = 24
+reconnect_delay = [%- greylisting_triplettime OR 5 -%]
+max_connect_age = [%- greylisting_connectage OR 24 -%]
 
 ## Throttling too many new entries from new host
 # Setting this optional parameter will refuse an excessive number of
@@ -104,8 +104,8 @@ max_connect_age = 24
 
 ## Auto whitelists settings
 # default is tailored for small sites
-# awl_age = 60
-# group_domain_level = 2
+awl_age = [%- greylisting_authtime OR 30 -%]
+group_domain_level = [%- greylisting_authtime OR 2 -%]
 
 # For bigger sites you may want
 # a smaller awl_age and a bigger group_domain_level
@@ -117,12 +117,12 @@ max_connect_age = 24
 # instead of Pg below use "mysql" for MySQL, "SQLite" for SQLite
 # any DBD driver is allowed, but only the previous 3 have been tested
 db_type = mysql
-db_name = sqlgrey
-db_host = localhost
-db_port = default
-db_user = sqlgrey-user
-db_pass = loltruck2000 
-#
+db_port = 3306
+db_host = [% mysql_host %]
+db_name = [% mysql_database %]
+db_user = [% mysql_username %]
+db_pass = [% mysql_password %]
+
 # For custom options (e.g. SSL), the whole dsn string may be specified
 # (overrides db_type, db_name, db_host, db_port)
 # db_dsn = DBI:SQLite:dbname=/path/to/database.db
@@ -157,7 +157,7 @@ db_pass = loltruck2000
 
 ## X-Greylist header added?
 # This adds delay, whitelist and autowhitelist information in the headers
-# prepend = 1
+prepend = 1
 
 ## Greylisting method:
 # - full   : greylist by IP address
@@ -171,24 +171,24 @@ db_pass = loltruck2000
 #       and all the hosts from that subnet are greylisted with the same
 #       rule. For non-EUI-64 addresses the full address is processed.
 # Default is smart
-greymethod = smart
+greymethod = full
 
 ## Optin/Optout (see README.OPTINOUT for details)
 # - none   : everyone is greylisted (default)
 # - optin  : one must optin to have its (incoming) messages being greylisted
 # - optout : one must optout to not have its messages being greylisted
-# optmethod = none
+optmethod = none
 
 ## Discriminating Greylisting (see README.DISCRIMINATION)
 # - off : normal greylisting
 # - on  : Only apply greylisting to senders that do not pass the regexp test.
 #
-# discrimination = off
+discrimination = off
 
 # Display the number of the regular expression causing the greylisting
 # at the end of the reject message.
 # Values: on/off
-# discrimination_add_rulenr = off
+discrimination_add_rulenr = off
 
 ## SQLgrey return value.
 # SQLgrey can tell Postfix to:
@@ -206,7 +206,7 @@ greymethod = smart
 # By default we use delay on first attempt
 # reject_first_attempt = delay
 # Default for early reconnection is the value affected to reject_first_attempt
-# reject_early_reconnect = delay
+reject_early_reconnect = delay
 
 # Use specific reject code - Only used if reject_first_attempt/reject_early_reconnect = immed
 # (Some "odd" mailservers actually bounce on 450 but not 451)
@@ -221,4 +221,4 @@ greymethod = smart
 # who gets urgent notifications (DB is down for example)
 # empty: don't send mail notifications
 # default:
-# admin_mail = postmaster
+admin_mail = postmaster

@@ -26,8 +26,10 @@
 
 		<fieldset>
 		[% INCLUDE 'site/elements/input' name = 'message', value = antispam.greylisting_message() OR "You have been greylisted. Come back in 240 seconds." %]
-		[% INCLUDE 'site/elements/input' name = 'authtime', class='number', value = antispam.greylisting_authtime() OR "30" %]
-		[% INCLUDE 'site/elements/input' name = 'triplettime', class='number', value = antispam.greylisting_triplettime() OR "4" %]
+		[% INCLUDE 'site/elements/input' name = 'authtime', class='number', value = antispam.greylisting_authtime() OR "60" %]
+                [% INCLUDE 'site/elements/input' name = 'domainlevel', class='number', value = antispam.greylisting_domainlevel() OR "2" %]
+		[% INCLUDE 'site/elements/input' name = 'triplettime', class='number', value = antispam.greylisting_triplettime() OR "5" %]
+                [% INCLUDE 'site/elements/input' name = 'connectage', class='number', value = antispam.greylisting_connectage() OR "24" %]
 		[% INCLUDE 'site/elements/input' type = 'button' %]
 		</fieldset>
 	</form>

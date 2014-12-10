@@ -23,9 +23,11 @@ use warnings;
 use Underground8::Utils;
 use Underground8::Exception;                                                                                                 
 use Underground8::Exception::FileOpen;                                                                                       
-use Error;                                                                                                                   
+use Error;
+use Carp;
 use Template;
 use DBI;
+use Data::Dumper;
 
 sub new ($$)
 {
@@ -358,7 +360,7 @@ sub write_sqlgrey_config ($$$$$)
     my $mysql_username = shift;
     my $mysql_password = shift;
     my $config = shift;
-
+    print STDERR "\n\nprinting config...\n\n";
     my ($name, $pass, $uid, 
         $gid, $quota, $comment, 
         $gcos, $dir, $shell, 
@@ -386,23 +388,24 @@ sub write_sqlgrey_config ($$$$$)
 		  greylisting_domainlevel => $config->{'greylisting_domainlevel'},
 		  greylisting_message => $config->{'greylisting_message'},
     };                                                                                                                       
-                                                                     
+
     my $config_content;                                                                                                         
     my $default_content;
 
-    $template->process($g->{'template_sqlgrey_conf'},$options,\$config_content)                                     
-        or throw Underground8::Exception($template->error);                                                            
+    $template->process($g->{'template_sqlgrey_conf'},$options,\$config_content)
+        or throw Underground8::Exception($template->error);
     open (SQLGREY,'>',$g->{'file_sqlgrey_conf'})
-        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_conf'});
+        or croak Underground8::Exception::FileOpen($g->{'file_sqlgrey_conf'});
     print SQLGREY $config_content;
+    close (SQLGREY);
 
-    $template->process($g->{'template_sqlgrey_default'},$options,\$default_content)                                     
-        or throw Underground8::Exception($template->error);                                                            
+    $template->process($g->{'template_sqlgrey_default'},$options,\$default_content)
+        or throw Underground8::Exception($template->error);
     open (DEFAULT,'>',$g->{'file_sqlgrey_default'})
-        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_default'});                     
+        or throw Underground8::Exception::FileOpen($g->{'file_sqlgrey_default'});
+
     print DEFAULT $default_content;
 
-    close (SQLGREY);
     close (DEFAULT);
 }
 

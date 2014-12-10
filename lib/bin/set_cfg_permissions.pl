@@ -44,7 +44,7 @@ my @files = qw(
 /etc/sambucus/main.cfg
 /etc/sambucus/roles.cfg
 /etc/sqlgrey/sqlgrey.conf
-/etc/init.d/sqlgrey
+/etc/default/sqlgrey
 /etc/postfix/main.cf
 /etc/postfix/filter-dynip.pcre
 /etc/postfix/amavis_bypass_filter

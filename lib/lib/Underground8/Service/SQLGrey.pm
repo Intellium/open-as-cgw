@@ -698,7 +698,7 @@ sub whitelist_addr_exists ($$)
 sub commit ($)
 {
     my $self = instance(shift, __PACKAGE__);
-    
+    print STDERR "We are in sqlgrey commit\n";
     $self->init_slave();
     $self->slave->write_config($self->mysql_host,
                                $self->mysql_database,
@@ -706,10 +706,13 @@ sub commit ($)
                                $self->mysql_password,
                                $self->config);
     $self->slave->service_restart();
-    $self->commit_ip_blacklist() if ($self->ip_blacklist_has_changes());
-    $self->commit_ip_whitelist($self->config) if ($self->ip_whitelist_has_changes());
-    $self->commit_addr_blacklist() if ($self->addr_blacklist_has_changes());
-    $self->commit_addr_whitelist($self->config) if ($self->addr_whitelist_has_changes());
+
+# TODO REMOVE DATABASE STUFF RELATED TO WHITELIST OR BLACKLIST
+# Black/Whitelists will be done in postfwd, not here anymore!
+#    $self->commit_ip_blacklist() if ($self->ip_blacklist_has_changes());
+#    $self->commit_ip_whitelist($self->config) if ($self->ip_whitelist_has_changes());
+#    $self->commit_addr_blacklist() if ($self->addr_blacklist_has_changes());
+#    $self->commit_addr_whitelist($self->config) if ($self->addr_whitelist_has_changes());
 
     $self->unchange;
 }

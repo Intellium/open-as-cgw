@@ -1294,7 +1294,7 @@ sub commit ($) {
                         print STDERR "Commited service spamassassin\n";
                         
                         # SQL Grey Commit is BROKEN, please investigate
-			#$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
+			$self->sqlgrey->commit() if ($sqlgrey_changed && !$ldap_override);
                         print STDERR "Commited service sqlgrey\n";
 			$self->amavis->commit() if (($self->amavis->is_changed || $self->spamassassin->is_changed) && (!$ldap_override));
                         print STDERR "Commited service amavis\n";

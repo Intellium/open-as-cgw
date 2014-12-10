@@ -17,6 +17,7 @@
 package Underground8::Exception;
 use base qw(Error);
 use overload ('""' => 'stringify');
+use Carp;
 
 sub new
 {

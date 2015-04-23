@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="Open AS" />
 	<meta name="copyright" content="Open AS" />
+	<meta name="robots" content="noindex,nofollow">
         <meta http-equiv="cache-control" content="no-cache"/>
         <meta http-equiv="content-language" content="[% Catalyst.language %]" />
         <meta http-equiv="expires" content="0" />

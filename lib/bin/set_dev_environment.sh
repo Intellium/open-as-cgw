@@ -16,6 +16,7 @@ sed -i '/LIMESGUI/d' ~/.bashrc
 # append new vars to env
 echo '+ Appending variables to your ~/.bashrc...'
 echo '# Open AS developer environment' >> ~/.bashrc
+echo '' >> ~/.bashrc
 echo 'export LIMESDEV=1' >> ~/.bashrc
 echo 'export LIMESLIB="'$(dirname $(pwd))'/lib"' >> ~/.bashrc
 echo 'export LIMESGUI="'$(dirname $(pwd))'/gui/lib"' >> ~/.bashrc

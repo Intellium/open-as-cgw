@@ -54,8 +54,9 @@ case "$1" in
           exit 1
         }
 	# unattended package installation
-	debconf-set-selections <<< 'mysql-server mysql-server/root_password password' # do not prompt for mysql pass (leave blank)
-	debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password' # we will change this in the postinst
+	export DEBIAN_FRONTEND="noninteractive"
+	debconf-set-selections <<< "mysql-server mysql-server/root_password password" # do not prompt for mysql pass (leave blank)
+	debconf-set-selections <<< "mysql-server mysql-server/root_password_again password" # we will change this in the postinst
 	debconf-set-selections <<< "postfix postfix/mailname string $hostname" # postfix default hostname
 	debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" # postfix configuration type
 

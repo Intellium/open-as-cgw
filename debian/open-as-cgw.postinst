@@ -481,6 +481,7 @@ prepare_system(){
         mkdir -p /var/log/open-as-cgw/upgrades
 
 	# set file permissions
+	chown mysql:limes /var/log/mysql
 	chown limes:limes /usr/bin/mail_logacc.pl
 	chown limes:limes /usr/bin/logacc_rotate.pl
 	chown limes:limes /usr/bin/daily_spam_report.pl

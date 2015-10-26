@@ -614,10 +614,18 @@ prepare_networking(){
 	echo "OK"
 }
 
+success_notice(){
+	printf "--------------------------------------------------------\n";
+	printf "Open AS Communication Gateway has been installed!\n";
+        printf "--------------------------------------------------------\n";
+	printf "To configure Open AS, please point your web browser to:\n";
+	printf "https://$HOSTNAME/\n";
+        printf "--------------------------------------------------------\n";
+}
+
 case "$1" in
     configure)
 	chown -R www-data:www-data /var/www/LimesGUI
-
 	prepare_system_accounts;	
 	prepare_crypto;
 	prepare_system;
@@ -634,6 +642,7 @@ case "$1" in
 	prepare_quarantine;
 	prepare_smtpcrypt;
 	prepare_networking;
+	success_notice;
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

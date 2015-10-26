@@ -195,4 +195,4 @@ Conflicts: apache2,
         openntpd,
         rsyslog,
         ubuntu-minimal
-Description: open-as-cgw
+Description: A powerful and feature-rich email security gateway 

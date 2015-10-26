@@ -2,7 +2,7 @@
 <?meta name="GENERATOR" content="XML::Smart/1.6.9 Perl/5.008008 [linux]" ?>
 <root>
   <postfix _ip_range_whitelist="">
-    <_config broken_sasl_auth_clients="yes" change_range="0" ip_range_whitelist="" mydestination="ascgw.underground8.com, localhost.localdomain, localhost" myhostname="ascgw.underground8.com" smtpd_banner="AS CGW ANTISPAM PROXY" smtpd_client_connection_rate_limit="200" smtpd_client_restrictions="check_client_access hash:/etc/postfix/amavis_bypass" smtpd_helo_required="yes" smtpd_sasl_auth_enable="no" smtpd_sasl_authenticated_header="yes" smtpd_sasl_path="smtpd" smtpd_sasl_security_options="noanonymous" smtpd_timeout="60" strict_rfc821_envelopes="no">
+    <_config broken_sasl_auth_clients="yes" change_range="0" ip_range_whitelist="" mydestination="antispam.localdomain, localhost.localdomain, localhost" myhostname="antispam.localdomain" smtpd_banner="OPEN AS ANTISPAM PROXY" smtpd_client_connection_rate_limit="200" smtpd_client_restrictions="check_client_access hash:/etc/postfix/amavis_bypass" smtpd_helo_required="yes" smtpd_sasl_auth_enable="no" smtpd_sasl_authenticated_header="yes" smtpd_sasl_path="smtpd" smtpd_sasl_security_options="noanonymous" smtpd_timeout="60" strict_rfc821_envelopes="no">
       <relay_domains/>
       <smtpd_recipient_restrictions>check_client_access hash:/etc/postfix/amavis_bypass_internal</smtpd_recipient_restrictions>
       <smtpd_recipient_restrictions>permit_sasl_authenticated</smtpd_recipient_restrictions>

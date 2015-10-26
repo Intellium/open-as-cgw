@@ -82,7 +82,7 @@ prepare_postfix(){
 
 	# Set default mailname
 	if [ ! -f "/etc/mailname" ]; then
-		echo "cgw.openas.org" > /etc/mailname
+		echo "antispam.localdomain" > /etc/mailname
 	fi
 
 	# BATV Filter / Backscatter protection

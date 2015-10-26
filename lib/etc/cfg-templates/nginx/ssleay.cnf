@@ -27,12 +27,12 @@ organizationName_default	= Open AS
 
 organizationalUnitName          = Organizational Unit Name (eg, section)
 organizationalUnitName_max      = 64
-organizationalUnitName_default	= CGW
+organizationalUnitName_default	= Anti Spam 
 
 commonName                      = server name (eg. ssl.domain.tld; required!!!)
 commonName_max                  = 64
-commonName_default		= cgw.openas.org
+commonName_default		= antispam.localdomain
 
 emailAddress                    = Email Address
 emailAddress_max                = 40
-emailAddress_default		= team@openas.org 
+emailAddress_default		= root@antispam.local 

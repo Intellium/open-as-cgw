@@ -61,7 +61,7 @@ create_swap_unit() {
 echo "Virtual swap controller started at `date`"
 
 # Exit if we're virtual
-if [ ! -e "/etc/limes/conf/vconfig" ]; then
+if [ ! -e "/etc/open-as-cgw/conf/vconfig" ]; then
 	echo "This appliance doesn't seem to run in virtual environment, exiting."
 	exit 0;
 fi

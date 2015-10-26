@@ -42,7 +42,7 @@ log {
 
 
 # LIMES REAL TIME LOG
-destination rt_limes { pipe("/var/limes/rt_log" flush_lines(1) owner(root) group(limes) perm(0664)); };
+destination rt_limes { pipe("/var/open-as-cgw/rt_log" flush_lines(1) owner(root) group(limes) perm(0664)); };
 
 
 # LIMES MAILLOG MANGLER
@@ -53,7 +53,7 @@ template t_mangled_mail {
 };
 
 destination d_mangled_mail {
-        file("/var/log/limes/mangled-mail.log" owner(root) group(limes) perm(0660) template(t_mangled_mail));
+        file("/var/log/open-as-cgw/mangled-mail.log" owner(root) group(limes) perm(0660) template(t_mangled_mail));
 };
 
 filter f_postfix {

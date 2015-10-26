@@ -643,7 +643,7 @@ sub new_sec_version_available
     my $self = instance(shift);
     my $current = get_current_installed_full_version();
     my $newest = 0;
-    open(AVAIL_SECVERSION, "</etc/limes/avail_secversion");
+    open(AVAIL_SECVERSION, "</etc/open-as-cgw/avail_secversion");
     while(<AVAIL_SECVERSION>)
     {
         $newest = $_;

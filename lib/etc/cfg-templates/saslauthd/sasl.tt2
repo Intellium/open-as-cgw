@@ -15,5 +15,5 @@ auth_with_plain 1
 
 check_certificate 0
 certificat_issuer *
-certificates_folder /etc/limes/xml/cacert
+certificates_folder /etc/open-as-cgw/xml/cacert
 

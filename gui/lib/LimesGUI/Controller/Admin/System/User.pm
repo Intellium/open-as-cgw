@@ -156,7 +156,7 @@ sub newpass_secure {
 		my ($dfv, $newpassword) = (shift, shift);
 		$dfv->name_this('newpass_secure');
 
-		if((length($newpassword) >= 8) && ($newpassword =~ /.*[\Q@%-_.:,;#+*\E].*/) && ($newpassword =~ /.*[0-9].*/)) {
+		if((length($newpassword) >= 8) && ($newpassword =~ /.*[\Q!@%-_.:,;#+*\E].*/) && ($newpassword =~ /.*[0-9].*/)) {
 			return 1
 		} else {
 			return 0;

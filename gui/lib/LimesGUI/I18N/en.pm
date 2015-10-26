@@ -100,9 +100,9 @@ amchart_last_year => 'last year',
 
 # TEMPLATE TEXT FOR AUTOMIZATION
 ## STATUS BAR HEADINGS
-heading_error_status => 'Error :(',
+heading_error_status => 'Error',
 heading_info_status => 'Info',
-heading_success_status => 'Success :)',
+heading_success_status => 'Success',
 heading_warning_status => 'Attention!',
 
 
@@ -283,7 +283,7 @@ dashboard_dashboard_notifications_update_running => 'The appliance is currently 
 dashboard_dashboard_notifications_default_text_heading => 'Everything\'s fine',
 dashboard_dashboard_notifications_default_text => 'Your appliance is correctly up and running.',
 
-dashboard_dashboard_support_text => 'If you have any questions or need help with something, don\'t hesitate to visit the project web-page. If you purchased a commercial license or you intend to do it, you\'re welcome <a href="http://www.openas.org">contact the Open AS support team!</a>',
+dashboard_dashboard_support_text => 'If you have any questions or need help with something, please visit the project web-page at <a href="https://openas.org">https://openas.org</a>',
 
 
 ### SYSTEM :: GENERAL SETTINGS
@@ -463,7 +463,7 @@ system_backup_manager_upload_upload => 'Upload backup',
 
 
 ### SYSTEM :: USER
-system_user_abstract => 'Change the password for the current user. Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list:  @ % - _ . : , ; # + *',
+system_user_abstract => 'Change the password for the current user. Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: ! @ % - _ . : , ; # + *',
 system_user_pw_gui_heading => 'Set the password currently logged-in user',
 system_user_pw_emergency_heading => 'Set password for Emergency Commands',
 
@@ -474,7 +474,7 @@ system_user_pw_gui_pw_new_verify => 'Re-type new password',
 system_user_pw_gui_success => 'Password has been successfully changed',
 system_user_pw_gui_error_password_invalid => 'The old password is invalid.',
 system_user_pw_gui_error_newpass_nomatch => 'The passwords don\'t match.',
-system_user_pw_gui_error_newpass_insecure => 'Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: @%-_.:,;#+*',
+system_user_pw_gui_error_newpass_insecure => 'Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: !@%-_.:,;#+*',
 
 system_user_pw_emergency_pw_admin => 'Administration password',
 system_user_pw_emergency_pw_new_ssh => 'New Emergency password',
@@ -1289,7 +1289,7 @@ help_system_security_ssl => 'During the configuration of your SMTP servers, you 
 help_system_update_settings => 'You can edit the update automation settings here.</p><ul><li><em>Automatically get the latest Update Information</em> does not install or download anything. The newest available informations on updates (security and system updates) are being downloaded, nothing is being installed</li><li><em>Automatically download security updates</em> as soon as they are available. If the next options are disabled you can install the updates in the box below manually.</li><li><em>Automatically install security updates</em> is highly recommended. E-Mail delivery is only suspended for about 30 to 60 seconds. The updates are designed to be installable even during office hours.</li><li>If you want your appliance stay on the newest feature version you may want to activate <em>Automatically install the latest system version</em>. If an update requires a restart (major feature updates) or if the service interruption could exceed 60 seconds you will still to have to install it manually.</li></ul>',
 help_system_update_versions => 'The currently installed system version and the available security updates (for this particular system version) are displayed here, as well as a timestamp of the last successful check for updates. If this timestamp is older than two hours and you have automatic checking enabled please check your firewall settings since your Open AS Communication Gateway&trade; seems to be unable to connect to the update server.<br />Searching for updates manually is possible at any time.',
 help_system_update_upgrade_info => 'If a security version is available you can start the installation here. If you have <em>automatically download security updates</em> enabled the installation will start almost immediately.',
-help_system_update_upgrade_table => 'If new system versions are available you can install them here. They will be downloaded and installed. Information on the updates can be found on our homepage <a href="http://www.openas.org">openas.org - Updates</a>',
+help_system_update_upgrade_table => 'If new system versions are available you can install them here. They will be downloaded and installed. Information on the updates can be found on our homepage <a href="https://openas.org">openas.org - Updates</a>',
 
 ### SYSTEM :: BACKUP MANAGER
 help_system_backup_manager_list => 'To generate a backup of your current settings (that also can be stored on your local hard drive) simply click the"Create" button. An encrypted backup-archive will be created, and added to your list of backups stored directly on the appliance. Once a backup has been created, you may download, install and delete it through the list of backups in the same dialog.',

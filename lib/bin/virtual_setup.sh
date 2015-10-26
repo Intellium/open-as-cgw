@@ -27,9 +27,9 @@
 #   5. If VCONFIG exists and is valid (non-'AX') <F2>
 
 
-PATH_VCONFIG="/etc/limes/conf/vconfig"
-PATH_VKEY="/etc/limes/conf/vkey"
-PATH_SERIAL="/etc/limes/sn"
+PATH_VCONFIG="/etc/open-as-cgw/conf/vconfig"
+PATH_VKEY="/etc/open-as-cgw/conf/vkey"
+PATH_SERIAL="/etc/open-as-cgw/sn"
 NET_IF="eth0"
 RAND_FILE="/tmp/`uuidgen`"
 

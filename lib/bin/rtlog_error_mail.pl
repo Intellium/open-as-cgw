@@ -30,9 +30,9 @@ use File::Slurp;
 use Underground8::Appliance::LimesAS;
 
 
-my $dumpfile = "/var/log/limes/rtlogd.dump";
-my $snfile = "/etc/limes/sn";
-my $versionsfile = "/etc/limes/versions";
+my $dumpfile = "/var/log/open-as-cgw/rtlogd.dump";
+my $snfile = "/etc/open-as-cgw/sn";
+my $versionsfile = "/etc/open-as-cgw/versions";
 my $address = "limesas\@underground8.com";
 
 my $appliance = new Underground8::Appliance::LimesAS;

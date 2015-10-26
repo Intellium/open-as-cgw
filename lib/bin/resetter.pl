@@ -221,7 +221,7 @@ sub purge_livelog
     system($cmd);
 
     # create database
-    $cmd = $mysql_cmd . "< /etc/limes/db_struct/rt_log.sql";
+    $cmd = $mysql_cmd . "< /etc/open-as-cgw/db_struct/rt_log.sql";
         
     if ($debug)
     {
@@ -232,7 +232,7 @@ sub purge_livelog
 
 
     # run index script
-    system("/etc/limes/db_struct/rtlog_checkdb.pl > /dev/null");
+    system("/etc/open-as-cgw/db_struct/rtlog_checkdb.pl > /dev/null");
 }
 
 # drop all info in amavis database
@@ -254,7 +254,7 @@ sub purge_amavis
     system($cmd);
 
     # create database
-    $cmd = $mysql_cmd_root . "< /etc/limes/db_struct/amavis.sql";
+    $cmd = $mysql_cmd_root . "< /etc/open-as-cgw/db_struct/amavis.sql";
         
     if ($debug)
     {
@@ -284,7 +284,7 @@ sub purge_smtpauth
 sub purge_system_logfiles
 {
     # purge current maillog file
-    system("/bin/echo \"\" > /var/log/limes/mangled-mail.log");
+    system("/bin/echo \"\" > /var/log/open-as-cgw/mangled-mail.log");
 }
 
 
@@ -301,9 +301,9 @@ sub purge_configuration
     {
         print STDERR "[*] Deleting all user-generated Config-files\n";
     }
-    system("$rm -f /etc/limes/xml/*.xml");
-    system("$rm -f /etc/limes/xml/backup.include");
-    system("$rm -f /etc/limes/xml/backup.exclude");
+    system("$rm -f /etc/open-as-cgw/xml/*.xml");
+    system("$rm -f /etc/open-as-cgw/xml/backup.include");
+    system("$rm -f /etc/open-as-cgw/xml/backup.exclude");
 }
 
 
@@ -329,7 +329,7 @@ sub purge_confbackup
         print STDERR "[*] Deleting all user-generated Backup-files\n";
     }
     system("$rm -f /var/www/LimesGUI/root/static/backup/*");
-    system("$rm -rf /var/limes/backup/*");
+    system("$rm -rf /var/open-as-cgw/backup/*");
 }
 
 

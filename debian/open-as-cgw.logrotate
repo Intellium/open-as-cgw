@@ -1,4 +1,4 @@
-/var/log/limes/update.log {
+/var/log/open-as-cgw/update.log {
         daily
         missingok
         rotate 14
@@ -8,7 +8,7 @@
         create 600
 }
 
-/var/log/limes/mail.log {
+/var/log/open-as-cgw/mail.log {
     daily
     dateext
     rotate 90
@@ -18,7 +18,7 @@
     nocreate
 }
 
-/var/log/limes/syslog {
+/var/log/open-as-cgw/syslog {
         daily
         missingok
         rotate 14
@@ -28,7 +28,7 @@
         create 600
 }
 
-/var/log/limes/mangled-mail.log {
+/var/log/open-as-cgw/mangled-mail.log {
      daily
      dateext
      rotate 90
@@ -50,7 +50,7 @@
      endscript
 }
 
-/var/log/openas/LimesGUI.log {
+/var/log/open-as-cgw/LimesGUI.log {
         daily
         missingok
         rotate 14

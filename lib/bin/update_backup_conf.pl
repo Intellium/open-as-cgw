@@ -36,9 +36,9 @@ if ($ENV{'LIMESLIB'})
 }
 else
 {
-    $etc = "/etc/limes";
+    $etc = "/etc/open-as-cgw";
     $bin = "/usr/local/bin";
-    $var = "/var/limes";
+    $var = "/var/open-as-cgw";
 }
 
 }

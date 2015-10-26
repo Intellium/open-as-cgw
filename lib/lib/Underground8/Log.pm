@@ -32,7 +32,7 @@ my $guipath = $ENV{'LIMESGUI'};
 
 my ($etc,$bin,$var) = ($libpath)
 	? ("$libpath/etc", "$libpath/bin", "$libpath/etc")
-	: ("/etc/limes", "/usr/local/bin", "/var/limes");
+	: ("/etc/open-as-cgw", "/usr/local/bin", "/var/open-as-cgw");
 my $www_static = ($guipath) ? "$guipath/root/static" : "/var/www/LimesGUI/root/static";
 
 

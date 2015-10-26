@@ -59,7 +59,7 @@ use Date::Format qw(time2str);
 
 our $progname = 'openas-rtlogd';
 our $pidfile = '/var/run/openas-rtlogd.pid';
-our $named_pipe = "/var/limes/rt_log";
+our $named_pipe = "/var/open-as-cgw/rt_log";
 our $mq_offset = 0; 
 
 my $INTERVAL = 300;  # seconds to restart writer

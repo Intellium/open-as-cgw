@@ -32,27 +32,7 @@ set -e
 
 case "$1" in
     install|upgrade)
-        echo "Creating/updating limes user account..." >&2
-        addgroup --quiet --system limes || {
-          # addgroup failed. Why?
-          if ! getent group limes >/dev/null ; then
-             echo "Could not create system group limes." >&2
-             exit 1
-          fi
-          # well, the group is there, so just ignore the error
-        }
-        adduser --system --ingroup limes --home /var/limes \
-                --gecos "limes system user" --shell /bin/sh \
-                --quiet --disabled-password limes || {
-          # adduser failed. Why?
-          if getent passwd limes >/dev/null ; then
-             echo "Non-system user limes found. I will not overwrite a non-system" >&2
-             echo "user.  Remove the user and reinstall limesas-lib." >&2
-             exit 1
-          fi
-          # unknown adduser error, simply exit
-          exit 1
-        }
+
 	# unattended package installation
 	export DEBIAN_FRONTEND="noninteractive"
 	debconf-set-selections <<< "mysql-server mysql-server/root_password password" # do not prompt for mysql pass (leave blank)
@@ -60,10 +40,6 @@ case "$1" in
 	debconf-set-selections <<< "postfix postfix/mailname string $hostname" # postfix default hostname
 	debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" # postfix configuration type
 
-	# create log directories
-        mkdir -p /var/log/limes
-        touch /var/log/limes/mail.log
-	
     ;;
 
     abort-upgrade)

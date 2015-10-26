@@ -22,7 +22,7 @@
 # Ignore signals
 trap "" SIGINT SIGTERM SIGTSTP SIGQUIT
 
-CFG_PATH='/etc/limes'
+CFG_PATH='/etc/open-as-cgw'
 
 SERIAL=`cat ${CFG_PATH}/sn 2>/dev/null`
 REVISION=`cat ${CFG_PATH}/versions | grep -e '^revision.*' | cut -d'=' -f2 2>/dev/null`

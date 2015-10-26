@@ -36,7 +36,7 @@ use Config::File qw(read_config_file);
 # the path variables need to be set (may not be always the case!)
 $ENV{PATH} = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games";
 
-my $config_file = "/etc/limes/conf/usus.conf";
+my $config_file = "/etc/open-as-cgw/conf/usus.conf";
 my $config = read_config_file($config_file) or exit 9;
 
 $ENV{UCF_FORCE_CONFFNEW} = "yes";

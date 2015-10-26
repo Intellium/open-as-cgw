@@ -35,36 +35,54 @@ set -e
 
 # Prepares system accounts and default password for admin account
 prepare_system_accounts() {
-	echo "*** Preparing System User Accounts...";
+	echo -n "*** Preparing System User Accounts... "
+
+        # create default limes group 
+        addgroup --quiet --system limes || {
+          if ! getent group limes >/dev/null ; then
+             echo "FAILED"
+             exit 1
+          fi
+        }
+
+        # create default limes user
+        adduser --system --ingroup limes --home /var/open-as-cgw \
+                --gecos "limes system user" --shell /bin/sh \
+                --quiet --disabled-password limes || {
+          # adduser failed. Why?
+          if getent passwd limes >/dev/null ; then
+                echo "FAILED"
+                exit 1
+          fi
+        }
+
 	# Create guipasswd if nonexistent
 	if [ ! -f "/etc/open-as-cgw/guipasswd" ]; then
 		echo "admin:$apr1$RNL.....$A8LOW/HU1HrCT9vv6JkhN/" > /etc/open-as-cgw/guipasswd
-		echo "wrote standard guipasswd file, this will soon be overwritten by catalyst"
 	fi
 
+	# Add users to the according group
 	usermod -G amavis clamav
 	usermod -G limes www-data
 	usermod -G sasl postfix
 
-	echo "*** System user accounts created."
+	echo "OK"
 }
 
 prepare_postfix(){
-	echo "*** Preparing Postfix Configuration..."
+	echo -n "*** Preparing Postfix Configuration... "
 
 	# Create empty defaults if nonexistent
 	CHECKED_FILES="main.cf usermaps local_rcpt_map mbox_transport header_checks"
 	for FILE in `echo $CHECKED_FILES`; do
 		if [ ! -f "/etc/postfix/$FILE" ]; then
 			touch /etc/postfix/$FILE
-			echo "Created empty file /etc/postfix/$FILE"
 		fi
 	done
 
 	# Set default mailname
 	if [ ! -f "/etc/mailname" ]; then
-		echo "ascgw.underground8.com" > /etc/mailname
-		echo "wrote standard /etc/mailname"
+		echo "cgw.openas.org" > /etc/mailname
 	fi
 
 	# BATV Filter / Backscatter protection
@@ -94,10 +112,14 @@ prepare_postfix(){
 		sed -i -e 's/root:\tgw/root:\tsupport/g' /etc/aliases
 		postalias /etc/aliases
 	fi
+
+	echo "OK"
 }
 
 prepare_postfwd(){
-	echo "*** Preparing PostFWD Configuration..."
+	echo -n "*** Preparing PostFWD Configuration... "
+
+	# POSTFW dirs	
 	PFWD_DEF="/etc/default/postfwd"
 	PFWD_XML="/etc/open-as-cgw/xml/postfwd.xml"
 	PFWD_CF="/etc/postfix/postfwd.cf"
@@ -124,26 +146,27 @@ prepare_postfwd(){
 	chown root:limes $PFWD_CF
 	chmod g+w $PFWD_CF
 
-	echo "*** PostFWD Config Done"
+	echo "OK"
 }
 
 prepare_spamassassin(){
-	echo "*** Preparing Spamassassin Configuration..."
+	echo -n "*** Preparing Spamassassin Configuration... "
+
+	# SA dir
 	SA_DIR="/var/lib/spamassassin"
 
+	# create SA directory
+	mkdir -p $SA_DIR
 	rm -f /etc/spamassassin/ctasd.pre
 	rm -f /etc/spamassassin/ctasd.cf
 
-	mkdir -p $SA_DIR
+	# disable updater
 	if [ ! -f "$SA_DIR/updates_spamassassin_org.cf" ]; then
 		echo "# UPDATE version 0" > $SA_DIR/updates_spamassassin_org.cf
-		echo "wrote standard sa-update compliant file"
 	fi
-	echo "spamassassin check done"
 
 	rm -rf $SA_DIR/3.001007
 	rm -rf $SA_DIR/3.002005
-	echo "removed spamassassin symlinks"
 
 	# fix ... i don't know why this is needs, but it is
 	mkdir -p $SA_DIR
@@ -152,12 +175,15 @@ prepare_spamassassin(){
 
 	# Enable SpamAssassin TextCat for language-filtering support
 	sed -i 's/#loadplugin Mail::SpamAssassin::Plugin::TextCat/loadplugin Mail::SpamAssassin::Plugin::TextCat/' /etc/spamassassin/v310.pre
-	echo "*** Spamassassin Config Done"
+
+	echo "OK"
 }
 
 
 prepare_quarantine(){
-	echo "*** Preparing Quarantine..."
+	echo -n "*** Preparing Quarantine... "
+
+	# quarantine dirs
 	Q_XML="/etc/open-as-cgw/xml/quarantine.xml"
 	Q_DIR="/var/quarantine"
 
@@ -165,13 +191,10 @@ prepare_quarantine(){
 	if [ ! -f $Q_XML ]; then
 		touch $Q_XML
 		echo "<perldata>\n<hashref></hashref>\n</perldata>" > $Q_XML
-		echo "$Q_XML check done"
 	fi
 
 	# make the quarantine directory
-	if [ -d $Q_DIR ]; then
-		echo "Quarantine directory already exists!"
-	else
+	if [ ! -d $Q_DIR ]; then
 		mkdir $Q_DIR $Q_DIR/spam $Q_DIR/banned $Q_DIR/virus
 		chown -R amavis:amavis $Q_DIR
 	fi
@@ -182,11 +205,13 @@ prepare_quarantine(){
 		echo -e "soft = 0\nhard = 0" > $Q_DIR/quarantine.lock
 	fi
 	
-	echo "*** Quarantine Config Done"
+	echo "OK"
 }
 
 prepare_smtpcrypt(){
-	echo "*** Preparing SMTPCrypt Configuration..."
+	echo -n "*** Preparing SMTPCrypt Configuration..."
+
+	# smtpcrypt dirs
 	SC_DIR="/var/spool/smtpcrypt"
 	SC_XML="/etc/open-as-cgw/xml/smtpcrypt.xml"
 
@@ -194,7 +219,7 @@ prepare_smtpcrypt(){
 	if [ -z `cat /etc/passwd | grep -e '^smtpcrypt:.*'` ]; then
 		useradd -d $SC_DIR -s /bin/false smtpcrypt
 	fi
-	usermod -g limes smtpcrypt
+	usermod -g limes smtpcrypt >/dev/null 2>&1
 
 	if [ ! -s $SC_XML ]; then
 		touch $SC_XML
@@ -209,21 +234,22 @@ prepare_smtpcrypt(){
 	chown smtpcrypt:limes $SC_XML
 
 	# this is so bad, don't even bother to ask for a reason!
-	echo "Installing Pisa-Egg"
 	easy_install /etc/open-as-cgw/cfg-templates/pisa-egg/pisa-3.0.29-py2.5.egg > /dev/null
 
-	echo "*** SMTPCrypt Configuration Done"
+	echo "OK"
 }
 
 prepare_cli(){
-	echo "*** Preparing CLI Configuration..."
-	CLI_LOG="/var/log/limes/cli.log"
-	CLI_ERR="/var/log/limes/cli-err.log"
+	echo -n "*** Preparing CLI Configuration... "
+
+	# CLI paths
+	CLI_LOG="/var/log/open-as-cgw/cli.log"
+	CLI_ERR="/var/log/open-as-cgw/cli-err.log"
 	CLI_VER="/etc/open-as-cgw/conf/cliversion"
 
 	# Set up CLI logs
 	touch $CLI_LOG $CLI_ERR
-	chown admin:limes $CLI_LOG $CLI_ERR
+	chown limes:limes $CLI_LOG $CLI_ERR
 	chmod 660 $CLI_LOG $CLI_ERR
 
 	# Set up CLI version file
@@ -232,140 +258,92 @@ prepare_cli(){
 		echo "02-09-09 14:12" > $CLI_VER
 	fi
 
-	echo "*** CLI Configuration Done"
+	echo "OK"
 }
 
 prepare_mysql(){
-	echo "*** Preparing MySQL Configuration..."
-	# the ping only works at new setupped appliances because
-	# root password is still not set
-	echo "starting mysql preparations"
+	echo -n "*** Preparing MySQL Configuration... "
 
-	## XXX lucid port
-	#/etc/init.d/mysql restart
-	service mysql stop
-	service mysql start
+	# start mysql daemon
+	/etc/init.d/mysql start >/dev/null 2>&1
 
+	# test mysql connectivity
 	TESTMYSQL=$(mysqladmin ping 2>&1)
 	MYSQLSUCCESS=mysqld\ is\ alive
-
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
+		# import schemas
 		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
-		echo "set /etc/open-as-cgw/db_struct/sqlgrey.sql"
 		mysql < /etc/open-as-cgw/db_struct/rt_log.sql
-		echo "set /etc/open-as-cgw/db_struct/rt_log.sql"
 		mysql < /etc/open-as-cgw/db_struct/smtp_auth.sql
-		echo "set /etc/open-as-cgw/db_struct/smtp_auth.sql"
 		mysql < /etc/open-as-cgw/db_struct/mailq.sql
-		echo "set /etc/open-as-cgw/db_struct/mailq.sql"
 		mysql < /etc/open-as-cgw/db_struct/amavis.sql
-		echo "set /etc/open-as-cgw/db_struct/amavis.sql"
-
+		
+		# change mysql root password
 		mysqladmin -u root password loltruck2000
-		echo "created mysql root password"
+		
+		# write db versions file	
 		echo "3" > /etc/open-as-cgw/db_version
-		echo "wrote db_versions file"
 	else
-		echo "MySQL already set"
+		echo "FAILED"
+		exit 1
 	fi
-	echo "primary MySQL check done - now comparing versions"
+
+	# Check DB version	
 	if [ ! -f /etc/open-as-cgw/db_version ]; then
 		echo "0" > /etc/open-as-cgw/db_version
 	fi
 
+	# Perform DB upgrades
 	DBVERSION=`cat /etc/open-as-cgw/db_version`
 	if [ "${DBVERSION}" -lt "1" ]; then
 		echo "1" > /etc/open-as-cgw/db_version
 		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
 	fi
-	echo "version 1 compared"
-
 	if [ "${DBVERSION}" -lt "2" ]; then
 		echo "2" > /etc/open-as-cgw/db_version
 		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
 	fi
-	echo "version 2 compared"
-
 	if [ "${DBVERSION}" -lt "3" ]; then
 		echo "3" > /etc/open-as-cgw/db_version
 		mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
 	fi
-	echo "version 3 compared"
 
 	chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
 	/etc/open-as-cgw/db_struct/rtlog_checkdb.pl
-	echo "*** MySQL Config Done"
+
+	echo "OK"
 }
 
 prepare_ssh(){
-	echo "*** Preparing SSH Configuration..."
+	echo -n "*** Preparing SSH Configuration... "
 
-	# overwrite freakin' sshd config
-	# may be in Service sometime
+	# copy sshd config
 	cp /etc/open-as-cgw/cfg-templates/ssh/sshd_config.tt2 /etc/ssh/sshd_config
 
-	# all ssh keys before dateval are definitly broken which
-	# is a security leak
-	# 12:00, 14 May 2008 is the date
-	dateval=200805141200
-	restartssh=0
-	
-	# Obscurity?
-	/usr/bin/sshd_srvstr_scramble.sh /usr/sbin/sshd
-	SCRAMBLING_RC=$?
-	if [ $SCRAMBLING_RC -eq 0 ]; then
-		echo "SSHd service string scrambling done"
-		restartssh=1
-	else
-		echo "SSHd service string scrambling aborted (it may have already been scrambled)"
-	fi
-	# sshd init script checks version via `sshd -?', disable it immediately
-	sed -i -e "s/\(^[^#].*grep -q OpenSSH\)/#\1/" /etc/init.d/ssh
+	# reload ssh daemon
+	service ssh reload 
 
-	if [ `date +%Y%m%d%H%M -r /etc/ssh/ssh_host_rsa_key` -lt $dateval ]; then
-		rm /etc/ssh/ssh_host_rsa_key
-		rm /etc/ssh/ssh_host_rsa_key.pub
-		ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
-		restartssh=1
-	fi
-
-	if [ `date +%Y%m%d%H%M -r /etc/ssh/ssh_host_dsa_key` -lt $dateval ]; then
-		rm /etc/ssh/ssh_host_dsa_key
-		rm /etc/ssh/ssh_host_dsa_key.pub
-		ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
-		restartssh=1
-	fi
-
-	if [ $restartssh -gt 0 ]; then
-		/etc/init.d/ssh restart
-	fi
-	echo "*** SSH Config Done"
+	echo "OK"
 }
 
 prepare_crypto(){
-	echo "*** Preparing Crypto Configuration..."
+	echo -n "*** Preparing Crypto Configuration... "
 
-	# search for new ca-certs (inlcuding our own)
-	if [ -e /etc/ssl/certs/underground8-cacert_pem.pem ]; then
-		rm /etc/ssl/certs/underground8-cacert_pem.pem
-		ln -s /usr/share/ca-certificates/underground8-cacert_pem.crt /etc/ssl/certs/underground8-cacert_pem.pem
-	fi
-	
-	if [ -e /etc/ssl/certs/underground8-webserver-cacert_pem.pem ]; then
-		rm /etc/ssl/certs/underground8-webserver-cacert_pem.pem
-		ln -s /usr/share/ca-certificates/underground8-webserver-cacert_pem.crt /etc/ssl/certs/underground8-webserver-cacert_pem.pem
-	fi
-	/usr/sbin/update-ca-certificates
+	# update ca certificates
+	/usr/sbin/update-ca-certificates >/dev/null 2>&1
 
+	# create directory structure
 	mkdir -p /etc/open-as-cgw/cacert
 	mkdir -p /etc/open-as-cgw/xml/cacert
 
-	echo "*** Crypto Config Done"
+	echo "OK"
 }
 
 
 prepare_ldap(){
-	echo "*** Preparing LDAP Configuration..."
+	echo -n "*** Preparing LDAP Configuration... "
+
+	# LDAP dir
 	LDAP_DIR="/var/cache/ldap"
 
 	# create dir for ldap cache
@@ -379,18 +357,19 @@ prepare_ldap(){
 		echo "<perldata>\n<hashref></hashref>\n</perldata>" > $LDAP_DIR/ldap_maps.xml
 	fi
 
+	# set permissions
 	chmod 664 $LDAP_DIR/ldap_maps.xml
 	chown www-data:limes $LDAP_DIR/ldap_maps.xml
 
-	echo "*** LDAP Config Done"
+	echo "OK"
 }
 
 prepare_cron(){
-	echo "*** Preparing CRON Configuration..."
+	echo -n "*** Preparing CRON Configuration... "
 
+	# execute logrotate hourly instead of daily
 	if [ -f "/etc/cron.daily/logrotate" ]; then
 		mv /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
-		echo "Changed logrotate to be executed HOURLY instead of daily"
 	fi
 
 	# rotate the daily logs at midnight
@@ -402,22 +381,24 @@ prepare_cron(){
 	cronisnew=`cat $crontab | grep "MAILTO=" | wc -l`
 
 	if [ $cronisnew -eq 0 ]; then
+		# update crontab
 		tmpcron=`tempfile`
 		sed '/^PATH=/a \MAILTO=\"\"' $crontab > $tmpcron
 		mv $tmpcron $crontab
 
+		# set permissions
 		chmod 0644 $crontab
 		chown root:root $crontab
-
-		/etc/init.d/cron restart
-		echo "$crontab MAILTO statement updated"
+		
+		# restart cron daemon
+		service cron restart
 	fi
 
-	echo "*** CRON Config Done"
+	echo "OK"
 }
 
 prepare_nginx(){
-	echo "*** Preparing Nginx Configuration..."
+	echo -n "*** Preparing Nginx Configuration... "
 
 	# overwrite current nginx config and create ssl certificate
 	cp -f /etc/open-as-cgw/cfg-templates/nginx/nginx.conf /etc/nginx
@@ -425,63 +406,59 @@ prepare_nginx(){
 	cp -f /etc/open-as-cgw/cfg-templates/nginx/default.vhost /etc/nginx/sites-available/default
 
 	# Make self-signed certificate
-	# there is a security-check for the date later in this file
 	if [ ! -f /etc/nginx/ssl/default.pem ] || [ ! -f /etc/nginx/ssl/default.key ]; then
 		mkdir -p /etc/nginx/ssl
 		/usr/bin/generate-sslcert.sh -batch
 	fi
+	
+	# restart nginx daemon
+	service nginx restart >/dev/null 2>&1 
 
-	# all certificates before dateval are definitly broken which
-	# is a security leak
-	# 12:00, 14 May 2008 is the date
-	#dateval=200805141200
-	#if [ `date +%Y%m%d%H%M -r /etc/nginx/ssl/default.pem` -lt $dateval ]; then
-	#	/usr/bin/generate-sslcert.sh --force -batch
-	#fi
-
-	echo "*** Nginx Config Done"
+	echo "OK"
 }
 
 prepare_system(){
-	echo "*** Preparing Base System Configuration..."
+	echo -n "*** Preparing Base System Configuration... "
+
+	# configure localtime
 	if [ -L "/etc/localtime" ]; then
 		rm /etc/localtime
 		touch /etc/localtime
-		echo "Recreated localtime"
 	fi
 
 	# enable UTF-8
 	/usr/sbin/update-locale LANG=en_US.UTF-8
-	echo "Set locale to UTF8"
 
 	# Correctly place sudoers file 
 	cp /etc/open-as-cgw/conf/sudoers /etc/sudoers
 	chmod 0440 /etc/sudoers
-	echo "Updated sudoers"
 
 	# Wipe motd, clean issue[.net]
-	echo "" > /etc/motd
-	echo "AS Communication Gateway" > /etc/issue
-	echo "AS Communication Gateway" > /etc/issue.net
-	echo "Updated MOTD"
+	rm -rf /etc/update-motd.d/*
+	echo "==============================" > /etc/motd
+	echo "Open AS Communication Gateway" >> /etc/motd
+	echo "==============================" >> /etc/motd
+	echo "Open AS Communication Gateway" > /etc/issue
+	echo "Open AS Communication Gateway" > /etc/issue.net
 
-	chown limes:limes /usr/bin/mail_logacc.pl
-	chown limes:limes /usr/bin/logacc_rotate.pl
-	chown limes:limes /usr/bin/daily_spam_report.pl
-	chown limes:limes /usr/bin/firewall.sh
-	chmod 775 /usr/bin/firewall.sh
+	# create directories
+        mkdir -p /var/open-as-cgw/backup
+        mkdir -p /var/log/open-as-cgw/upgrades
 
-	mkdir -p /var/limes/backup
-	mkdir -p /var/log/limes/upgrades
-	chown -R limes:limes /var/limes
-	chmod 775 /var/limes/backup
-	chmod 775 /var/limes
+	# set file permissions
+	#chown limes:limes /usr/bin/mail_logacc.pl
+	#chown limes:limes /usr/bin/logacc_rotate.pl
+	#chown limes:limes /usr/bin/daily_spam_report.pl
+	#chown limes:limes /usr/bin/firewall.sh
+	chown -R limes:limes /var/open-as-cgw	
+	#chmod 775 /usr/bin/firewall.sh
+	chmod 775 /var/open-as-cgw/backup
+	chmod 775 /var/open-as-cgw
 
 	# /etc/environment + /etc/clamav/freshclam.conf have to be writable by limes group for proxy settings
 	touch /etc/environment
 	chown root.limes /etc/environment
 	chmod g+w /etc/environment
-	echo "Set up /etc/environment"
 
 	### write /etc/rc.local
 	echo "#!/bin/sh -e" > /etc/rc.local
@@ -504,13 +481,9 @@ prepare_system(){
 	echo "if grep -w -q hddextend /proc/cmdline 2>/dev/null; then" >> /etc/rc.local
 	echo " /usr/bin/virtual_hdd_extend.sh >/dev/null 2>&1" >> /etc/rc.local
 	echo "fi" >> /etc/rc.local
-
-	### not needed anymore
-	# echo "/usr/bin/nohup /usr/bin/launch.pl >/dev/null 2>&1" >> /etc/rc.local
 	echo "exit 0" >> /etc/rc.local
-	echo "Updated rc.local"
 
-
+	# update fstab
 	sed -i -e 's/defaults,errors=remount-ro/defaults,errors=remount-ro,noatime/g' /etc/fstab
 
 	# remove pre-used pipe from maillog-mangler
@@ -518,18 +491,19 @@ prepare_system(){
 		rm /etc/syslog-ng/mail.log
 	fi
 
+	# setup simple log
 	if [ ! -e "/var/log/mail-simple.log" ]; then
 		/usr/bin/touch /var/log/mail-simple.log
 	fi
 	chgrp limes /var/log/mail-simple*
-	echo "Set up simple log"
 
+	# create default firewall script
 	if [ ! -f "/usr/bin/firewall.sh" ]; then
 		echo '#!/bin/bash' > /usr/bin/firewall.sh
 		echo 'exit 0' >> /usr/bin/firewall.sh
-		echo "wrote standard firewall.sh file, this will soon be overwritten by catalyst"
 	fi
 
+	# create default snmpd config
 	if [ -f "/etc/snmp/snmpd.conf" ]; then
 		touch "/etc/snmp/snmpd.conf";
 	fi
@@ -553,13 +527,12 @@ prepare_system(){
 	# Use the new file-mime command
 	sed -i "s/'file'/'file-mime'/" /etc/amavis/conf.d/01-debian
 
-
-	echo "*** Base System Config Done"
+	echo "OK"
 }
 
 
 prepare_limes(){
-	echo "*** Preparing Limes Configuration..."
+	echo -n "*** Preparing Open AS Configuration... "
 
 	# create empty usermaps
 	if [ ! -f /etc/open-as-cgw/xml/usermaps.xml ]; then
@@ -567,14 +540,13 @@ prepare_limes(){
 		echo "<perldata>\n<hashref></hashref>\n</perldata>" > /etc/open-as-cgw/xml/usermaps.xml
 	fi
 
+	# set config permissions
 	chown -R limes:limes /etc/open-as-cgw
 	chown -R www-data:limes /etc/open-as-cgw/xml
-
 	find /etc/open-as-cgw -type d -exec chmod 774 {} \;
 	find /etc/open-as-cgw -type f -exec chmod 664 {} \;
-	echo "Changed all /etc/open-as-cgw permissions"
 
-#	Re-Read all backups to re-generate the backup.xml holding the IP information
+	# Re-Read all backups to re-generate the backup.xml holding the IP information
 	if [ -f "/etc/open-as-cgw/xml/backup.xml" ]; then
 		chown www-data:limes /etc/open-as-cgw/xml/backup.xml
 	fi
@@ -601,53 +573,57 @@ prepare_limes(){
 
 	# create homedir if needed - otherwise usus fails the first time it's started
 	gpg --homedir /root/.gnupg -k
-	echo "Usus file checking done"
 
-	if [ ! -p /var/limes/rt_log ]; then
-		mkfifo /var/limes/rt_log
-		echo "Recreated rtlog pipe"
+	# create rtlog pipe
+	if [ ! -p /var/open-as-cgw/rt_log ]; then
+		mkfifo /var/open-as-cgw/rt_log
 	fi
-	chown limes:limes /var/limes/rt_log
+	chown limes:limes /var/open-as-cgw/rt_log
 
-	echo "*** Limes Config Done"
+        # restart openas-rtlogd
+        service openas-rtlogd restart
+
+	echo "OK"
 }
 
 prepare_networking(){
-	echo "*** Preparing network/interfaces..."
-	IFACES="/etc/network/interfaces"
+	echo -n "*** Preparing network/interfaces... "
 
-	# TODO: this should not be statically bound
-	DEFAULT_IFACE="eth0"
-
-	echo "auto lo" > $IFACES
-	echo -e "iface lo inet loopback\n" >> $IFACES
-	echo "# MARKER: DO NOT DELETE THE LINE BELOW" >> $IFACES
-	echo "#--start:${DEFAULT_IFACE}--" >> $IFACES
-	echo "auto ${DEFAULT_IFACE}" >> $IFACES
-	echo "iface ${DEFAULT_IFACE} inet static" >> $IFACES
-	echo -e "\taddress 192.168.1.1" >> $IFACES
-	echo -e "\tnetmask 255.255.255.0" >> $IFACES
-	echo -e "\tgateway 192.168.1.254" >> $IFACES
-	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
-	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
+#	# Interfaces file
+#	IFACES="/etc/network/interfaces"
+#
+#	# TODO: this should not be statically bound
+#	DEFAULT_IFACE="eth0"
+#
+#	echo "auto lo" > $IFACES
+#	echo -e "iface lo inet loopback\n" >> $IFACES
+#	echo "# MARKER: DO NOT DELETE THE LINE BELOW" >> $IFACES
+#	echo "#--start:${DEFAULT_IFACE}--" >> $IFACES
+#	echo "auto ${DEFAULT_IFACE}" >> $IFACES
+#	echo "iface ${DEFAULT_IFACE} inet static" >> $IFACES
+#	echo -e "\taddress 192.168.1.1" >> $IFACES
+#	echo -e "\tnetmask 255.255.255.0" >> $IFACES
+#	echo -e "\tgateway 192.168.1.254" >> $IFACES
+#	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
+#	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
 
 	# be sure we don't fetch a dhcp lease
 	pidof dhclient3 &>/dev/null && killall dhclient3
 	pidof dhclient &>/dev/null && killall dhclient
 
-	echo "*** Preparing network/interfaces done"
+	echo "OK"
 }
 
 case "$1" in
     configure)
 	chown -R www-data:www-data /var/www/LimesGUI
-	
+
+	prepare_system_accounts;	
 	prepare_crypto;
 	prepare_system;
-#	prepare_ssh;
-	prepare_system_accounts;
+	prepare_ssh;
 	prepare_limes;
-#	prepare_cli;
+	prepare_cli;
 	prepare_cron;
 	prepare_postfix;
 	prepare_postfwd;
@@ -658,14 +634,6 @@ case "$1" in
 	prepare_quarantine;
 	prepare_smtpcrypt;
 	prepare_networking;
-
-	#sudo -u www-data /usr/bin/update_backup_conf.pl
-
-	# restart openas-rtlogd
-	/etc/init.d/openas-rtlogd restart
-
-	# restart nginx 
-	/etc/init.d/nginx restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

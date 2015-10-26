@@ -13,5 +13,5 @@ stop on runlevel 5
 stop on runlevel 6
 
 respawn
-exec /usr/bin/tail -f  /var/log/limes/mangled-mail.log >/dev/tty3
+exec /usr/bin/tail -f  /var/log/open-as-cgw/mangled-mail.log >/dev/tty3
 

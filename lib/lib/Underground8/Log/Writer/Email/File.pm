@@ -59,7 +59,7 @@ sub new
 {
     my $class = shift;
     my $id = shift || 0;
-    my $filename = shift || '/var/log/limes/mail.log';
+    my $filename = shift || '/var/log/open-as-cgw/mail.log';
     
     my $self = $class->SUPER::new($id);
 

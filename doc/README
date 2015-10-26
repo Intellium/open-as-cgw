@@ -181,7 +181,7 @@ II.4: Installing all required CPAN modules
  Everything on the system, even the network configuration, is managed via the
  Perl code. If you want to permanently change your network settings, either do
  this via the WebGUI (System -> Network), or manually change the corresponding
- config file at /etc/limes/xml/system.xml - the XML nodes are self-describing.
+ config file at /etc/open-as-cgw/xml/system.xml - the XML nodes are self-describing.
 
 
 

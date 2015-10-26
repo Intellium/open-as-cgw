@@ -27,7 +27,7 @@ Quick install instructions:
          connectivity (on a Core2Duo VM with 8Mbit Download, about 13 minutes).
 
 (4. Network settings, optional)
-  Edit /etc/limes/xml/system.xml, and adjust XML nodes <_net_interface> and
+  Edit /etc/open-as-cgw/xml/system.xml, and adjust XML nodes <_net_interface> and
   <_net_dns>. These settings will be automatically set upon rebooting (next
   step). Normally, these settings are set solely via the WebGUI.
 

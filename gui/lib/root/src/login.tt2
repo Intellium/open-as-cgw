@@ -23,7 +23,7 @@
 	</script>
     </head>
     <body id="login">
-		<!-- <a id="logo" href="http://www.openas.org">openas.org</a> -->
+		<!-- <a id="logo" href="https://openas.org">openas.org</a> -->
         <div id="horizon">
             <div id="login_center">
                 [% login_form_url = Catalyst.uri_for('/login') %]
@@ -46,7 +46,7 @@
 				<p id="login_error">[% Catalyst.localize( error_msg ) %]</p>
 				[% END %]
             </div> 
-			<div id="copy_note">Open AS Communication Gateway | Licensed under AGPL | <a href="http://www.openas.org" target="_blank">www.openas.org</a></div>
+			<div id="copy_note">Open AS Communication Gateway | Licensed under AGPL | <a href="https://openas.org" target="_blank">www.openas.org</a></div>
             [% PROCESS redirect.inc.tt2 
                redirect_url = Catalyst.uri_for('/login') %]
         </div>

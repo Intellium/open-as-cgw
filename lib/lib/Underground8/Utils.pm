@@ -44,7 +44,7 @@ else
 {
     $etc = "/etc/open-as-cgw";
     $bin = "/usr/bin";
-    $var = "/var/limes";
+    $var = "/var/open-as-cgw";
 }
 
 if ($ENV{'LIMESGUI'})
@@ -435,7 +435,7 @@ our $g = {
     ca_certificates => '/etc/ssl/certs/ca-certificates.crt',
 
     # log download
-    mail_log => '/var/log/limes/mangled-mail.log',
+    mail_log => '/var/log/open-as-cgw/mangled-mail.log',
     log_dir => '/root/static/log/',
 	mailsimple_log => '/var/log/mail-simple.log',
 	ascgw_log => '/var/log/ascgw.log',

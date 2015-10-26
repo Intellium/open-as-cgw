@@ -7,14 +7,14 @@ on its way up to the version 2.0.2s, when the AS has finally gone Open Source.
 
 
 === Active developers =========================================================
-Wehinger Stefan
+Wehinger Stefan <stefan@openas.org>
 Core programming, build system, packaging
 
-Schallert Dominic
-Core programming
-
-Sonnleitner Erik, PhD <es@delta-xi.net>
+Sonnleitner Erik, PhD <erik@openas.org>
 Core programming, OSS porting, maintainer
+
+Dominic Schallert <dominic@openas.org>
+Core programming, configs, scripting
 
 
 === Former developers =========================================================

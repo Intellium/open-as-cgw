@@ -69,6 +69,6 @@ Misc/				s/t
 
 Configuration files, GUI pages and some other files are managed through Template
 Toolkit (TT2) templates, and reside in lib/etc/cfg-templates (in an installed
-environment, under /etc/limes/cfg-templates).
+environment, under /etc/open-as-cgw/cfg-templates).
 
 

@@ -262,7 +262,7 @@ prepare_cli(){
 	echo "" >> ~/.bashrc
 	echo "# Custom Open AS Color Prompt" >> ~/.bashrc
 	echo -en "PS1='\[\033[0;31m[\033[1;31m\u@\h:\w\033[1;31m]\033[1;37m $\033[0;37;0m\] '" >> ~/.bashrc
-	export PS1
+	source ~/.bashrc
 
 	# CLI paths
 	CLI_LOG="/var/log/open-as-cgw/cli.log"
@@ -290,16 +290,19 @@ prepare_mysql(){
 	/etc/init.d/mysql start >/dev/null 2>&1
 
 	# test mysql connectivity
-	TESTMYSQL=$(mysqladmin -u root -ploltruck2000 ping 2>&1)
+	TESTMYSQL=$(mysqladmin ping 2>&1)
 	MYSQLSUCCESS=mysqld\ is\ alive
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
-		# import schemas
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/sqlgrey.sql
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/rt_log.sql
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/amavis.sql
-		
+		# import default schemas
+		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
+		mysql < /etc/open-as-cgw/db_struct/rt_log.sql
+		mysql < /etc/open-as-cgw/db_struct/smtp_auth.sql
+		mysql < /etc/open-as-cgw/db_struct/mailq.sql
+		mysql < /etc/open-as-cgw/db_struct/amavis.sql
+	
+		# set mysql root password
+		mysqladmin -u root password loltruck2000
+			
 		# write db versions file	
 		echo "3" > /etc/open-as-cgw/db_version
 	else

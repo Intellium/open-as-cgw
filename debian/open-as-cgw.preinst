@@ -32,15 +32,6 @@ set -e
 
 case "$1" in
     install|upgrade)
-
-	# unattended dependency installation
-	export DEBIAN_FRONTEND="noninteractive"
-	echo "debconf debconf/frontend select noninteractive" | sudo debconf-set-selections
-        echo "mysql-server mysql-server/root_password password loltruck2000" | sudo debconf-set-selections
-        echo "mysql-server mysql-server/root_password_again password loltruck2000" | sudo debconf-set-selections
-	echo "postfix postfix/main_mailer_type select Internet Site" | sudo debconf-set-selections
-        echo "postfix postfix/mailname string antispam.localdomain" | sudo debconf-set-selections
-
     ;;
 
     abort-upgrade)

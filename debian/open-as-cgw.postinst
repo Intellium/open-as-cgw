@@ -241,6 +241,17 @@ prepare_smtpcrypt(){
 
 prepare_cli(){
 	echo -n "*** Preparing CLI Configuration... "
+	
+	# Update etc/issue
+	echo -e "\033[0;34m  ____                  ___   ____" > /etc/issue
+	echo " / __ \___  ___ ___    / _ | / __/" >> /etc/issue
+	echo "/ /_/ / _ \/ -_) _ \  / __ |_\ \  " >> /etc/issue
+	echo "\____/ .__/\__/_//_/ /_/ |_/___/  " >> /etc/issue
+	echo -e "    /_/                           \033[0m\n" >> /etc/issue
+	echo -en "\033[1;31m[ Open AS Communication Gateway " >> /etc/issue
+	echo -e "$(cat /etc/open-as-cgw/versions | grep main | awk -F'=' '{print $NF}') - www.openas.org ]\033[0m" >> /etc/issue
+	echo -en "\033[1;31m[ Hostname: \033[0;37m$(hostname) \033[1;31m] \033[0m" >> /etc/issue
+	echo -e "\033[1;31m[ IP: \033[0;37m$(ip route get 1 | awk '{print $NF;exit}') \033[1;31m]\033[0m\n" >> /etc/issue
 
 	# Mega fancy MOTD
 	echo -e "\033[0;34m  ____                  ___   ____" > /etc/motd
@@ -264,6 +275,16 @@ prepare_cli(){
 	echo -en "PS1='\[\033[0;31m[\033[1;31m\u@\h:\w\033[1;31m]\033[1;37m $\033[0;37;0m\] '" >> ~/.bashrc
 	source ~/.bashrc
 
+        # remove etc/issue.net and link to etc/issue
+        rm -rf /etc/issue.net
+        ln -s /etc/issue /etc/issue.net
+
+        # remove ubuntu landscape motd
+        rm -rf /etc/update-motd.d/*
+
+	# MOTD changes require a ssh reload
+	service ssh reload
+	
 	# CLI paths
 	CLI_LOG="/var/log/open-as-cgw/cli.log"
 	CLI_ERR="/var/log/open-as-cgw/cli-err.log"
@@ -455,24 +476,17 @@ prepare_system(){
 	cp /etc/open-as-cgw/conf/sudoers /etc/sudoers
 	chmod 0440 /etc/sudoers
 
-	# remove ubuntu landscape motd
-	rm -rf /etc/update-motd.d/*
-
-	# alter issue and issue.net 
-	echo "Open AS Communication Gateway" > /etc/issue
-	echo "Open AS Communication Gateway" > /etc/issue.net
-
 	# create directories
         mkdir -p /var/open-as-cgw/backup
         mkdir -p /var/log/open-as-cgw/upgrades
 
 	# set file permissions
-	#chown limes:limes /usr/bin/mail_logacc.pl
-	#chown limes:limes /usr/bin/logacc_rotate.pl
-	#chown limes:limes /usr/bin/daily_spam_report.pl
-	#chown limes:limes /usr/bin/firewall.sh
+	chown limes:limes /usr/bin/mail_logacc.pl
+	chown limes:limes /usr/bin/logacc_rotate.pl
+	chown limes:limes /usr/bin/daily_spam_report.pl
+	chown limes:limes /usr/bin/firewall.sh
 	chown -R limes:limes /var/open-as-cgw	
-	#chmod 775 /usr/bin/firewall.sh
+	chmod 775 /usr/bin/firewall.sh
 	chmod 775 /var/open-as-cgw/backup
 	chmod 775 /var/open-as-cgw
 
@@ -610,6 +624,10 @@ prepare_limes(){
 prepare_networking(){
 	echo -n "*** Preparing network/interfaces... "
 
+#
+#	Deprecated as of 26.10.2015 
+#	No more overwrite interfaces
+#
 #	# Interfaces file
 #	IFACES="/etc/network/interfaces"
 #
@@ -627,21 +645,12 @@ prepare_networking(){
 #	echo -e "\tgateway 192.168.1.254" >> $IFACES
 #	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
 #	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
-
+#
 	# be sure we don't fetch a dhcp lease
 	pidof dhclient3 &>/dev/null && killall dhclient3
 	pidof dhclient &>/dev/null && killall dhclient
 
 	echo "OK"
-}
-
-success_notice(){
-	echo "--------------------------------------------------------"
-	echo "Open AS Communication Gateway has been installed!"
-        echo "--------------------------------------------------------"
-	echo "To configure Open AS, please point your web browser to:"
-	echo "https://$HOSTNAME/"
-        echo "--------------------------------------------------------"
 }
 
 case "$1" in
@@ -663,7 +672,6 @@ case "$1" in
 	prepare_quarantine;
 	prepare_smtpcrypt;
 	prepare_networking;
-	success_notice;
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

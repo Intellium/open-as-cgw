@@ -615,12 +615,12 @@ prepare_networking(){
 }
 
 success_notice(){
-	printf "--------------------------------------------------------\n";
-	printf "Open AS Communication Gateway has been installed!\n";
-        printf "--------------------------------------------------------\n";
-	printf "To configure Open AS, please point your web browser to:\n";
-	printf "https://$HOSTNAME/\n";
-        printf "--------------------------------------------------------\n";
+	echo "--------------------------------------------------------"
+	echo "Open AS Communication Gateway has been installed!"
+        echo "--------------------------------------------------------"
+	echo "To configure Open AS, please point your web browser to:"
+	echo "https://$HOSTNAME/"
+        echo "--------------------------------------------------------"
 }
 
 case "$1" in

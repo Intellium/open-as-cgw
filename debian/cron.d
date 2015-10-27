@@ -11,4 +11,5 @@
 20	*	*	*	*	root    /etc/init.d/openas-ldapsync start > /dev/null 2>&1 
 37	3	*	*	*	root    /etc/init.d/openas-qcron restart > /dev/null 2>&1 
 */10	*	*	*	*	root	/usr/bin/check_amavis_phail.sh
-*/10	*	*	*	*   root    /usr/bin/virtual_swap_controller.sh >> /var/log/open-as-cgw/swap_control.log
+*/10	*	*	*	*  	root    /usr/bin/virtual_swap_controller.sh >> /var/log/open-as-cgw/swap_control.log
+*	*	*	*	*	root	/usr/bin/update_motd_issue.sh

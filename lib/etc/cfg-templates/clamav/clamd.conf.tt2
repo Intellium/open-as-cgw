@@ -37,7 +37,6 @@ ScanHTML true
 ScanPDF true
 ScanMail true
 DetectBrokenExecutables true
-MailFollowURLs false
 #ArchiveBlockMax false
 ExitOnOOM false
 LeaveTemporaryFiles false

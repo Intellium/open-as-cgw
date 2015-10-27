@@ -236,7 +236,8 @@ sub spawn_listener
             my $service;
             my $log_pid;
             my $message;
-
+	
+	    # 2015-10-27T03:33:26+01:00 mx postfix/cleanup[22414]: CEE2810098C: message-id=<E1Zqu4j-000ROF-HF.octo15@web.heise.de>
             # 2008-04-22T12:52:49+02:00 limeas01-vienna-buero2 postfix/cleanup[941]: 9F55682ACE: message-id=<20080422105245.5695B8295C@kermit.abizzle.net>
             my $match_string = qr/^(\d{4,4}-\d{2,2}-\d{2,2}T\d{2,2}:\d{2,2}:\d{2,2}\+[\d\:]*)\s([\d\_\+\w\-\.]+)\s([\w+\/-]+)(\[(\d+)\])*:\s(.+)$/;
 
@@ -314,6 +315,7 @@ sub date_to_timestamp
 {
     my $date = shift;
 
+    # 2015-10-27T03:33:26+01:00
     # 2007-06-18T15:20:02+02:00
     if ($date =~ qr/(\d{4,4})-(\d{2,2})-(\d{2,2})T(\d{2,2}):(\d{2,2}):(\d{2,2})\+.+/)
     {

@@ -63,9 +63,9 @@ print "APPLIANCE SETTINGS\n";
 
         ## HOST / DOMAINNAME ##
         print "\t\tApplying Host/Domainname...";
-        $appliance->system->set_hostname('kermit');
+        $appliance->system->set_hostname('antispam');
 
-        $appliance->system->set_domainname('vienna.underground8.com');
+        $appliance->system->set_domainname('localdomain');
         print "done.\n";
 
     ## AUTHENTICATION ##
@@ -93,7 +93,6 @@ print "APPLIANCE SETTINGS\n";
         $appliance->system->add_ntp_server('1.pool.ntp.org');
         $appliance->system->add_ntp_server('2.pool.ntp.org');
         $appliance->system->add_ntp_server('3.pool.ntp.org');
-        $appliance->system->add_ntp_server('4.pool.ntp.org');
         print "done.\n";
 
 print "\n";
@@ -105,7 +104,7 @@ print "ANTISPAM SETTINGS\n";
 
         # SPAM SETTINGS #
         print "\t\tApplying Spam Settings...";
-        $appliance->antispam->set_spam_admin('mp@underground8.com');
+        $appliance->antispam->set_spam_admin('box-master@openas.org');
         $appliance->antispam->set_spam_subject_tag('** SPAM **');
         print "done.\n";
 

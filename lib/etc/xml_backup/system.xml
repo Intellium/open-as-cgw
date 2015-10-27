@@ -470,11 +470,10 @@
     </_timezones>
   </_timezone>
   <_timesync>
+    <_server>0.pool.ntp.org</_server>
     <_server>1.pool.ntp.org</_server>
     <_server>2.pool.ntp.org</_server>
     <_server>3.pool.ntp.org</_server>
-    <_server>4.pool.ntp.org</_server>
-    <_server>5.pool.ntp.org</_server>
   </_timesync>
   <_iptables _admin_range_end="" _admin_range_start="" _ip_range_whitelist="" _notify="0" _old_admin_range_end="" _old_admin_range_start="" _old_ip_range_whitelist="" _user_change="0"/>
 </root>

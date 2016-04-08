@@ -2,6 +2,6 @@
    group mail
    start program = "/etc/init.d/sqlgrey start"
    stop  program = "/etc/init.d/sqlgrey stop"
-   if failed port 2501 protocol sqlgrey within 2 cycles then restart
+   if failed port 2501 within 2 cycles then restart
    if 99 restarts within 99 cycles then timeout
 

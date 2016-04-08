@@ -37,9 +37,7 @@ set httpd port 2812 and
 #
 #  include /etc/monit.d/*
 include /etc/open-as-cgw/cfg-templates/monit/services/amavisd-new
-include /etc/open-as-cgw/cfg-templates/monit/services/batv-filter
 include /etc/open-as-cgw/cfg-templates/monit/services/clamav
-include /etc/open-as-cgw/cfg-templates/monit/services/kav-server
 #include /etc/open-as-cgw/cfg-templates/monit/services/localhost
 #include /etc/open-as-cgw/cfg-templates/monit/services/locutus
 include /etc/open-as-cgw/cfg-templates/monit/services/mysql
@@ -52,5 +50,4 @@ include /etc/open-as-cgw/cfg-templates/monit/services/openas-qng
 include /etc/open-as-cgw/cfg-templates/monit/services/openas-rtlogd
 include /etc/open-as-cgw/cfg-templates/monit/services/postfix
 include /etc/open-as-cgw/cfg-templates/monit/services/postfwd
-include /etc/open-as-cgw/cfg-templates/monit/services/sambucus
 include /etc/open-as-cgw/cfg-templates/monit/services/sqlgrey

@@ -1,7 +1,0 @@
- check process batv-filter with pidfile /var/run/batv-filter/batv-filter.pid
-   group mail
-   start program = "/etc/init.d/batv-filter restart >/dev/null 2>&1"
-   stop  program = "/etc/init.d/batv-filter stop"
-   if failed port 10060 type TCP within 2 cycles then start
-   if 99 restarts within 99 cycles then timeout
-

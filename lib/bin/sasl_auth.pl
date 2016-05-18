@@ -432,7 +432,7 @@ sub check_smtp_server
 	die( "Unknown STARTTLS response '$code'.\n") if( $code != 220 );
 		
 	# Convert the socket from normal to SSL/TLS
-	my %opt = ( SSL_version => 'SSLv3 TLSv1' );
+	my %opt = ( SSL_version => 'TLSv1.2 TLSv1.1 TLSv1' );
 	if( $certificate{ 'check' } && $certificate{ 'issuer' } eq "*" )
 	{
 	    print "* Force checking of server's certificate\n" if $debug;

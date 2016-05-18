@@ -195,7 +195,7 @@ sub starttls {
 		croak "Invalid response for STARTTLS: $num $txt\n";
 	}
 	if(not IO::Socket::SSL::socket_to_SSL($me->{sock},
-		SSL_version	=>	"SSLv3 TLSv1")){
+		SSL_version	=>	"TLSv1.2 TLSv1.1 TLSv1")){
 			croak "Couldn't start TLS: ".IO::Socket::SSL::errstr."\n";
 	}
 	$me->hello();

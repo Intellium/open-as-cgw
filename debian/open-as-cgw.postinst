@@ -244,7 +244,7 @@ prepare_cli(){
 	
 	# Update MOTD and etc/issue
 	chmod +x /usr/bin/update_motd_issue.sh
-	/usr/bin/update_motd_issue.sh
+	/bin/bash /usr/bin/update_motd_issue.sh
 
         # remove etc/issue.net and link to etc/issue
         rm -rf /etc/issue.net
@@ -289,7 +289,10 @@ prepare_mysql(){
 
 	# test mysql connectivity
 	TESTMYSQL=$(mysqladmin ping 2>&1)
+	TESTMYSQL2=$(mysqladmin ping -uroot -ploltruck2000 2>&1)
 	MYSQLSUCCESS=mysqld\ is\ alive
+
+	# initialize mysql with default schema (first-install) 
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
 		# import default schemas
 		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
@@ -300,32 +303,29 @@ prepare_mysql(){
 	
 		# set mysql root password
 		mysqladmin -u root password loltruck2000
-			
-		# write db versions file	
-		echo "3" > /etc/open-as-cgw/db_version
+		
+	        # write db versions file        
+	        echo "3" > /etc/open-as-cgw/db_version
 	else
-		echo "FAILED"
-		exit 1
-	fi
-
-	# Check DB version	
-	if [ ! -f /etc/open-as-cgw/db_version ]; then
-		echo "0" > /etc/open-as-cgw/db_version
-	fi
-
-	# Perform DB upgrades
-	DBVERSION=`cat /etc/open-as-cgw/db_version`
-	if [ "${DBVERSION}" -lt "1" ]; then
-		echo "1" > /etc/open-as-cgw/db_version
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
-	fi
-	if [ "${DBVERSION}" -lt "2" ]; then
-		echo "2" > /etc/open-as-cgw/db_version
-		mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
-	fi
-	if [ "${DBVERSION}" -lt "3" ]; then
-		echo "3" > /etc/open-as-cgw/db_version
-		mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
+		# upgrade existing database schema (upgrade) 
+		if [ "${TESTMYSQL2}" == "${MYSQLSUCCESS}" ]; then
+		         DBVERSION=`cat /etc/open-as-cgw/db_version`
+       			 if [ "${DBVERSION}" -lt "1" ]; then
+               		   echo "1" > /etc/open-as-cgw/db_version
+                	   mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
+       			 fi
+       			 if [ "${DBVERSION}" -lt "2" ]; then
+               		   echo "2" > /etc/open-as-cgw/db_version
+               		   mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
+       			 fi
+       			 if [ "${DBVERSION}" -lt "3" ]; then
+       		          echo "3" > /etc/open-as-cgw/db_version
+                	  mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
+        		fi
+		else
+			echo "FAILED"
+			exit 1
+		fi
 	fi
 
 	chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
@@ -594,7 +594,7 @@ prepare_limes(){
 	chown limes:limes /var/open-as-cgw/rt_log
 
         # restart openas-rtlogd
-        service openas-rtlogd restart
+        service openas-rtlogd restart >/dev/null 2>&1
 
 	echo "OK"
 }

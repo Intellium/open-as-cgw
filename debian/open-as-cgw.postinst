@@ -244,7 +244,7 @@ prepare_cli(){
 	
 	# Update MOTD and etc/issue
 	chmod +x /usr/bin/update_motd_issue.sh
-	/bin/bash /usr/bin/update_motd_issue.sh
+	/usr/bin/update_motd_issue.sh
 
         # remove etc/issue.net and link to etc/issue
         rm -rf /etc/issue.net
@@ -258,9 +258,6 @@ prepare_cli(){
 	echo "# Custom Open AS Color Prompt" >> ~/.bashrc
 	echo -en "PS1='\[\033[0;36m[\033[1;36m\u@\h:\w\033[1;36m]\033[1;37m $\033[0;37;0m\] '" >> ~/.bashrc
 	source ~/.bashrc
-
-	# MOTD changes require a ssh reload
-	service ssh reload
 	
 	# CLI paths
 	CLI_LOG="/var/log/open-as-cgw/cli.log"
@@ -282,56 +279,68 @@ prepare_cli(){
 }
 
 prepare_mysql(){
-	echo -n "*** Preparing MySQL Configuration... "
+echo -n "*** Preparing MySQL Configuration... "
 
-	# start mysql daemon
-	/etc/init.d/mysql start >/dev/null 2>&1
+# start mysql daemon
+service mysql start >/dev/null 2>&1
 
-	# test mysql connectivity
-	TESTMYSQL=$(mysqladmin ping 2>&1)
-	TESTMYSQL2=$(mysqladmin ping -uroot -ploltruck2000 2>&1)
-	MYSQLSUCCESS=mysqld\ is\ alive
+# test mysql connectivity
+TESTMYSQL=$(mysqladmin ping 2>&1)
+TESTMYSQL2=$(mysqladmin ping -u root -ploltruck2000 2>&1)
+DBVERFILE=/etc/open-as-cgw/db_version
+MYSQLSUCCESS=mysqld\ is\ alive
 
-	# initialize mysql with default schema (first-install) 
+# check if db_version file exists
+if [ ! -e $DBVERFILE ]; then
+	####
+	# initialize mysql with default schema (first-install)
+	####
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
-		# import default schemas
+		# import default database schema
 		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
 		mysql < /etc/open-as-cgw/db_struct/rt_log.sql
 		mysql < /etc/open-as-cgw/db_struct/smtp_auth.sql
 		mysql < /etc/open-as-cgw/db_struct/mailq.sql
 		mysql < /etc/open-as-cgw/db_struct/amavis.sql
-	
 		# set mysql root password
 		mysqladmin -u root password loltruck2000
-		
-	        # write db versions file        
-	        echo "3" > /etc/open-as-cgw/db_version
+		# write db versions file        
+		echo "3" > /etc/open-as-cgw/db_version
 	else
-		# upgrade existing database schema (upgrade) 
-		if [ "${TESTMYSQL2}" == "${MYSQLSUCCESS}" ]; then
-		         DBVERSION=`cat /etc/open-as-cgw/db_version`
-       			 if [ "${DBVERSION}" -lt "1" ]; then
-               		   echo "1" > /etc/open-as-cgw/db_version
-                	   mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
-       			 fi
-       			 if [ "${DBVERSION}" -lt "2" ]; then
-               		   echo "2" > /etc/open-as-cgw/db_version
-               		   mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
-       			 fi
-       			 if [ "${DBVERSION}" -lt "3" ]; then
-       		          echo "3" > /etc/open-as-cgw/db_version
-                	  mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
-        		fi
-		else
-			echo "FAILED"
-			exit 1
-		fi
+		echo "FAILED"
+		exit 1
 	fi
+else
+	####
+	# upgrade existing database schema
+	####
+	if [ "${TESTMYSQL2}" == "${MYSQLSUCCESS}" ]; then
+		# get current db version
+		DBVERSION=$(cat $DBVERFILE 2>&1)
+		# perform schema upgrades
+		if [ "${DBVERSION}" -lt "1" ]; then
+			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
+			echo "1" > /etc/open-as-cgw/db_version
+		fi
+		if [ "${DBVERSION}" -lt "2" ]; then
+			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
+			echo "2" > /etc/open-as-cgw/db_version
+		fi
+		if [ "${DBVERSION}" -lt "3" ]; then
+			mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
+			echo "3" > /etc/open-as-cgw/db_version
+		fi
+	else
+		echo "FAILED"
+		exit 1
+	fi
+fi
 
-	chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
-	/etc/open-as-cgw/db_struct/rtlog_checkdb.pl
+# perform rtlog database check
+chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
+/etc/open-as-cgw/db_struct/rtlog_checkdb.pl >/dev/null 2>&1
 
-	echo "OK"
+echo "OK"
 }
 
 prepare_ssh(){
@@ -341,7 +350,7 @@ prepare_ssh(){
 	cp /etc/open-as-cgw/cfg-templates/ssh/sshd_config.tt2 /etc/ssh/sshd_config
 
 	# reload ssh daemon
-	service ssh reload 
+	service ssh reload  >/dev/null 2>&1
 
 	echo "OK"
 }
@@ -602,28 +611,25 @@ prepare_limes(){
 prepare_networking(){
 	echo -n "*** Preparing network/interfaces... "
 
-#
-#	Deprecated as of 26.10.2015 
-#	No more overwrite interfaces
-#
-#	# Interfaces file
-#	IFACES="/etc/network/interfaces"
-#
-#	# TODO: this should not be statically bound
-#	DEFAULT_IFACE="eth0"
-#
-#	echo "auto lo" > $IFACES
-#	echo -e "iface lo inet loopback\n" >> $IFACES
-#	echo "# MARKER: DO NOT DELETE THE LINE BELOW" >> $IFACES
-#	echo "#--start:${DEFAULT_IFACE}--" >> $IFACES
-#	echo "auto ${DEFAULT_IFACE}" >> $IFACES
-#	echo "iface ${DEFAULT_IFACE} inet static" >> $IFACES
-#	echo -e "\taddress 192.168.1.1" >> $IFACES
-#	echo -e "\tnetmask 255.255.255.0" >> $IFACES
-#	echo -e "\tgateway 192.168.1.254" >> $IFACES
-#	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
-#	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
-#
+	#	Deprecated as of 26.10.2015 
+	#	No more overwrite interfaces
+	#
+	#	# Interfaces file
+	#	IFACES="/etc/network/interfaces"
+	#	DEFAULT_IFACE="eth0"
+	#
+	#	echo "auto lo" > $IFACES
+	#	echo -e "iface lo inet loopback\n" >> $IFACES
+	#	echo "# MARKER: DO NOT DELETE THE LINE BELOW" >> $IFACES
+	#	echo "#--start:${DEFAULT_IFACE}--" >> $IFACES
+	#	echo "auto ${DEFAULT_IFACE}" >> $IFACES
+	#	echo "iface ${DEFAULT_IFACE} inet static" >> $IFACES
+	#	echo -e "\taddress 192.168.1.1" >> $IFACES
+	#	echo -e "\tnetmask 255.255.255.0" >> $IFACES
+	#	echo -e "\tgateway 192.168.1.254" >> $IFACES
+	#	echo "#--end:${DEFAULT_IFACE}--" >> $IFACES
+	#	echo "# MARKER: DO NOT DELETE THE LINE ABOVE" >> $IFACES
+
 	# be sure we don't fetch a dhcp lease
 	pidof dhclient3 &>/dev/null && killall dhclient3
 	pidof dhclient &>/dev/null && killall dhclient

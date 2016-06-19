@@ -282,11 +282,9 @@ prepare_mysql(){
 echo -n "*** Preparing MySQL Configuration... "
 
 # start mysql daemon
-service mysql start >/dev/null 2>&1
+/etc/init.d/mysql restart >/dev/null 2>&1
 
-# test mysql connectivity
-TESTMYSQL=$(mysqladmin ping 2>&1)
-TESTMYSQL2=$(mysqladmin ping -u root -ploltruck2000 2>&1)
+# db params
 DBVERFILE=/etc/open-as-cgw/db_version
 MYSQLSUCCESS=mysqld\ is\ alive
 
@@ -295,6 +293,7 @@ if [ ! -e $DBVERFILE ]; then
 	####
 	# initialize mysql with default schema (first-install)
 	####
+	TESTMYSQL=$(mysqladmin ping 2>&1)
 	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
 		# import default database schema
 		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
@@ -305,7 +304,7 @@ if [ ! -e $DBVERFILE ]; then
 		# set mysql root password
 		mysqladmin -u root password loltruck2000
 		# write db versions file        
-		echo "3" > /etc/open-as-cgw/db_version
+		echo "3" > $DBVERFILE
 	else
 		echo "FAILED"
 		exit 1
@@ -314,21 +313,22 @@ else
 	####
 	# upgrade existing database schema
 	####
+	TESTMYSQL=$(mysqladmin ping -u root -ploltruck2000 2>&1)
 	if [ "${TESTMYSQL2}" == "${MYSQLSUCCESS}" ]; then
 		# get current db version
 		DBVERSION=$(cat $DBVERFILE 2>&1)
 		# perform schema upgrades
 		if [ "${DBVERSION}" -lt "1" ]; then
 			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
-			echo "1" > /etc/open-as-cgw/db_version
+			echo "1" > $DBVERFILE
 		fi
 		if [ "${DBVERSION}" -lt "2" ]; then
 			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
-			echo "2" > /etc/open-as-cgw/db_version
+			echo "2" > $DBVERFILE
 		fi
 		if [ "${DBVERSION}" -lt "3" ]; then
 			mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
-			echo "3" > /etc/open-as-cgw/db_version
+			echo "3" > $DBVERFILE
 		fi
 	else
 		echo "FAILED"
@@ -350,7 +350,7 @@ prepare_ssh(){
 	cp /etc/open-as-cgw/cfg-templates/ssh/sshd_config.tt2 /etc/ssh/sshd_config
 
 	# reload ssh daemon
-	service ssh reload  >/dev/null 2>&1
+	/etc/init.d/ssh reload  >/dev/null 2>&1
 
 	echo "OK"
 }
@@ -420,7 +420,7 @@ prepare_cron(){
 		chown root:root $crontab
 		
 		# restart cron daemon
-		service cron restart
+		/etc/init.d/cron restart >/dev/null 2>&1
 	fi
 
 	echo "OK"
@@ -429,6 +429,9 @@ prepare_cron(){
 prepare_nginx(){
 	echo -n "*** Preparing Nginx Configuration... "
 
+	# change the owner of the webroot directory
+	chown -R www-data:www-data /var/www/LimesGUI
+	
 	# overwrite current nginx config and create ssl certificate
 	cp -f /etc/open-as-cgw/cfg-templates/nginx/nginx.conf /etc/nginx
 	cp -f /etc/open-as-cgw/cfg-templates/nginx/ssleay.cnf /etc/nginx 
@@ -441,7 +444,7 @@ prepare_nginx(){
 	fi
 	
 	# restart nginx daemon
-	service nginx restart >/dev/null 2>&1 
+	/etc/init.d/nginx restart >/dev/null 2>&1 
 
 	echo "OK"
 }
@@ -603,7 +606,7 @@ prepare_limes(){
 	chown limes:limes /var/open-as-cgw/rt_log
 
         # restart openas-rtlogd
-        service openas-rtlogd restart >/dev/null 2>&1
+        /etc/init.d/openas-rtlogd restart >/dev/null 2>&1
 
 	echo "OK"
 }
@@ -639,7 +642,6 @@ prepare_networking(){
 
 case "$1" in
     configure)
-	chown -R www-data:www-data /var/www/LimesGUI
 	prepare_system_accounts;	
 	prepare_crypto;
 	prepare_system;

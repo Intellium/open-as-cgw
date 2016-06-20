@@ -5,6 +5,8 @@ An open, integrated, easy-to-use, GUI-managed SMTP gateway scanning your emails 
 
 The Open AS Communication Gateway (or short 'AS') aims to be a all-in-one solution of an SMTP gateway: It accepts incoming email, performs various antispam-related processes like blacklisting, virus- and spam-scanning, and relays the mails to pre-defined SMTP servers. It's built upon an Ubuntu Server system, and can be entirely managed via a user-friendly web-frontend.
 
+:warning: This branch is currently **UNSTABLE** and supports Ubuntu 14.04 LTS **ONLY**! :warning:
+
 Main features
 ----------------------------------------
 

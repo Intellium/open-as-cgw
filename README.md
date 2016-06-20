@@ -24,7 +24,7 @@ Installation
 
 On a fresh Ubuntu 14.04 LTS box type:
 
-	sudo add-apt-repository -y ppa:open-as-team/stable
+	sudo add-apt-repository -y ppa:open-as-team/ppa
 	sudo apt-get update && sudo apt-get upgrade
 	sudo apt-get -q -y install open-as-cgw
 

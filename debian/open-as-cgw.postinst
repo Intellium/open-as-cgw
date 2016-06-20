@@ -314,7 +314,7 @@ else
 	# upgrade existing database schema
 	####
 	TESTMYSQL=$(mysqladmin ping -u root -ploltruck2000 2>&1)
-	if [ "${TESTMYSQL2}" == "${MYSQLSUCCESS}" ]; then
+	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
 		# get current db version
 		DBVERSION=$(cat $DBVERFILE 2>&1)
 		# perform schema upgrades

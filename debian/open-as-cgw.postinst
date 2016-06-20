@@ -179,6 +179,16 @@ prepare_spamassassin(){
 	echo "OK"
 }
 
+prepare_clamd() {
+	echo -n "*** Preparing Clamd Antivirus... "
+	
+	# restart clamd service
+	/etc/init.d/clamav-daemon restart >/dev/null 2>&1
+	
+	# todo: clamd postconfig
+	
+	echo "OK"
+}
 
 prepare_quarantine(){
 	echo -n "*** Preparing Quarantine... "
@@ -612,7 +622,7 @@ prepare_limes(){
 }
 
 prepare_networking(){
-	echo -n "*** Preparing network/interfaces... "
+	echo -n "*** Preparing Network/Interfaces... "
 
 	#	Deprecated as of 26.10.2015 
 	#	No more overwrite interfaces
@@ -652,6 +662,7 @@ case "$1" in
 	prepare_postfix;
 	prepare_postfwd;
 	prepare_spamassassin;
+	prepare_clamd;
 	prepare_mysql;
 	prepare_nginx;
 	prepare_ldap;

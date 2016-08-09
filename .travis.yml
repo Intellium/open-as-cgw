@@ -1,10 +1,11 @@
 sudo: required
+dist: xenial
 
 services:
   - docker
 
 script:
-  - wget -O- https://openas.org/travis.sh | sh -
+  - wget -O- http://travis.debian.net/script.sh | sh -
 
 branches:
   except:

@@ -12,7 +12,7 @@ branches:
     - /^debian\/\d/
 
 notifications:
-email: false
+  email: false
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

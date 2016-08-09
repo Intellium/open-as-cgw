@@ -9,7 +9,7 @@ An open, integrated, easy-to-use, GUI-managed SMTP gateway scanning your emails 
 
 The Open AS Communication Gateway (or short 'AS') aims to be a all-in-one solution of an SMTP gateway: It accepts incoming email, performs various antispam-related processes like blacklisting, virus- and spam-scanning, and relays the mails to pre-defined SMTP servers. It's built upon an Ubuntu Server system, and can be entirely managed via a user-friendly web-frontend.
 
-:warning: This branch is currently **UNSTABLE** and supports Ubuntu 14.04 LTS **ONLY**! :warning:
+:warning: This branch is **UNSTABLE**! Support for Ubuntu 16.04 Xenial LTS in progress! :warning:
 
 Main features
 ----------------------------------------
@@ -28,15 +28,10 @@ Main features
 Installation
 ----------------------------------------
 
-On a fresh Ubuntu 14.04 LTS box type:
-
-	sudo add-apt-repository -y ppa:open-as-team/ppa
-	sudo apt-get update && sudo apt-get upgrade
-	sudo apt-get -q -y install open-as-cgw
+Starting with the upcoming 2.2.0 release, we will provide pre-built Docker and OVF images.
 
 Please make sure to read the docs at https://wiki.openas.org.
 
-Developers
 ----------------------------------------
 
 Fork the repo and set-up a local development environment by executing

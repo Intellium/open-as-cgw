@@ -1,6 +1,6 @@
+language: perl
 sudo: required
 dist: xenial
-group: edge
 
 services:
   - docker
@@ -17,15 +17,7 @@ notifications:
       - team@openas.org
 
 deploy:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    provider: launchpad
-    slug: "~open-as-team/open-as-cgw/master"
-    oauth_token: "$LP_OAUTH_TOKEN"
-    oauth_token_secret: "$LP_OAUTH_SECRET"
-    fi
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push openasteam/open-as-cgw;
-    fi
+  provider: launchpad
+  slug: "~open-as-team/open-as-cgw/master"
+  oauth_token: "$LP_OAUTH_TOKEN"
+  oauth_token_secret: "$LP_OAUTH_SECRET"

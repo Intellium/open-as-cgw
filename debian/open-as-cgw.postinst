@@ -291,7 +291,15 @@ prepare_cli(){
 prepare_mysql(){
 echo -n "*** Preparing MySQL Configuration... "
 
-# start mysql daemon
+# move mysql tmpdir to ramdisk
+DBTMPFS=/dev/shm
+if [ -d $DBTMPFS ]; then
+	mkdir -p $DBTMPFS/mysql
+	chown -R mysql:mysql $DBTMPFS/mysql
+	sed -i -e "s#/tmp/#$DBTMPFS/mysql/#g" /etc/mysql/my.cnf
+fi
+
+# restart mysql daemon
 /etc/init.d/mysql restart >/dev/null 2>&1
 
 # db params

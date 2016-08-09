@@ -1,9 +1,6 @@
 sudo: required
 dist: xenial
 
-services:
-  - docker
-
 script:
   - wget -O- http://travis.debian.net/script.sh | sh -
 

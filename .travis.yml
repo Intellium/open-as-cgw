@@ -15,6 +15,12 @@ branches:
 notifications:
   email: false
 
+deploy:
+  provider: launchpad
+  slug: "~open-as-team/open-as-cgw/master"
+  oauth_token: $LP_OAUTH_TOKEN
+  oauth_token_secret: $LP_OAUTH_SECRET
+  
 #after_success:
 #  - if [ "$TRAVIS_BRANCH" == "master" ]; then
 #    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";

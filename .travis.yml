@@ -17,13 +17,15 @@ notifications:
       - team@openas.org
 
 deploy:
-  provider: launchpad
-  slug: "~open-as-team/open-as-cgw/master"
-  oauth_token: $LP_OAUTH_TOKEN
-  oauth_token_secret: $LP_OAUTH_SECRET
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    provider: launchpad
+    slug: "~open-as-team/open-as-cgw/master"
+    oauth_token: "$LP_OAUTH_TOKEN"
+    oauth_token_secret: "$LP_OAUTH_SECRET"
+    fi
 
-#after_success:
-#  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-#    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-#    docker push openasteam/open-as-cgw;
-#    fi
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push openasteam/open-as-cgw;
+    fi

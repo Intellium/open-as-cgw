@@ -33,6 +33,7 @@ Starting with the upcoming 2.2.0 release, we will provide pre-built Docker and O
 
 Please make sure to read the docs at https://wiki.openas.org.
 
+Developers
 ----------------------------------------
 
 Fork the repo and set-up a local development environment by executing
@@ -47,7 +48,6 @@ from within your local copy of the repositoy.
 
 This will start a local webserver for accessing the GUI.
 All changes on the code will be visible immediatly.
-
 
 You can also test the current version from the master branch.
 Use the command below on a fresh Ubuntu box:

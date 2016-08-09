@@ -1,10 +1,21 @@
 sudo: required
 dist: xenial
 
+services:
+  - docker
+
 script:
   - wget -O- http://travis.debian.net/script.sh | sh -
 
 branches:
   except:
     - /^debian\/\d/
-    
+
+notifications:
+email: false
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push openas/open-as-cgw;
+    fi

@@ -54,7 +54,7 @@ Use the command below on a fresh Ubuntu box:
 
 	sudo bash -c "$(curl -sL openas.org/install-devel.sh)"
 
-Ubuntu PPA Packages are built daily at midnight via launchpad.net.
+Ubuntu PPA packages are built daily at midnight via launchpad.net.
 
 Resources
 ----------------------------------------

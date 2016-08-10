@@ -23,7 +23,7 @@ use DBI;
 require Exporter;
 use Digest::MD5 qw(md5_base64);
 use Email::MIME::CreateHTML;
-use Email::Send;
+use Email::Sender::Simple qw(sendmail);
 use Template;
 use DateTime;
 use DateTime::Format::Strptime;
@@ -344,10 +344,8 @@ sub send_user_mail
         text_body => Encode::encode_utf8($plain),
     );
 
-    $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
-
-    my $sender = Email::Send->new({mailer => 'Sendmail'});
-    $sender->send($email); 
+    # send notification mail to possible quarantine users
+    sendmail($email);
 }
 
 # deactivate users quarantine

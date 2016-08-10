@@ -24,7 +24,7 @@ use Underground8::Utils;
 use Underground8::Service::QuarantineNG::SLAVE;
 use Digest::MD5 qw(md5_base64);
 use Email::MIME::CreateHTML;
-use Email::Send;
+use Email::Sender::Simple qw(sendmail);
 use Template;
 use DateTime;
 use Underground8::QuarantineNG::Common;
@@ -566,14 +566,10 @@ sub notify_recipient($)
                         text_body => Encode::encode_utf8($plain),
                     );
 
-        # set this so the sendmail binary can be found ...!
-        $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
-
         # send notification mail to possible quarantine users
-        my $sender = Email::Send->new({mailer => 'Sendmail'});
-        $sender->send($email);
+	sendmail($email);
 
-        #update confirmation counter for the user
+        # update confirmation counter for the user
         my $sth3 = undef;
         if ($confirmation_counter == 0)
         {
@@ -682,14 +678,10 @@ sub notify_recipient_with_new_confirmation_Id($)
                         text_body => Encode::encode_utf8($plain),
                     );
 
-        # set this so the sendmail binary can be found ...!
-        $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
-
         # send notification mail to possible quarantine users
-        my $sender = Email::Send->new({mailer => 'Sendmail'});
-        $sender->send($email);
+	sendmail($email);
 
-        #update confirmation counter for the user
+        # update confirmation counter for the user
         my $sth2 = undef;
         if ($confirmation_counter == 0)
         {

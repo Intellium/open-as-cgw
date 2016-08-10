@@ -206,10 +206,6 @@ foreach my $recipient_hash (@$recipients) {
 
 	$mailer->dataend();
 	$mailer->quit(); 
-	
-	#use Email::Send;
-	#my $sender = Email::Send->new({mailer => 'Sendmail'});
-	#$sender->send($email);
 }
 
 

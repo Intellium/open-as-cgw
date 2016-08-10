@@ -47,7 +47,9 @@ use Pod::Usage;
 use Getopt::Long;
 use Schedule::Cron; # libschedule-cron-perl
 
-use Email::Send;
+use Email::Sender::Simple qw(sendmail);
+use Email::Simple;
+use Email::Simple::Creator;
 
 use strict;
 use warnings;
@@ -219,18 +221,21 @@ sub notify_admin
 {
     my $subject = shift;
     my $body = shift;
-    my $address = $config->{'notify_address'};
-    my $sendmail = '/usr/sbin/sendmail';
+    my $recipient = $config->{'notify_address'};
+    my $host_name = chomp(`hostname -f`);
 
-    my $hostname = `hostname -f`;
-    chomp($hostname);
+    # create email object
+    my $email = Email::Simple->create(
+        header => [
+            From => "no-reply\@$host_name\n",
+            To => $recipient,
+            Subject => $subject,
+        ],
+        body => Encode::encode_utf8($body),
+    );
 
-    open(MAIL, "|$sendmail -oi -t");
-    print MAIL "From: no-reply\@$hostname\n";
-    print MAIL "To: $address\n";
-    print MAIL "Subject: $subject\n\n";
-    print MAIL "ATTENTION: $body\n";
-    close(MAIL);
+    # send notification mail
+    sendmail($email);
 }
 
 exit 0;

@@ -13,8 +13,7 @@ branches:
     - /^debian\/\d/
 
 notifications:
-  email:
-      - team@openas.org
+  email: false
 
 deploy:
   provider: launchpad

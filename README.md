@@ -49,13 +49,6 @@ from within your local copy of the repositoy.
 This will start a local webserver for accessing the GUI.
 All changes on the code will be visible immediatly.
 
-You can also test the current version from the master branch.
-Use the command below on a fresh Ubuntu box:
-
-	sudo bash -c "$(curl -sL openas.org/install-devel.sh)"
-
-Ubuntu PPA packages are built daily at midnight via launchpad.net.
-
 Resources
 ----------------------------------------
 * Website: https://openas.org

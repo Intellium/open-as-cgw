@@ -4,7 +4,6 @@
 [![Travis CI](https://travis-ci.org/open-as-team/open-as-cgw.svg?branch=master)](https://travis-ci.org/open-as-team/open-as-cgw)
 [![Docs](https://img.shields.io/badge/docs-in%20progress-orange.svg)](https://openas.org/docs)
 [![Launchpad PPA](https://img.shields.io/badge/launchpad-ppa-green.svg)](https://code.launchpad.net/~open-as-team/+recipe/open-as-cgw-daily)
-[![Docker](https://img.shields.io/badge/container-docker-green.svg)](https://hub.docker.com/r/openasteam/open-as-cgw/)
 
 An open, integrated, easy-to-use, GUI-managed SMTP gateway scanning your emails for spam and viruses.
 

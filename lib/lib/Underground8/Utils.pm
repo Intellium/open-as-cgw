@@ -302,10 +302,10 @@ our $g = {
     cmd_quarantine_cron_restart => '/usr/bin/sudo /etc/init.d/openas-qcron restart',        
     cmd_quarantine_ng_restart => '/usr/bin/sudo /etc/init.d/openas-qng restart',        
     
-    cmd_sqlgrey_start => '/usr/bin/sudo /usr/bin/service sqlgrey start',
-    cmd_sqlgrey_stop => '/usr/bin/sudo /usr/bin/service sqlgrey stop',
-    cmd_sqlgrey_restart => '/usr/bin/sudo /usr/bin/service sqlgrey restart',
-    cmd_sqlgrey_reload => '/usr/biN/sudo /usr/bin/service sqlgrey reload',    
+    cmd_sqlgrey_start => '/usr/bin/sudo /usr/sbin/service sqlgrey start',
+    cmd_sqlgrey_stop => '/usr/bin/sudo /usr/sbin/service sqlgrey stop',
+    cmd_sqlgrey_restart => '/usr/bin/sudo /usr/sbin/service sqlgrey restart',
+    cmd_sqlgrey_reload => '/usr/bin/sudo /usr/sbin/service sqlgrey reload',    
 
     cmd_postfwd_start => '/usr/bin/sudo /etc/init.d/postfwd start',
     cmd_postfwd_stop => '/usr/bin/sudo /etc/init.d/postfwd stop',

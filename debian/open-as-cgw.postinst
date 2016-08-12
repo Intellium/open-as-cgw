@@ -289,76 +289,76 @@ prepare_cli(){
 }
 
 prepare_mysql(){
-echo -n "*** Preparing MySQL Configuration... "
+	echo -n "*** Preparing MySQL Configuration... "
 
-# move mysql tmpdir to ramdisk
-DBTMPFS=/dev/shm
-if [ -d $DBTMPFS ]; then
-	mkdir -p $DBTMPFS/mysql
-	chown -R mysql:mysql $DBTMPFS/mysql
-	sed -i -e "s#/tmp/#$DBTMPFS/mysql/#g" /etc/mysql/my.cnf
-fi
-
-# restart mysql daemon
-/etc/init.d/mysql restart >/dev/null 2>&1
-
-# db params
-DBVERFILE=/etc/open-as-cgw/db_version
-MYSQLSUCCESS=mysqld\ is\ alive
-
-# check if db_version file exists
-if [ ! -e $DBVERFILE ]; then
-	####
-	# initialize mysql with default schema (first-install)
-	####
-	TESTMYSQL=$(mysqladmin ping 2>&1)
-	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
-		# import default database schema
-		mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
-		mysql < /etc/open-as-cgw/db_struct/rt_log.sql
-		mysql < /etc/open-as-cgw/db_struct/smtp_auth.sql
-		mysql < /etc/open-as-cgw/db_struct/mailq.sql
-		mysql < /etc/open-as-cgw/db_struct/amavis.sql
-		# set mysql root password
-		mysqladmin -u root password loltruck2000
-		# write db versions file        
-		echo "3" > $DBVERFILE
-	else
-		echo "FAILED"
-		exit 1
+	# move mysql tmpdir to ramdisk
+	DBTMPFS=/dev/shm
+	if [ -d $DBTMPFS ]; then
+		mkdir -p $DBTMPFS/mysql
+		chown -R mysql:mysql $DBTMPFS/mysql
+		sed -i -e "s#/tmp/#$DBTMPFS/mysql/#g" /etc/mysql/my.cnf
 	fi
-else
-	####
-	# upgrade existing database schema
-	####
-	TESTMYSQL=$(mysqladmin ping -u root -ploltruck2000 2>&1)
-	if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
-		# get current db version
-		DBVERSION=$(cat $DBVERFILE 2>&1)
-		# perform schema upgrades
-		if [ "${DBVERSION}" -lt "1" ]; then
-			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
-			echo "1" > $DBVERFILE
-		fi
-		if [ "${DBVERSION}" -lt "2" ]; then
-			mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
-			echo "2" > $DBVERFILE
-		fi
-		if [ "${DBVERSION}" -lt "3" ]; then
-			mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
+
+	# restart mysql daemon
+	/etc/init.d/mysql restart >/dev/null 2>&1
+
+	# db params
+	DBVERFILE=/etc/open-as-cgw/db_version
+	MYSQLSUCCESS=mysqld\ is\ alive
+
+	# check if db_version file exists
+	if [ ! -e $DBVERFILE ]; then
+		####
+		# initialize mysql with default schema (first-install)
+		####
+		TESTMYSQL=$(mysqladmin ping 2>&1)
+		if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
+			# import default database schema
+			mysql < /etc/open-as-cgw/db_struct/sqlgrey.sql
+			mysql < /etc/open-as-cgw/db_struct/rt_log.sql
+			mysql < /etc/open-as-cgw/db_struct/smtp_auth.sql
+			mysql < /etc/open-as-cgw/db_struct/mailq.sql
+			mysql < /etc/open-as-cgw/db_struct/amavis.sql
+			# set mysql root password
+			mysqladmin -u root password loltruck2000
+			# write db versions file        
 			echo "3" > $DBVERFILE
+		else
+			echo "FAILED"
+			exit 1
 		fi
 	else
-		echo "FAILED"
-		exit 1
+		####
+		# upgrade existing database schema
+		####
+		TESTMYSQL=$(mysqladmin ping -u root -ploltruck2000 2>&1)
+		if [ "${TESTMYSQL}" == "${MYSQLSUCCESS}" ]; then
+			# get current db version
+			DBVERSION=$(cat $DBVERFILE 2>&1)
+			# perform schema upgrades
+			if [ "${DBVERSION}" -lt "1" ]; then
+				mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/smtp_auth.sql
+				echo "1" > $DBVERFILE
+			fi
+			if [ "${DBVERSION}" -lt "2" ]; then
+				mysql -u root -ploltruck2000 < /etc/open-as-cgw/db_struct/mailq.sql
+				echo "2" > $DBVERFILE
+			fi
+			if [ "${DBVERSION}" -lt "3" ]; then
+				mysql -u root -ploltruck2000 </etc/open-as-cgw/db_struct/amavis.sql
+				echo "3" > $DBVERFILE
+			fi
+		else
+			echo "FAILED"
+			exit 1
+		fi
 	fi
-fi
 
-# perform rtlog database check
-chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
-/etc/open-as-cgw/db_struct/rtlog_checkdb.pl >/dev/null 2>&1
+	# perform rtlog database check
+	chmod +x /etc/open-as-cgw/db_struct/rtlog_checkdb.pl
+	/etc/open-as-cgw/db_struct/rtlog_checkdb.pl >/dev/null 2>&1
 
-echo "OK"
+	echo "OK"
 }
 
 prepare_ssh(){
@@ -458,7 +458,7 @@ prepare_nginx(){
 	# Make self-signed certificate
 	if [ ! -f /etc/nginx/ssl/default.pem ] || [ ! -f /etc/nginx/ssl/default.key ]; then
 		mkdir -p /etc/nginx/ssl
-		/usr/bin/generate-sslcert.sh -batch
+		/usr/bin/generate-sslcert.sh -batch 2>&1
 	fi
 	
 	# restart nginx daemon

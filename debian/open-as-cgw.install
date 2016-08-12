@@ -1,7 +1,7 @@
 versions etc/open-as-cgw
 lib/etc/* etc/open-as-cgw
 lib/lib/* usr/share/perl5
-lib/lib-external/usr/local/* usr
+lib/lib-external/* usr/share/perl5
 lib/bin/* usr/bin
 gui/lib/* var/www/LimesGUI
 gui/script/* var/www/LimesGUI/script

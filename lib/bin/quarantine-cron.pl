@@ -222,12 +222,13 @@ sub notify_admin
     my $subject = shift;
     my $body = shift;
     my $recipient = $config->{'notify_address'};
-    my $host_name = chomp(`hostname -f`);
+    my $hostname = `hostname -f`;
+    chomp($hostname);
 
     # create email object
     my $email = Email::Simple->create(
         header => [
-            From => "no-reply\@$host_name\n",
+            From => "no-reply\@$hostname\n",
             To => $recipient,
             Subject => $subject,
         ],

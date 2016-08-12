@@ -2,7 +2,7 @@
 ## Open AS Communication Gateway
 
 [![Travis CI](https://travis-ci.org/open-as-team/open-as-cgw.svg?branch=master)](https://travis-ci.org/open-as-team/open-as-cgw)
-[![Docs](https://img.shields.io/badge/docs-in%20progress-orange.svg)](https://wiki.openas.org)
+[![Docs](https://img.shields.io/badge/docs-in%20progress-orange.svg)](https://openas.org/docs)
 [![Launchpad PPA](https://img.shields.io/badge/launchpad-ppa-green.svg)](https://code.launchpad.net/~open-as-team/+recipe/open-as-cgw-daily)
 [![Docker](https://img.shields.io/badge/container-docker-green.svg)](https://hub.docker.com/r/openasteam/open-as-cgw/)
 
@@ -52,5 +52,5 @@ All changes on the code will be visible immediatly.
 Resources
 ----------------------------------------
 * Website: https://openas.org
+* Docs:    https://openas.org/docs
 * Forum:   https://forum.openas.org
-* Wiki:    https://wiki.openas.org

@@ -243,9 +243,6 @@ prepare_smtpcrypt(){
 	chown -R smtpcrypt:smtpcrypt $SC_DIR
 	chown smtpcrypt:limes $SC_XML
 
-	# this is so bad, don't even bother to ask for a reason!
-	easy_install /etc/open-as-cgw/cfg-templates/pisa-egg/pisa-3.0.29-py2.5.egg > /dev/null
-
 	echo "OK"
 }
 

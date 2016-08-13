@@ -59,5 +59,4 @@ echo -e "\033[1;36m[ Cluster Status: $CLUSTER_STATUS \033[1;36m] \033[0m" >> /et
 echo -en "\033[1;36m[ Uptime: \033[0;37m$UPTIME_D $UPTIME_H $UPTIME_M \033[1;36m] \033[0m" >> /etc/motd
 echo -en "\033[1;36m[ Load: \033[0;37m$LOADAVG \033[1;36m]\033[0m" >> /etc/motd
 echo -e "\033[1;36m[ Mem: \033[0;37m$MEM_STAT \033[1;36m]\033[0m\n" >> /etc/motd
-echo -e "\033[1;36m[ Type \033[0;33m'openas-cli help'\033[1;36m for a list of available commands ]\033[0m" >> /etc/motd
 echo -e "" >> /etc/motd

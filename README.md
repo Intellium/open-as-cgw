@@ -30,7 +30,7 @@ Installation
 
 Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images.
 
-Please make sure to read the docs at https://wiki.openas.org.
+Please make sure to read the docs at https://openas.org/docs
 
 Developers
 ----------------------------------------

@@ -27,9 +27,4 @@ root    ALL=(ALL) ALL
 %sudo  ALL=(ALL:ALL) ALL
 
 %limes  ALL = (OP) NOPASSWD: ALL
-aspoweroff ALL = NOPASSWD: /sbin/poweroff
-asreboot   ALL = NOPASSWD: /sbin/reboot
-asinfo     ALL = NOPASSWD: /usr/local/bin/sysinfo.sh
-asreset    ALL = NOPASSWD: /usr/local/bin/resetter.pl
-asrestartgui  ALL = NOPASSWD: /etc/init.d/nginx
 admin      ALL = NOPASSWD: /usr/local/bin/cli.pl, /etc/init.d/nginx

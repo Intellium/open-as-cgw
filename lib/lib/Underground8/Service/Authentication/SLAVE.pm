@@ -59,11 +59,6 @@ sub write_passwd_commonuse($$){
 
 	my $ec = 0;
 
-#	$ec |= system( $g->{'cmd_usermod'} . " -p '$hash' asinfo" );
-#	$ec |= system( $g->{'cmd_usermod'} . " -p '$hash' asreboot" );
-#	$ec |= system( $g->{'cmd_usermod'} . " -p '$hash' aspoweroff" );
-#	$ec |= system( $g->{'cmd_usermod'} . " -p '$hash' asrestartgui" );
-#	$ec |= system( $g->{'cmd_usermod'} . " -p '$hash' asmailq" );
 	return $ec;
 }
 

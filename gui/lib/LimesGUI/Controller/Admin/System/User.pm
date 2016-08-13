@@ -87,48 +87,6 @@ sub change_password : Local {
 	$c->stash->{'template'} = 'admin/system/user/pw_gui.inc.tt2';
 }
 
-sub change_password_emergency : Local {
-	my ($self, $c) = @_;
-	my $appliance = $c->config->{'appliance'};
-
-	my $form_profile = {
-		required => [qw(adminusername pw_new_ssh pw_admin pw_new_ssh_verify)],
-		constraint_methods => {
-			pw_admin => [{ constraint_method => password_valid($c), params => [qw(adminusername pw_admin)] }],
-			pw_new_ssh_verify => [{ constraint_method => newpass_valid(), params => [qw(pw_new_ssh pw_new_ssh_verify)] }],
-			pw_new_ssh => [{ constraint_method => newpass_secure(), params => [qw(pw_new_ssh)] }],
-		},
-
-		msgs => {
-			constraints => {
-				'password_valid' => 'error_password_invalid',
-				'newpass_valid' => 'error_newpass_nomatch', 
-				'newpass_secure' => 'error_newpass_insecure',
-			},
-			login => $c->login
-		}
-	};
-
-	my $result = $self->process_form($c, $form_profile);
-	if($result->success()) {
-		try {
-			my $pw = $c->req->param('pw_new_ssh');
-
-			$appliance->system->set_commonusers_password($pw);
-			$appliance->system->commit;
-
-			aslog "info", "Changed password for emergency users";
-			$c->stash->{'box_status'}->{'success'} = 'success';
-		} catch Underground8::Exception with {
-			aslog "warn", "Error changing password for emergency users";
-			error($c, shift);
-		};
-	}
-
-	$c->stash->{'system'} = $appliance->system;
-	$c->stash->{'template'} = 'admin/system/user/pw_emergency.inc.tt2';
-}
-
 sub password_valid {
 	my $c = shift;
 	my $login_sub = sub{$c->login(@_)}; # create anonymous sub ref

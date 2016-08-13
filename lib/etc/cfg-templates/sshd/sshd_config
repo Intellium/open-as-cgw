@@ -77,5 +77,4 @@ UsePAM yes
 
 DenyUsers asreset
 
-Match User asreset,asinfo,asreboot,asmailq,asrestartgui
 AllowTcpForwarding no

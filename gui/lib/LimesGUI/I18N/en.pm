@@ -465,7 +465,6 @@ system_backup_manager_upload_upload => 'Upload backup',
 ### SYSTEM :: USER
 system_user_abstract => 'Change the password for the current user. Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: ! @ % - _ . : , ; # + *',
 system_user_pw_gui_heading => 'Set the password currently logged-in user',
-system_user_pw_emergency_heading => 'Set password for Emergency Commands',
 
 system_user_pw_gui_username => 'Username',
 system_user_pw_gui_pw_current => 'Current password',
@@ -475,14 +474,6 @@ system_user_pw_gui_success => 'Password has been successfully changed',
 system_user_pw_gui_error_password_invalid => 'The old password is invalid.',
 system_user_pw_gui_error_newpass_nomatch => 'The passwords don\'t match.',
 system_user_pw_gui_error_newpass_insecure => 'Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: !@%-_.:,;#+*',
-
-system_user_pw_emergency_pw_admin => 'Administration password',
-system_user_pw_emergency_pw_new_ssh => 'New Emergency password',
-system_user_pw_emergency_pw_new_ssh_verify => 'Re-type new Emergency password',
-system_user_pw_emergency_success => 'Password for Emergency Commands has been successfully changed',
-system_user_pw_emergency_error_password_invalid => 'The old password is invalid.',
-system_user_pw_emergency_error_newpass_nomatch => 'The passwords don\'t match.',
-system_user_pw_emergency_error_newpass_insecure => 'Your new password must contain at least 8 characters, including at least 1 digit and 1 special character out of the following list: @%-_.:,;#+*',
 
 
 #### SYSTEM :: SYSLOG
@@ -1297,7 +1288,6 @@ help_system_backup_manager_upload => 'Here, you may upload any previously create
 
 ### SYSTEM :: USER
 help_system_user_pw_gui => 'Here you may change the password for the currently logged in user on the web-interface (which will most likely be called <em>admin</em>.',
-help_system_user_pw_emergency => 'Here you can change the passwords for the designated system commands <em>asreboot</em>, <em>aspoweroff</em>, <em>asrestartgui</em> and <em>asinfo</em> in order to reboot or shutdown the appliance,  restart the web-interface or request system information about the Open AS Communication Gateway&trade;, respectively. The administration password (GUI-login password for user <em>admin</em>) is needed in order to set a new emergency-password. Those commands only work through SSH and serial console connections.<br/><strong>Note:</strong> All mentioned commands are managed by the same password and will not be available unless a password is set once!',
 
 ### SYSTEM :: SYSLOG
 help_system_syslog_remote => 'Here you can define an external syslog server in your network. The Syslog Host field needs a valid IP-address or DNS-hostname of your syslog server (IP is recommended). Syslog uses 514/udp as default, but the port is changeable. The Enabled checkbox has to be activated, otherwise it will not work.',

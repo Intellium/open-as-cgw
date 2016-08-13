@@ -21,23 +21,14 @@ iptables -P FORWARD DROP
 
 # MY_REJECT-Chain
 iptables -N MY_REJECT
-
-# MY_REJECT
 iptables -A MY_REJECT -p tcp -j REJECT --reject-with tcp-reset
 iptables -A MY_REJECT -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A MY_REJECT -j REJECT --reject-with icmp-proto-unreachable
 
 # USER chain
 iptables -N USER
-
-# Rules for USER chain
-
-iptables -A USER -i eth0 -p tcp --dport 443 -j ACCEPT # https
 iptables -A USER -i eth0 -p tcp --dport 22 -j ACCEPT # ssh
-
-
-
-
+iptables -A USER -i eth0 -p tcp --dport 443 -j ACCEPT # https
 iptables -A USER -i eth0 -j DROP
 
 # MY_DROP-Chain
@@ -52,30 +43,17 @@ iptables -A MY_DROP -j DROP
 iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A OUTPUT -m state --state INVALID -j DROP
 
-
+# allow SNMP
 iptables -A INPUT -i eth0 -p udp --dport 161 -j ACCEPT # snmp
-
 
 # drop stealth scans etc.
 iptables -A INPUT -p tcp --tcp-flags ALL NONE -j MY_DROP
-
-# SYN FIN
-iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j MY_DROP
-
-# SYN RST
-iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j MY_DROP
-
-# FIN RST
-iptables -A INPUT -p tcp --tcp-flags FIN,RST FIN,RST -j MY_DROP
-
-# FIN ACK
-iptables -A INPUT -p tcp --tcp-flags ACK,FIN FIN -j MY_DROP
-
-# PSH ACK
-iptables -A INPUT -p tcp --tcp-flags ACK,PSH PSH -j MY_DROP
-
-# URG without ACK
-iptables -A INPUT -p tcp --tcp-flags ACK,URG URG -j MY_DROP
+iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j MY_DROP # SYN FIN
+iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j MY_DROP # SYN RST
+iptables -A INPUT -p tcp --tcp-flags FIN,RST FIN,RST -j MY_DROP # FIN RST
+iptables -A INPUT -p tcp --tcp-flags ACK,FIN FIN -j MY_DROP # FIN ACK
+iptables -A INPUT -p tcp --tcp-flags ACK,PSH PSH -j MY_DROP # PSH ACK
+iptables -A INPUT -p tcp --tcp-flags ACK,URG URG -j MY_DROP #URG without ACK
 
 # allow loopback-communication
 iptables -A INPUT -i lo -j ACCEPT
@@ -85,13 +63,12 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-# ICMP
+# allow ICMP
 iptables -A INPUT -p icmp -j ACCEPT
 
-
+# SMTP ports
 iptables -A INPUT -i eth0 -m state --state NEW -p tcp --dport 25 -j ACCEPT # SMTP 
-iptables -A INPUT -i eth0 -m state --state NEW -p tcp --dport 465 -j ACCEPT # SMTPS 
-
+iptables -A INPUT -i eth0 -m state --state NEW -p tcp --dport 587 -j ACCEPT # SMTPS 
 
 # previously defined USER table which contains ssh and adminrange
 iptables -A INPUT -i eth0 -p tcp -j USER

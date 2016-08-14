@@ -33,24 +33,24 @@ use Catalyst::Runtime;
 use Data::Dumper;
 
 use Catalyst qw/
-		-Debug
-		ConfigLoader 
-		Static::Simple
+	-Debug
+	ConfigLoader 
+	Static::Simple
 		
-		StackTrace
+	StackTrace
 
-		Authentication
-		Authentication::Store::Htpasswd
-		Authentication::Credential::Password
+	Authentication
+	Authentication::Store::Htpasswd
+	Authentication::Credential::Password
 
-		Authorization::Roles
-		Authorization::ACL	
+	Authorization::Roles
+	Authorization::ACL	
 
-		Session
-		Session::Store::File
-		Session::State::Cookie
+	Session
+	Session::Store::File
+	Session::State::Cookie
 
-		I18N::Underground8
+	I18N::Underground8
         Unicode
     
         FormValidator

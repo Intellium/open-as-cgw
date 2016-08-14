@@ -34,7 +34,9 @@ Main features
 Installation
 ----------------------------------------
 
-Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images.
+Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images. This will provide a easy and convenient method of deploying Open AS within your existing virtual infrastructure or cloud.
+
+Besides that, you can build and install the package yourself or rely on pre-built packages for Ubuntu which are available via PPA on Launchpad. Be aware of the fact, that this method may require advanced efforts.
 
 Please make sure to read the docs at https://openas.org/docs
 

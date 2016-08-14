@@ -26,7 +26,7 @@ sql_mode                        = NO_ENGINE_SUBSTITUTION
 socket                          = /var/run/mysqld/mysqld.sock
 pid-file                        = /var/run/mysqld/mysqld.pid
 datadir                         = /var/lib/mysql/
-tmpdir                          = /tmp/
+tmpdir                          = /run/mysqld/
 
 # SAFETY #
 explicit_defaults_for_timestamp = 1

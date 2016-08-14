@@ -43,8 +43,9 @@ iptables -A MY_DROP -j DROP
 iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A OUTPUT -m state --state INVALID -j DROP
 
-# allow SNMP
-iptables -A INPUT -i eth0 -p udp --dport 161 -j ACCEPT # snmp
+# SNMP
+# must be explicitly enabled within the GUI [ds,14/08/16]
+#iptables -A INPUT -i eth0 -p udp --dport 161 -j ACCEPT # snmp
 
 # drop stealth scans etc.
 iptables -A INPUT -p tcp --tcp-flags ALL NONE -j MY_DROP
@@ -63,7 +64,7 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-# allow ICMP
+# ICMP
 iptables -A INPUT -p icmp -j ACCEPT
 
 # SMTP ports

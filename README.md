@@ -13,6 +13,7 @@ While we focus on Ubuntu LTS as the base distribution for our appliance releases
 
 :warning: This branch is **UNSTABLE**! Support for Ubuntu 16.04 Xenial LTS in progress! :warning:
 
+
 Main features
 ----------------------------------------
 
@@ -27,12 +28,14 @@ Main features
  * End-User-maintainable email quarantining
  * A very pretty, user-friendly web GUI
 
+
 Installation
 ----------------------------------------
 
 Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images.
 
 Please make sure to read the docs at https://openas.org/docs
+
 
 Developers
 ----------------------------------------
@@ -46,6 +49,7 @@ Make sure you have the latest version of Vagrant and Virtualbox installed, clone
 After the installation process has completed, the Open AS Web GUI should be reachable at https://localhost:8443 on your local machine. 
 
 You can ssh into your test box with the `vagrant ssh` command.
+
 
 **GUI development**
 
@@ -64,11 +68,12 @@ Connect to the previously set-up vagrant box via `vagrant ssh` and perform the f
 
 By default, the copy of the repository on your local machine is synced with the VM and is available under /vagrant. 
 
+
 **Contributing**
 
 Feel free to pick any open issue and provide a proper fix.
-
 We greatly appreciate pull requests via Github. 
+
 
 Resources
 ----------------------------------------

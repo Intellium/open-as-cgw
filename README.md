@@ -34,9 +34,9 @@ Main features
 Installation
 ----------------------------------------
 
-Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images. This will provide a easy and convenient method of deploying Open AS within your existing virtual infrastructure or cloud.
+Starting with the upcoming 2.2.0 release, we will provide pre-built virtual appliance images. This enables an easy and convenient method of deploying Open AS within your existing virtual infrastructure or cloud.
 
-Besides that, you can build and install the package yourself or rely on pre-built packages for Ubuntu which are available via PPA on Launchpad. Be aware of the fact, that this method may require advanced efforts.
+Besides that, you can build and install the package yourself or rely on pre-built packages for Ubuntu which are available via PPA on Launchpad. Be aware of the fact, that this methods may require advanced efforts and only limited support can be provided by us.
 
 Please make sure to read the docs at https://openas.org/docs
 
@@ -49,16 +49,16 @@ Developers
 
 A local test environment can be set-up easily by using Vagrant.
 
-Make sure you have the latest version of Vagrant and Virtualbox installed, clone the repository and type `vagrant up` within the projects directory. This will deploy a local Ubuntu VM via vagrant, build our packages and installs them.
+Make sure you have the latest version of Vagrant and Virtualbox installed, clone the repository and type `vagrant up` within the projects main directory. This will automatically deploy a virtual machine running Ubuntu LTS, build our packages and installs them afterwards.
 
-After the installation process has completed, the Open AS Web GUI should be reachable at https://localhost:8443 on your local machine. 
+After the provisioning has been completed, the WebGUI should be reachable at https://localhost:8443 on your local machine. 
 
 You can ssh into your test box with the `vagrant ssh` command.
 
 
 **GUI development**
 
-Open AS WebGUI is based on the Perl Catalyst framework which requires a few perl modules to be installed. The easiest way for making changes on the GUI is to use the test environment explained above with all dependencies already installed. Within this virtual machine you can manually start the GUI in development mode, which will make all changes to the code visable immediately and provide you with proper debug output.
+The Open AS WebGUI is based on the Perl Catalyst framework which requires a few perl modules to be installed. The easiest way for making changes on the GUI is to use the test environment explained above with all dependencies already installed. Within this virtual machine you can manually start the GUI in development mode, which will make all changes to the code visable immediately and provide you with proper debug output.
 
 Connect to the previously set-up vagrant box via `vagrant ssh` and perform the following steps: 
 

@@ -39,7 +39,7 @@ Developers
 
 **Testing environment**
 
-A local test environment can be easily set-up by using Vagrant and Virtualbox.
+A local test environment can be easily set-up by using Vagrant.
 
 Make sure you have the latest version of Vagrant and Virtualbox installed, clone the repository and type `vagrant up` within the projects directory. This will deploy a local Ubuntu VM via vagrant, build our packages and installs them.
 

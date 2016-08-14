@@ -58,7 +58,7 @@ You can ssh into your test box with the `vagrant ssh` command.
 
 **GUI development**
 
-The Open AS WebGUI is based on the Perl Catalyst framework, which requires a few perl modules to be installed. The easiest way for developers interessted to contribute to the GUI, is to use the test environment explained above with all dependencies already installed. Within this virtual machine you can manually start the GUI in development mode, which will make all changes to the code visible immediately and provides you with proper debug outputs.
+The Open AS WebGUI is based on the Perl Catalyst framework, which requires a few perl modules to be installed. The easiest way for developers interested in contributing to the GUI is to use the test environment explained above, which has all dependencies already installed. Within this virtual machine you can manually start the GUI in development mode, which will make all changes to the code visible immediately and provides you with proper debug outputs.
 
 Connect to the previously set-up vagrant box via `vagrant ssh` and perform the following steps: 
 

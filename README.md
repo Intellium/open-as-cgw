@@ -37,18 +37,38 @@ Please make sure to read the docs at https://openas.org/docs
 Developers
 ----------------------------------------
 
-Fork the repo and set-up a local development environment by executing
+**Testing environment**
 
-	/bin/bash ./lib/bin/set_dev_environment.sh
+A local test environment can be easily set-up by using Vagrant and Virtualbox.
 
-To start the GUI in development mode type:
+Make sure you have the latest version of Vagrant and Virtualbox installed, clone the repository and type `vagrant up` within the projects directory. This will deploy a local Ubuntu VM via vagrant, build our packages and installs them.
 
-	/usr/bin/perl ./gui/script/limesgui_server.pl
+After the installation process has completed, the Open AS Web GUI should be reachable at https://localhost:8443 on your local machine. 
 
-from within your local copy of the repositoy.
+You can ssh into your test box with the `vagrant ssh` command.
 
-This will start a local webserver for accessing the GUI.
-All changes on the code will be visible immediatly.
+**GUI development**
+
+Open AS WebGUI is based on the Perl Catalyst framework which requires a few perl modules to be installed. The easiest way for making changes on the GUI is to use the test environment explained above with all dependencies already installed. Within this virtual machine you can manually start the GUI in development mode, which will make all changes to the code visable immediately and provide you with proper debug output.
+
+Connect to the previously set-up vagrant box via `vagrant ssh` and perform the following steps: 
+
+	# stop the gui within the vm 
+	sudo service nginx stop && sudo service open-as-backend stop 
+
+	# set-up the development environment
+	sudo /bin/bash /vagrant/lib/bin/set_dev_environment.sh
+
+	# start the gui in development mode
+	/usr/bin/perl /vagrant/gui/script/limesgui_server.pl
+
+By default, the copy of the repository on your local machine is synced with the VM and is available under /vagrant. 
+
+**Contributing**
+
+Feel free to pick any open issue and provide a fix.
+
+We greatly appreciate pull requests via Github. 
 
 Resources
 ----------------------------------------

@@ -54,19 +54,19 @@ Open AS WebGUI is based on the Perl Catalyst framework which requires a few perl
 Connect to the previously set-up vagrant box via `vagrant ssh` and perform the following steps: 
 
 	# stop the gui within the vm 
-	sudo service nginx stop && sudo service open-as-backend stop 
+	sudo service openas-backend stop && sudo service nginx stop
 
 	# set-up the development environment
 	sudo /bin/bash /vagrant/lib/bin/set_dev_environment.sh
 
 	# start the gui in development mode
-	/usr/bin/perl /vagrant/gui/script/limesgui_server.pl
+	sudo /usr/bin/perl /vagrant/gui/script/limesgui_server.pl
 
 By default, the copy of the repository on your local machine is synced with the VM and is available under /vagrant. 
 
 **Contributing**
 
-Feel free to pick any open issue and provide a fix.
+Feel free to pick any open issue and provide a proper fix.
 
 We greatly appreciate pull requests via Github. 
 

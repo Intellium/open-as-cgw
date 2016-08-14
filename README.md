@@ -69,7 +69,7 @@ Connect to the previously set-up vagrant box via `vagrant ssh` and perform the f
 	# start the gui in development mode
 	sudo /usr/bin/perl /vagrant/gui/script/limesgui_server.pl
 
-By default, the copy of the repository on your local machine is synced with the VM and is available under /vagrant. 
+By default the repository on your local machine is synced with the Vagrant VM and is available under /vagrant within the virtual machine.
 
 
 **Contributing**

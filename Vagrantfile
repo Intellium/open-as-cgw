@@ -19,6 +19,7 @@ Vagrant.configure(2) do |config|
 	   echo "***************************************"
 	   sudo apt-get -y -q update && sudo apt-get -y -q upgrade
 	   sudo apt-get -y -q install dpkg-dev debhelper fakeroot
+	   
 	   echo "**************************************"
 	   echo "**** Building open-as-cgw package ****"
 	   echo "**************************************"
@@ -26,6 +27,7 @@ Vagrant.configure(2) do |config|
 	   sudo cp -Rf /vagrant/* /tmp/build/open-as-cgw/
 	   cd /tmp/build/open-as-cgw
 	   sudo dpkg-buildpackage -rfakeroot
+	   
 	   echo "****************************************"
 	   echo "**** Installing open-as-cgw package ****"
 	   echo "****************************************"
@@ -35,8 +37,9 @@ Vagrant.configure(2) do |config|
 	   echo "postfix postfix/main_mailer_type select Internet Site" | sudo debconf-set-selections
 	   echo "postfix postfix/mailname string antispam.localdomain" | sudo debconf-set-selections
 	   sudo apt-get -y -q -f install /tmp/build/*.deb
-	   sudo rm -rf /tmp/build
+	   sduo apt-get -y -q clean && sudo rm -rf /tmp/build
 	   sudo service openas-firewall stop
+	   
            echo "********************************************"
            echo "****      Installation completed        ****"
 	   echo "**** Navigate to https://localhost:8443 ****" 

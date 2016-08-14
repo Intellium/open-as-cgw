@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
 	   echo "postfix postfix/main_mailer_type select Internet Site" | sudo debconf-set-selections
 	   echo "postfix postfix/mailname string antispam.localdomain" | sudo debconf-set-selections
 	   sudo apt-get -y -q -f install /tmp/build/*.deb
-	   sduo apt-get -y -q clean && sudo rm -rf /tmp/build
+	   sudo apt-get -y -q clean && sudo rm -rf /tmp/build
 	   sudo service openas-firewall stop
 	   
            echo "********************************************"

@@ -1,10 +1,6 @@
 [![Open AS Communication Gateway](https://openas.org/assets/img/logo.png)](https://openas.org) 
 ## Open AS Communication Gateway
 
-[![Travis CI](https://travis-ci.org/open-as-team/open-as-cgw.svg?branch=master)](https://travis-ci.org/open-as-team/open-as-cgw)
-[![Docs](https://img.shields.io/badge/docs-in%20progress-orange.svg)](https://openas.org/docs)
-[![Launchpad PPA](https://img.shields.io/badge/launchpad-ppa-green.svg)](https://code.launchpad.net/~open-as-team/+recipe/open-as-cgw-daily)
-
 An open, integrated, easy-to-use, GUI-managed SMTP gateway scanning your emails for spam and viruses.
 
 The Open AS Communication Gateway (or short 'AS') aims to be a all-in-one solution of an SMTP gateway: It accepts incoming email, performs various antispam-related processes like blacklisting, virus- and spam-scanning, and relays the mails to pre-defined SMTP servers. It's built upon an Ubuntu Server system, and can be entirely managed via a user-friendly web-frontend.
@@ -86,4 +82,3 @@ Resources
 ----------------------------------------
 * Website: https://openas.org
 * Docs:    https://openas.org/docs
-* Forum:   https://forum.openas.org
